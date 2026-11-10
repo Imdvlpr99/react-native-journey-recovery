@@ -9,15 +9,15 @@ This library is built with reliability as its highest priority. Before submittin
 ## Development Workflow
 
 ### Requirements
-- Node.js >= 18.0.0
+- Node.js >= 20.0.0
 - npm or pnpm
 
 ### Getting Started
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/<your-username>/rn-journey-recovery.git
-   cd rn-journey-recovery
+   git clone https://github.com/Imdvlpr99/react-native-journey-recovery.git
+   cd react-native-journey-recovery
    ```
 
 2. **Install dependencies:**
@@ -25,21 +25,27 @@ This library is built with reliability as its highest priority. Before submittin
    npm install
    ```
 
-3. **Run tests:**
+3. **Run tests with coverage:**
    ```bash
-   npm test
+   npm run test:coverage
    # or with live watch mode:
    npm run test:watch
    ```
 
-4. **Run TypeScript check:**
+4. **Run TypeScript check & benchmarks:**
    ```bash
    npm run typecheck
+   npm run bench
    ```
 
-5. **Build the package:**
+5. **Start local documentation & simulator:**
    ```bash
-   npm run build
+   npm run dev:docs
+   ```
+
+6. **Run complete verification pipeline:**
+   ```bash
+   npm run verify
    ```
 
 ---
@@ -56,14 +62,14 @@ This library is built with reliability as its highest priority. Before submittin
 
 ## Submitting Pull Requests
 
-1. Create a feature branch from `main`:
+1. Create a feature branch from `master`:
    ```bash
    git checkout -b feat/your-feature-name
    ```
 2. Write unit and integration tests covering your changes in `tests/`.
-3. Verify that all tests and type checks pass:
+3. Verify that all checks pass cleanly:
    ```bash
-   npm run typecheck && npm test && npm run build
+   npm run verify
    ```
 4. Commit your changes using conventional commit messages (e.g. `feat:`, `fix:`, `docs:`, `test:`).
 5. Push to your fork and submit a Pull Request with a clear description of the problem solved and testing performed.
