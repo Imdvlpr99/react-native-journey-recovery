@@ -135,7 +135,9 @@ export const SchemaPlayground: React.FC = () => {
         expiresAt: null,
         isExpired: false,
         checksum: { stored: '', computed: '', matches: false },
-        byteSize: Buffer.byteLength(jsonText, 'utf8'),
+        byteSize: typeof TextEncoder !== 'undefined'
+          ? new TextEncoder().encode(jsonText).length
+          : jsonText.length,
         status: 'corrupted',
         data: null,
         rejectionReason: `JSON Syntax Error: ${e.message}`,

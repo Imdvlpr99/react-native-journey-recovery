@@ -21,6 +21,16 @@ export interface InspectionReport {
   rejectionReason?: string;
 }
 
+function getByteLength(str: string): number {
+  if (typeof TextEncoder !== 'undefined') {
+    return new TextEncoder().encode(str).length;
+  }
+  if (typeof Buffer !== 'undefined') {
+    return Buffer.byteLength(str, 'utf8');
+  }
+  return str.length;
+}
+
 /**
  * Inspects a journey snapshot string or object and generates a diagnostics report.
  */
@@ -29,7 +39,7 @@ export function inspectSnapshot(rawInput: string | Record<string, unknown>): Ins
   let byteSize = 0;
 
   if (typeof rawInput === 'string') {
-    byteSize = Buffer.byteLength(rawInput, 'utf8');
+    byteSize = getByteLength(rawInput);
     try {
       parsed = JSON.parse(rawInput);
     } catch (e: any) {
@@ -50,7 +60,7 @@ export function inspectSnapshot(rawInput: string | Record<string, unknown>): Ins
     }
   } else {
     parsed = rawInput;
-    byteSize = Buffer.byteLength(JSON.stringify(rawInput), 'utf8');
+    byteSize = getByteLength(JSON.stringify(rawInput));
   }
 
   const journeyId = parsed.id || parsed.journeyId || 'unknown';
