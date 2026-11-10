@@ -1,1 +1,1 @@
-export { StorageAdapter } from '../types/storage';
+export type { StorageAdapter } from '../types/storage';
