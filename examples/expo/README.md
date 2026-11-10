@@ -1,11 +1,34 @@
-# Expo Journey Recovery Example
+# Expo Journey Recovery Standalone Example
 
-This example demonstrates how to integrate `react-native-journey-recovery` into an Expo project to make multi-screen flight booking forms recoverable across app process restarts, crashes, and accidental dismissals.
+A self-contained, fully runnable Expo application demonstrating **multi-step flight booking recovery** across process kills, crashes, and accidental dismissals.
 
-## Key Concepts Demonstrated
+## Getting Started
+
+1. **Install dependencies:**
+   ```bash
+   cd examples/expo
+   npm install
+   ```
+
+2. **Run in development:**
+   ```bash
+   # Start Expo CLI bundler
+   npx expo start
+
+   # Or launch directly in web
+   npm run web
+
+   # Or launch in iOS Simulator
+   npm run ios
+
+   # Or launch on Android Emulator
+   npm run android
+   ```
+
+## Features Demonstrated
 
 1. **`RecoveryProvider`**: Configures the recovery engine at the root of the app.
-2. **`useRecovery`**: Detects whether an unfinished booking journey exists on launch and presents a user recovery banner.
-3. **`useJourney`**: Incrementally saves checkpoints at each step (`destination` -> `passengers` -> `review`).
-4. **`journey.clear()`**: Clears the persisted checkpoint once the booking is confirmed.
-
+2. **`useJourney`**: Incrementally checkpoints flight selection and passenger information with automatic debouncing.
+3. **`useRecovery` & `RecoveryModal`**: Detects unfinished booking flows on launch and provides a modal prompt to resume or discard.
+4. **`SecureStoreAdapter` (or `MemoryStorageAdapter` for testing)**: Persistent client-side storage without server data confusion.
+5. **Clean Dismissal**: Clears storage using `journey.clear()` upon final booking confirmation.

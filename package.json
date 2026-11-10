@@ -13,6 +13,9 @@
       "default": "./dist/index.js"
     }
   },
+  "bin": {
+    "journey-recovery": "dist/cli/index.js"
+  },
   "files": [
     "dist",
     "README.md",
@@ -24,6 +27,7 @@
     "build:docs": "vite build --config website/vite.config.ts",
     "dev:docs": "vite --config website/vite.config.ts",
     "bench": "vite-node benchmarks/bench-throughput.ts",
+    "cli": "vite-node src/cli/index.ts",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest"

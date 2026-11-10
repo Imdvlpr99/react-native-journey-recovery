@@ -1,6 +1,7 @@
 import React from 'react';
 import { CodeBlock } from './CodeBlock';
 import { Simulator } from './Simulator';
+import { SchemaPlayground } from './SchemaPlayground';
 
 export const Sections: React.FC = () => {
   return (
@@ -315,8 +316,28 @@ const storage = new MMKVStorageAdapter(mmkv);
 <RecoveryProvider storage={storage}> ... </RecoveryProvider>`}
         />
 
+        <h3 id="storage-secure" style={{ fontSize: '18px', fontWeight: 600, color: '#e2e8f0', marginBlock: '20px 8px' }}>
+          2. SecureStoreAdapter (Expo &amp; Hardware Keystore / Keychain)
+        </h3>
+        <p style={{ color: 'var(--text-secondary)', fontSize: '14px', marginBottom: '12px' }}>
+          Includes automatic payload chunking to prevent Android&apos;s native 2048-byte Keystore limits from crashing your app during large form recovery.
+        </p>
+        <CodeBlock
+          language="tsx"
+          title="SecureStore Adapter (Expo)"
+          code={`import * as SecureStore from 'expo-secure-store';
+import { SecureStoreAdapter, RecoveryProvider } from 'react-native-journey-recovery';
+
+// Hardware-backed encrypted storage for Fintech & Healthcare journeys
+const storage = new SecureStoreAdapter(SecureStore, {
+  chunkSize: 1800, // Safe chunking for Android Keystore
+});
+
+<RecoveryProvider storage={storage}> ... </RecoveryProvider>`}
+        />
+
         <h3 id="storage-memory" style={{ fontSize: '18px', fontWeight: 600, color: '#e2e8f0', marginBlock: '20px 8px' }}>
-          2. Memory Storage Adapter (Testing &amp; Ephemeral Flows)
+          3. Memory Storage Adapter (Testing &amp; Ephemeral Flows)
         </h3>
         <CodeBlock
           language="typescript"
@@ -556,6 +577,37 @@ await checkpointManager.clearUserJourneys(currentUserId);`}
         />
       </section>
 
+      {/* RecoveryModal & RecoveryBottomSheet */}
+      <section id="ui-recovery-modal" className="doc-section" style={{ marginBottom: '64px' }}>
+        <h2 style={{ fontSize: '28px', fontWeight: 800, color: '#f8fafc', marginBottom: '16px' }}>
+          RecoveryModal &amp; RecoveryBottomSheet
+        </h2>
+        <p style={{ color: 'var(--text-secondary)', fontSize: '15px', lineHeight: 1.7, marginBottom: '16px' }}>
+          When you want to prompt the user with a focused dialog or slide-up sheet rather than an inline banner:
+        </p>
+        <CodeBlock
+          language="tsx"
+          title="Modal & Sheet Dialogs"
+          code={`import { RecoveryModal, RecoveryBottomSheet } from 'react-native-journey-recovery';
+
+// 1. Centered Modal with dark backdrop blur
+<RecoveryModal
+  journeyId="loan-application"
+  title="Resume Loan Application?"
+  resumeLabel="Continue Application"
+  discardLabel="Start New"
+  onRestored={(data) => setFormData(data)}
+/>
+
+// 2. Mobile-first Bottom Sheet sliding up from viewport base
+<RecoveryBottomSheet
+  journeyId="kyc-verification"
+  title="Unfinished Verification Found"
+  onRestored={(data) => resumeVerification(data)}
+/>`}
+        />
+      </section>
+
       {/* Diagnostics */}
       <section id="diagnostics" className="doc-section" style={{ marginBottom: '64px' }}>
         <h2 style={{ fontSize: '28px', fontWeight: 800, color: '#f8fafc', marginBottom: '16px' }}>
@@ -580,6 +632,28 @@ console.log(diag);
 //   isEligibleForMigration: false,
 //   formatVersion: 1
 // }`}
+        />
+      </section>
+
+      {/* CLI Tools */}
+      <section id="cli-tools" className="doc-section" style={{ marginBottom: '64px' }}>
+        <h2 style={{ fontSize: '28px', fontWeight: 800, color: '#f8fafc', marginBottom: '16px' }}>
+          CLI Diagnostic &amp; Inspection Tool
+        </h2>
+        <p style={{ color: 'var(--text-secondary)', fontSize: '15px', lineHeight: 1.7, marginBottom: '16px' }}>
+          Inspect exported checkpoint snapshots, verify FNV-1a checksums, check TTL expiration, and debug corrupted state right from your terminal:
+        </p>
+        <CodeBlock
+          language="bash"
+          title="CLI Commands"
+          code={`# Inspect snapshot and output colorized diagnostic report
+npx journey-recovery inspect snapshot.json
+
+# Automated CI verification: exits with code 0 if valid, 1 if corrupted/expired
+npx journey-recovery verify snapshot.json
+
+# Calculate 32-bit FNV-1a checksum for an arbitrary payload string
+npx journey-recovery checksum '{"step":"review","cartItems":[...]}'`}
         />
       </section>
 
@@ -624,6 +698,18 @@ it('detects draft recovery', async () => {
         </p>
 
         <Simulator />
+      </section>
+
+      {/* Schema & Hash Playground */}
+      <section id="interactive-playground" className="doc-section" style={{ marginBottom: '64px' }}>
+        <h2 style={{ fontSize: '28px', fontWeight: 800, color: '#f8fafc', marginBottom: '16px' }}>
+          Schema &amp; Hash Playground
+        </h2>
+        <p style={{ color: 'var(--text-secondary)', fontSize: '15px', lineHeight: 1.7 }}>
+          Prototype your data model, inspect live FNV-1a checksums, evaluate size limits, and generate production TypeScript code:
+        </p>
+
+        <SchemaPlayground />
       </section>
 
       {/* API Reference */}

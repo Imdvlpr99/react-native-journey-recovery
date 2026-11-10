@@ -4,9 +4,17 @@ interface NavbarProps {
   searchTerm: string;
   onSearchChange: (value: string) => void;
   onMenuToggle: () => void;
+  theme: 'dark' | 'light';
+  onThemeToggle: () => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ searchTerm, onSearchChange, onMenuToggle }) => {
+export const Navbar: React.FC<NavbarProps> = ({
+  searchTerm,
+  onSearchChange,
+  onMenuToggle,
+  theme,
+  onThemeToggle,
+}) => {
   return (
     <header style={{
       position: 'sticky',
@@ -102,6 +110,28 @@ export const Navbar: React.FC<NavbarProps> = ({ searchTerm, onSearchChange, onMe
             }}
           />
         </div>
+
+        <button
+          onClick={onThemeToggle}
+          aria-label="Toggle theme"
+          title={theme === 'dark' ? 'Switch to Light mode' : 'Switch to Dark mode'}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: '36px',
+            height: '36px',
+            background: 'var(--bg-secondary)',
+            border: '1px solid var(--border-color)',
+            borderRadius: '8px',
+            cursor: 'pointer',
+            fontSize: '16px',
+            color: 'var(--text-primary)',
+            transition: 'all 0.2s',
+          }}
+        >
+          {theme === 'dark' ? '☀️' : '🌙'}
+        </button>
 
         <a
           href="https://github.com/Imdvlpr99/react-native-journey-recovery"

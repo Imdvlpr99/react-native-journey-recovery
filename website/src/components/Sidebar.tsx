@@ -35,6 +35,7 @@ export const NAV_GROUPS: NavGroup[] = [
     items: [
       { id: 'storage-async', label: 'AsyncStorageAdapter' },
       { id: 'storage-mmkv', label: 'MMKVStorageAdapter' },
+      { id: 'storage-secure', label: 'SecureStoreAdapter (Expo)' },
       { id: 'storage-memory', label: 'MemoryStorageAdapter' },
       { id: 'storage-custom', label: 'Custom Storage Adapter' },
     ],
@@ -68,9 +69,12 @@ export const NAV_GROUPS: NavGroup[] = [
     title: 'UI & Diagnostics',
     items: [
       { id: 'ui-recovery-banner', label: 'RecoveryBanner Component' },
+      { id: 'ui-recovery-modal', label: 'RecoveryModal & BottomSheet' },
       { id: 'diagnostics', label: 'Recovery Diagnostics' },
+      { id: 'cli-tools', label: 'CLI Inspection & Verify Tool' },
       { id: 'testing-utilities', label: 'Testing Utilities' },
       { id: 'interactive-simulator', label: 'Live Interactive Simulator' },
+      { id: 'interactive-playground', label: 'Schema & Hash Playground' },
       { id: 'api-reference', label: 'API Reference' },
     ],
   },

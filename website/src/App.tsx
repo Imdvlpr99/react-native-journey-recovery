@@ -8,6 +8,18 @@ export const App: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [activeId, setActiveId] = useState('overview');
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [theme, setTheme] = useState<'dark' | 'light'>(() => {
+    return (localStorage.getItem('theme') as 'dark' | 'light') || 'dark';
+  });
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
+  };
 
   // Keyboard shortcut Ctrl+K / Cmd+K to focus search
   useEffect(() => {
@@ -49,6 +61,8 @@ export const App: React.FC = () => {
         searchTerm={searchTerm}
         onSearchChange={setSearchTerm}
         onMenuToggle={() => setSidebarOpen(!sidebarOpen)}
+        theme={theme}
+        onThemeToggle={toggleTheme}
       />
 
       <div style={{

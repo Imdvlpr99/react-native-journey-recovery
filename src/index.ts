@@ -41,6 +41,7 @@ export * from './react';
 export * from './utils/errors';
 export * from './utils/checksum';
 export * from './utils/debounce';
+export * from './cli/inspect';
 
 // Type Contracts
 export * from './types';
