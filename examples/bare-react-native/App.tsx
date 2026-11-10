@@ -256,3 +256,4 @@ const styles = StyleSheet.create({
   row: { flexDirection: 'row', gap: 10 },
   reviewItem: { fontSize: 15, color: '#1f2937', marginVertical: 3 },
 });
+

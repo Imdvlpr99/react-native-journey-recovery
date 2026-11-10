@@ -10,3 +10,4 @@ This example demonstrates how to integrate `react-native-journey-recovery` into 
    Providing a multi-step KYC identity verification flow with resume prompts.
 3. **`flushOnBackground`**:
    Leveraging AppState lifecycle listeners to flush pending form drafts when the user backgrounds the app.
+

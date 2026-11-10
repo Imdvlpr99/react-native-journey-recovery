@@ -27,6 +27,7 @@ describe('react-native-journey-recovery exports', () => {
   it('exports form and state integration adapters', () => {
     expect(JourneyRecovery.useJourneyForm).toBeDefined();
     expect(JourneyRecovery.useJourneyZustand).toBeDefined();
+    expect(JourneyRecovery.useJourneyRedux).toBeDefined();
   });
 
   it('exports UI primitives', () => {

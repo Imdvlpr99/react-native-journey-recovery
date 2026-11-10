@@ -21,6 +21,7 @@ export * from './forms';
 
 // State Management Integrations
 export * from './integrations/zustand';
+export * from './integrations/redux';
 
 // UI Primitives
 export * from './ui';

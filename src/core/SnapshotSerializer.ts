@@ -2,6 +2,20 @@ import { JourneySnapshot } from '../types/checkpoint';
 import { JourneyRecoveryError } from '../utils/errors';
 import { computeChecksum } from '../utils/checksum';
 
+export interface SnapshotSerializerOptions {
+  /**
+   * Maximum allowed snapshot size in bytes. Prevents massive state bloat.
+   * Default: 512 KB (524,288 bytes)
+   */
+  maxSizeBytes?: number;
+
+  /**
+   * Internal storage format version.
+   * Default: 1
+   */
+  formatVersion?: number;
+}
+
 function omitFields(obj: unknown, exclude: string[]): unknown {
   if (typeof obj !== 'object' || obj === null) {
     return obj;
@@ -20,6 +34,14 @@ function omitFields(obj: unknown, exclude: string[]): unknown {
 }
 
 export class SnapshotSerializer {
+  private maxSizeBytes: number;
+  private formatVersion: number;
+
+  constructor(options?: SnapshotSerializerOptions) {
+    this.maxSizeBytes = options?.maxSizeBytes ?? 512 * 1024;
+    this.formatVersion = options?.formatVersion ?? 1;
+  }
+
   /**
    * Serializes a snapshot into a JSON string, calculating checksum and applying exclusions.
    */
@@ -36,14 +58,35 @@ export class SnapshotSerializer {
       const dataString = JSON.stringify(dataToPersist);
       const checksum = computeChecksum(dataString);
 
-      const completeSnapshot: JourneySnapshot<T> = {
+      const completeSnapshot: JourneySnapshot<T> & { _formatVersion?: number } = {
         ...snapshot,
         data: dataToPersist,
         checksum,
+        _formatVersion: this.formatVersion,
       };
 
-      return JSON.stringify(completeSnapshot);
+      const serialized = JSON.stringify(completeSnapshot);
+
+      const byteLength =
+        typeof Buffer !== 'undefined'
+          ? Buffer.byteLength(serialized, 'utf8')
+          : typeof TextEncoder !== 'undefined'
+            ? new TextEncoder().encode(serialized).length
+            : serialized.length;
+
+      if (byteLength > this.maxSizeBytes) {
+        throw new JourneyRecoveryError(
+          'SERIALIZATION_FAILED',
+          `Snapshot size (${byteLength} bytes) exceeds maximum allowed limit (${this.maxSizeBytes} bytes)`,
+          snapshot.id
+        );
+      }
+
+      return serialized;
     } catch (error) {
+      if (error instanceof JourneyRecoveryError) {
+        throw error;
+      }
       throw new JourneyRecoveryError(
         'SERIALIZATION_FAILED',
         `Failed to serialize journey snapshot: ${error instanceof Error ? error.message : String(error)}`,
@@ -86,4 +129,3 @@ export class SnapshotSerializer {
     return parsed as JourneySnapshot<T>;
   }
 }
-
