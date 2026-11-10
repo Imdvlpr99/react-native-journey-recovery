@@ -48,3 +48,4 @@ describe('SnapshotSerializer Size Limits & Storage Version', () => {
     expect(deserialized.data.count).toBe(5);
   });
 });
+

@@ -33,3 +33,4 @@ Provide standard first-party adapters:
 - **Positive:** Developers can bring any existing storage engine.
 - **Positive:** Unit tests can run in memory in < 10ms without mocking disk operations.
 - **Negative:** Storage operations remain asynchronous at the contract level (even for synchronous engines like MMKV) to maintain unified interface predictability.
+

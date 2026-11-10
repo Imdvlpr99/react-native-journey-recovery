@@ -18,3 +18,4 @@ In asynchronous systems, if save operations run uncoordinated:
 - **Positive:** Race conditions are mathematically prevented per journey.
 - **Positive:** Data loss during failed disk writes is eliminated.
 - **Positive:** Different journeys (e.g. `checkout` and `profile`) can write in parallel without blocking each other.
+

@@ -21,3 +21,4 @@ Implement the entire v0.1.0 recovery engine in pure TypeScript.
 - **Positive:** Works out of the box with bare React Native, Expo Go, Expo managed, and web without native configuration.
 - **Positive:** Fast development and test cycles with Node.js test runners (Vitest).
 - **Negative:** Cannot execute code if the OS terminates the process instantaneously while a debounced timer is still ticking (mitigated by explicit checkpointing and background flush).
+

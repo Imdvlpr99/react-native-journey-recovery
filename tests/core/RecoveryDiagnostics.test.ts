@@ -100,3 +100,4 @@ describe('RecoveryDiagnostics', () => {
     expect(diag.isEligibleForMigration).toBe(true);
   });
 });
+
