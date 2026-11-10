@@ -1,64 +1,120 @@
-# react-native-journey-recovery
+<div align="center">
 
-> **Never make users start over.**  
-> A developer-first journey recovery engine for React Native. Save checkpoints, validate interrupted sessions, and restore unfinished multi-screen workflows on Android and iOS.
+# 🛡️ react-native-journey-recovery
 
-[![npm version](https://img.shields.io/badge/version-0.1.0-blue.svg)](https://www.npmjs.com/package/react-native-journey-recovery)
-[![license](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![CI](https://github.com/Imdvlpr99/react-native-journey-recovery/actions/workflows/ci.yml/badge.svg)](https://github.com/Imdvlpr99/react-native-journey-recovery/actions/workflows/ci.yml)
-[![Tests](https://img.shields.io/badge/tests-121%20passing-brightgreen.svg)](https://rn-journey-recovery.vercel.app/)
-[![Coverage](https://img.shields.io/badge/coverage-90%25-brightgreen.svg)](https://rn-journey-recovery.vercel.app/)
-[![Vercel](https://img.shields.io/badge/docs-vercel-black?logo=vercel)](https://rn-journey-recovery.vercel.app/)
+### *Never make users start over.*
 
----
+A developer-first journey recovery engine for React Native and Expo.  
+Persist checkpoints, validate interrupted sessions, and safely restore unfinished multi-screen workflows on Android and iOS.
 
-## Overview
+[![npm version](https://img.shields.io/badge/npm-v0.1.0-blue.svg?style=flat-square)](https://www.npmjs.com/package/react-native-journey-recovery)
+[![license](https://img.shields.io/badge/license-MIT-green.svg?style=flat-square)](LICENSE)
+[![CI](https://github.com/Imdvlpr99/react-native-journey-recovery/actions/workflows/ci.yml/badge.svg?style=flat-square)](https://github.com/Imdvlpr99/react-native-journey-recovery/actions/workflows/ci.yml)
+[![Tests](https://img.shields.io/badge/tests-121%20passing-brightgreen.svg?style=flat-square)](https://rn-journey-recovery.vercel.app/)
+[![Coverage](https://img.shields.io/badge/coverage-90%25-brightgreen.svg?style=flat-square)](https://rn-journey-recovery.vercel.app/)
+[![Docs](https://img.shields.io/badge/docs-vercel-black?logo=vercel&style=flat-square)](https://rn-journey-recovery.vercel.app/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-100%25-blue.svg?style=flat-square)](https://www.typescriptlang.org/)
 
-Mobile workflows (checkout flows, multi-step onboarding, KYC forms, booking wizards) are frequently interrupted when:
-- The user accidentally closes or backgrounds the app.
-- Android or iOS terminates background processes to reclaim RAM.
-- The device restarts or the app crashes.
-- Network connectivity drops mid-flow.
-
-`react-native-journey-recovery` provides a dedicated, lightweight recovery lifecycle for named journeys: registration, checkpointing, validation, expiry, restoration, migration, and cleanup.
-
-### Core Product Principles
-1. **Developer-Controlled:** Explicitly decide what data is captured. Never dump full state stores automatically.
-2. **Safe by Default:** Sensitive field exclusion, structural validation, and FNV-1a integrity checksums before restoring.
-3. **Write Serialization:** Checkpoint writes are strictly queued per journey to eliminate race conditions.
-4. **Resilient to Failure:** If a new write fails, the previous valid checkpoint is preserved.
-5. **No Shutdown Callback Dependency:** Relies on incremental checkpoints, not unreliable OS termination callbacks.
-6. **No Transaction Truth Assumption:** Restores client-side UI progress; server-side state (prices, stock, auth) must still be revalidated by your application.
+[**Interactive Docs & Live Simulator**](https://rn-journey-recovery.vercel.app/) • [**API Reference**](docs/api-reference.md) • [**Architecture Blueprint**](REACT_NATIVE_JOURNEY_RECOVERY_PRODUCT_BLUEPRINT.md) • [**Example Apps**](examples/)
 
 ---
 
-## Installation
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FImdvlpr99%2Freact-native-journey-recovery&project-name=react-native-journey-recovery-docs&repository-name=react-native-journey-recovery)
+
+</div>
+
+<br />
+
+## 💡 The Problem
+
+Mobile workflows—multi-step KYC onboarding, flight bookings, loan applications, e-commerce checkouts—are frequently interrupted:
+- 📱 The OS forcefully terminates background processes (OOM / memory reclamation) without running JavaScript shutdown callbacks.
+- ⚡ The user switches apps to check a two-factor SMS code or authenticator app.
+- 🔋 The device battery dies, restarts, or the app encounters a crash.
+- 📶 Connectivity drops mid-transaction.
+
+Most developers try to solve this by dumping their entire global Redux or Zustand state to disk. This creates **massive storage bloat**, **accidental persistence of passwords and tokens**, and **fragile restore bugs** when backend truth changes.
+
+`react-native-journey-recovery` provides a dedicated recovery layer with **explicit journey semantics**: registration, incremental checkpointing, FNV-1a integrity validation, TTL expiry, schema migration, and clean dismissal.
+
+---
+
+## 🏗️ Architecture & Recovery Lifecycle
+
+```mermaid
+flowchart TD
+    subgraph Client ["React Native Application"]
+        UI["Multi-Step Screen / Form"]
+        Hooks["useJourney() / useRecovery()"]
+    end
+
+    subgraph Core ["Journey Recovery Engine"]
+        Queue["Mutex Promise Queue (FIFO)"]
+        Serializer["SnapshotSerializer\n(Sensitive Exclusions + FNV-1a Hash)"]
+        Validator["SnapshotValidator\n(TTL Expiry + Schema Migration)"]
+    end
+
+    subgraph StorageLayer ["Pluggable Storage Adapters"]
+        AsyncStorage["AsyncStorageAdapter"]
+        MMKV["MMKVStorageAdapter"]
+        SecureStore["SecureStoreAdapter (2KB Android Chunking)"]
+        Memory["MemoryStorageAdapter"]
+    end
+
+    UI -->|"Step Change / Auto-Save"| Hooks
+    Hooks -->|"Enqueue Write"| Queue
+    Queue -->|"Atomic Write (Never Corrupts Last Good)"| Serializer
+    Serializer --> StorageLayer
+
+    StorageLayer -.->|"App Relaunch / Restart"| Validator
+    Validator -->|"Integrity & TTL Verified"| Hooks
+    Hooks -->|"Prompt: Resume or Start Over"| UI
+```
+
+---
+
+## ⚖️ Why Journey Recovery vs Generic Persistence?
+
+| Capability | Generic Store Persistence | `react-native-journey-recovery` |
+|---|:---:|:---:|
+| **Named Journey Semantics** | ❌ (Dumps entire store) | ✅ First-class (`useJourney('checkout')`) |
+| **Write Race Protection** | ❌ (Prone to out-of-order writes) | ✅ Per-journey FIFO Mutex Queue |
+| **Tamper & Corruption Detection**| ❌ (Blind `JSON.parse`) | ✅ Deterministic 32-bit FNV-1a Checksums |
+| **Automatic Schema Migration** | ⚠️ (Complex root migrations) | ✅ Per-journey `migrate(oldData, oldVer)` |
+| **Time-to-Live (TTL) Expiry** | ❌ (Stale data persists forever) | ✅ Configurable expiration timestamps |
+| **Android Keystore Size Limit** | ❌ (Crashes on >2048B in SecureStore) | ✅ Automatic transparent chunking |
+| **Multi-User Isolation** | ❌ (Shared device leakage) | ✅ Namespaced user scoping (`userId`) |
+| **Server Truth Assumption** | ⚠️ (Assumes saved = completed) | ✅ UI-only progress (requires server re-check) |
+
+---
+
+## 📦 Installation
 
 ```bash
 npm install react-native-journey-recovery
+# or
+yarn add react-native-journey-recovery
 # or
 pnpm add react-native-journey-recovery
 ```
 
 ### Peer Dependencies
 - `react`: `>= 18.0.0`
-- `@react-native-async-storage/async-storage` (optional, for persistent storage)
-- `react-native-mmkv` (optional, for fast MMKV storage)
+- *(Optional)* `@react-native-async-storage/async-storage` for default persistent storage.
+- *(Optional)* `react-native-mmkv` for ultra-fast synchronous storage.
+- *(Optional)* `expo-secure-store` for hardware-backed encrypted storage.
 
 ---
 
-## Quick Start
+## 🚀 Quick Start (In 3 Steps)
 
-### 1. Setup Provider
-
-Wrap your application with `RecoveryProvider`:
+### Step 1: Wrap App with `RecoveryProvider`
 
 ```tsx
 import React from 'react';
-import { AppState } from 'react-native';
 import { RecoveryProvider, AsyncStorageAdapter } from 'react-native-journey-recovery';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { AppNavigator } from './navigation/AppNavigator';
+import { NavigationContainer } from '@react-navigation/native';
 
 const storage = new AsyncStorageAdapter(AsyncStorage);
 
@@ -67,239 +123,214 @@ export default function App() {
     <RecoveryProvider
       storage={storage}
       options={{
-        defaultExpiry: 24 * 60 * 60 * 1000, // 24 hours
+        defaultExpiry: 24 * 60 * 60 * 1000, // 24-hour TTL
         autoSave: true,
         debounceMs: 500,
-        appState: AppState, // Automatically flushes pending debounced writes on background
-        flushOnBackground: true,
-      }}
-      onRecovery={(event) => {
-        console.log(`[Journey ${event.journeyId}] status: ${event.status}`);
       }}
     >
-      <AppNavigator />
+      <NavigationContainer>{/* Your App Screens */}</NavigationContainer>
     </RecoveryProvider>
   );
 }
 ```
 
-### 2. Capture Checkpoints in a Flow
-
-Use `useJourney` inside workflow screens:
+### Step 2: Save Checkpoints in Your Screen
 
 ```tsx
 import React, { useState } from 'react';
 import { useJourney } from 'react-native-journey-recovery';
 
-export function CheckoutScreen({ navigation }) {
-  const journey = useJourney('checkout', {
+interface CheckoutState {
+  step: 'shipping' | 'billing' | 'review';
+  shippingAddress: Record<string, string>;
+  paymentMethod: string;
+}
+
+export function CheckoutScreen() {
+  const journey = useJourney<CheckoutState>('checkout-flow', {
     version: 1,
     expiry: 12 * 60 * 60 * 1000, // 12 hours
   });
 
-  const [address, setAddress] = useState('');
+  const [address, setAddress] = useState({});
 
-  const handleNext = async () => {
-    // Save checkpoint before navigating forward
-    await journey.checkpoint({
-      step: 'shipping',
-      address,
-    }, {
-      exclude: ['creditCardCVV'], // Safeguard sensitive fields
+  const handleNext = async (nextStepData: CheckoutState) => {
+    // Checkpoint progress with sensitive field exclusions
+    await journey.checkpoint(nextStepData, {
+      exclude: ['cardNumber', 'cvv'],
     });
-
-    navigation.navigate('PaymentScreen');
   };
 
-  const handleOrderComplete = async () => {
-    // Clear checkpoint when flow is completed
+  const handleFinalOrderSubmit = async () => {
+    // Clear checkpoint once successfully completed on backend
     await journey.clear();
   };
 
-  return (
-    // Your UI components
-  );
+  return <>{/* Checkout UI */}</>;
 }
 ```
 
-### 3. Prompt Users with `<RecoveryBanner />`
+### Step 3: Offer Seamless Recovery on App Launch
 
-Add an accessible, customizable recovery prompt to your flow:
+Use pre-built UI primitives or build your own custom banner/dialog:
 
 ```tsx
 import React from 'react';
-import { RecoveryBanner } from 'react-native-journey-recovery';
+import { RecoveryBanner, RecoveryModal, RecoveryBottomSheet } from 'react-native-journey-recovery';
 
-export function CheckoutEntryScreen({ navigation }) {
+export function HomeScreen({ navigation }) {
   return (
-    <View>
+    <>
+      {/* 1. Inline Prompt Banner */}
       <RecoveryBanner
-        journeyId="checkout"
-        title="Resume your unfinished checkout?"
-        onRestored={(data) => {
-          navigation.navigate(data.step, { restoredData: data });
-        }}
+        journeyId="checkout-flow"
+        title="Resume your unfinished order?"
+        onRestored={(savedState) => navigation.navigate('Checkout', savedState)}
       />
-      <FreshCheckoutView />
-    </View>
+
+      {/* 2. Or a Centered Modal Dialog */}
+      <RecoveryModal
+        journeyId="kyc-verification"
+        title="Resume Identity Verification?"
+        onRestored={(savedState) => navigation.navigate('KYC', savedState)}
+      />
+    </>
   );
 }
 ```
 
 ---
 
-## Key Features & Integrations
+## 🧰 Key Features & Highlights
 
-### 1. Form Integration (`useJourneyForm` & `useJourneyFormik`)
-Seamlessly integrates with **React Hook Form** and **Formik**:
+### 1. Hardware-Backed Encrypted Storage with 2KB Chunking
+Expo's `expo-secure-store` throws exceptions on Android when storing values over 2048 bytes. `SecureStoreAdapter` automatically chunks large snapshots into sub-keys and reassembles them transparently:
 
 ```tsx
-// React Hook Form
-const { hasSavedProgress, restoreToForm, clearForm } = useJourneyForm('profile-flow', form, {
-  autoSave: true,
-  exclude: ['password'],
-});
+import * as SecureStore from 'expo-secure-store';
+import { SecureStoreAdapter } from 'react-native-journey-recovery';
 
-// Formik
-const { hasSavedProgress, restoreToFormik, clearFormik } = useJourneyFormik('signup-flow', formik, {
-  autoSave: true,
-  exclude: ['confirmPassword'],
+const storage = new SecureStoreAdapter(SecureStore, {
+  chunkSize: 1800, // Safe chunking for Android Keystore
 });
 ```
 
-### 2. TanStack Query Server Coordination (`useJourneyQuery`)
-Coordinate client snapshot recovery with server query cache invalidation and re-fetching:
+### 2. State & Form Integrations
+Zero-boilerplate hooks for the React Native ecosystem:
+- **React Hook Form:** `useJourneyForm('kyc', form, { autoSave: true })`
+- **Formik:** `useJourneyFormik('signup', formik, { autoSave: true })`
+- **Zustand Slices:** `useJourneyZustand('cart', useStore, (s) => s.cart)`
+- **Redux Slices:** `useJourneyRedux('order', store, (s) => s.order)`
+- **TanStack Query:** `createTanStackQueryCoordinator({ invalidateOnRestore: [['cart']] })`
+- **Zod Validation:** `validate: createZodValidator(mySchema)`
 
-```tsx
-const { available, restoreAndRevalidate, discardAndReset } = useJourneyQuery('checkout-flow', {
-  queryClient,
-  invalidateOnRestore: [['cart'], ['inventory']],
-  refetchOnRestore: [['pricing']],
-  resetOnClear: [['cart-hold']],
-  onRevalidated: async (data) => {
-    console.log('Restored with fresh server prices:', data);
-  },
-});
-```
-
-### 3. Recovery Diagnostics (`getRecoveryDiagnostics`)
-Explain exactly why a session is or is not recoverable with granular health and security metrics:
-
-```tsx
-const diag = await recoveryManager.getDiagnostics('checkout-flow');
-console.log(diag);
-// {
-//   exists: true,
-//   status: 'available',
-//   isRecoverable: true,
-//   payloadSizeBytes: 1420,
-//   hasChecksum: true,
-//   checksumValid: true,
-//   isExpired: false,
-//   timeUntilExpiryMs: 86340000,
-//   isEligibleForMigration: false,
-//   formatVersion: 1
-// }
-```
-
-### 4. Selective State Slices (`useJourneyZustand` & `useJourneyRedux`)
-Persist **only the specific slice** of state without dumping global stores:
-
-```tsx
-// Zustand Slice
-const { hasSavedProgress, restoreToStore } = useJourneyZustand(
-  'cart-slice',
-  useAppStore,
-  (state) => state.cart
-);
-
-// Redux Slice
-const { hasSavedProgress, restoreToRedux } = useJourneyRedux(
-  'loan-slice',
-  reduxStore,
-  (state) => state.loanApplication
-);
-```
-
-### 5. Navigation Adapters
-- **React Navigation:** `createNavigationAdapter(navigation)`
-- **Expo Router:** `createExpoRouterAdapter(router, () => ({ pathname, segments, params }))`
-
-### 6. Storage Adapters
-- `AsyncStorageAdapter`: Standard React Native storage.
-- `MMKVStorageAdapter`: Ultra-fast synchronous-backed persistence.
-- `SecureStoreAdapter`: Hardware-backed encrypted storage for Expo (`expo-secure-store`) with automatic 2048-byte Keystore chunking for Android.
-- `MemoryStorageAdapter`: Fast in-memory storage for testing and ephemeral flows.
-
-### 7. UI Primitives
-Drop-in accessible, themeable components or headless custom UI via render props:
-- **`RecoveryBanner`**: Inline prompt banner with title, last saved time, resume, and discard buttons.
-- **`RecoveryModal`**: Centered modal dialog with backdrop blur overlay and focus trap.
-- **`RecoveryBottomSheet`**: Mobile-first bottom sheet prompt with drag handle indicator.
-
-```tsx
-import { RecoveryModal, RecoveryBottomSheet } from 'react-native-journey-recovery';
-
-// Centered Dialog
-<RecoveryModal journeyId="loan-application" onRestored={(data) => setForm(data)} />
-
-// Bottom-anchored Sheet
-<RecoveryBottomSheet journeyId="kyc-verification" onRestored={(data) => resumeVerification(data)} />
-```
-
-### 8. CLI Diagnostic & Verification Tool
-Inspect exported checkpoint snapshots, check FNV-1a integrity, and test TTL expiration directly from your terminal:
+### 3. CLI Inspection & Verification Tool
+Debug and verify exported snapshots directly from your terminal or CI pipelines:
 
 ```bash
-# Detailed diagnostic report
+# Print detailed diagnostics report with FNV-1a checksum and byte size
 npx journey-recovery inspect snapshot.json
 
 # Automated CI check: exits with 0 if valid, 1 if corrupted/expired
 npx journey-recovery verify snapshot.json
 
-# Fast FNV-1a checksum calculation
-npx journey-recovery checksum '{"step":"review","cartItems":[...]}'
+# Compute 32-bit FNV-1a checksum
+npx journey-recovery checksum '{"step":"shipping","cartTotal":150}'
 ```
 
-### 9. Multi-User & Shared Device Scoping
-Namespace all checkpoints per logged-in user:
+### 4. Zero-Mock Unit Testing Harness
+Test your screens with an isolated in-memory recovery environment for Jest / Vitest:
 
 ```tsx
-<RecoveryProvider storage={storage} options={{ userId: currentUserId }}>
+import { render, screen, fireEvent } from '@testing-library/react-native';
+import { createTestRecoveryEnvironment } from 'react-native-journey-recovery/testing';
+
+it('recovers form draft after simulated process kill', async () => {
+  const env = createTestRecoveryEnvironment();
+
+  // 1. Render and enter data
+  const { unmount } = render(<env.Wrapper><MyScreen /></env.Wrapper>);
+  fireEvent.changeText(screen.getByPlaceholderText('City'), 'Tokyo');
+  await env.flushPending();
+
+  // 2. Simulate process termination
+  unmount();
+
+  // 3. Relaunch app with identical storage
+  render(<env.Wrapper><MyScreen /></env.Wrapper>);
+  expect(await screen.findByText(/Resume where you left off/i)).toBeTruthy();
+});
 ```
-On logout, call `checkpointManager.clearUserJourneys(currentUserId)` to cleanly purge draft applications.
 
 ---
 
-## Example Applications
+## ⚡ High-Throughput Benchmarks
 
-- 🌐 [**Interactive Browser Simulator**](examples/simulator) — Standalone visual simulator with simulated process kill (SIGKILL), storage tampering, checksum validation, and real-time diagnostics.
-- 🛒 [**Multi-Screen Checkout Flow**](examples/checkout-flow) — React Navigation multi-step checkout with delivery, method, and payment steps.
-- ✈️ [**Expo Flight Booking Wizard**](examples/expo) — Expo Router flight reservation wizard using `MMKVStorageAdapter`.
-- 🔐 [**Bare React Native KYC Flow**](examples/bare-react-native) — Identity verification flow featuring multi-user scoping and sensitive field exclusions.
+Tested on standard Node.js runtime (v22):
+
+| Operation | Throughput | Latency |
+|---|:---:|:---:|
+| **32-bit FNV-1a Checksum Calculation** | **~167,000 ops/sec** | `0.005 ms` |
+| **Serialized Concurrent Checkpoint Writes (Mutex Queue)** | **~35,000 writes/sec** | `0.028 ms` |
+| **Checkpoint Retrieval, Checksum & TTL Verification** | **~224,000 reads/sec** | `0.004 ms` |
+
+Run benchmarks locally anytime:
+```bash
+npm run bench
+```
 
 ---
 
-## Documentation Website
+## 📂 Standalone Example Projects
 
-The official developer documentation website is built with React 18 & Vite:
-- 🌐 [**Interactive Documentation Website**](https://rn-journey-recovery.vercel.app/) (Live on Vercel)
+Explore fully runnable implementations in [`examples/`](examples/):
+
+- ✈️ [**`examples/expo`**](examples/expo): Standalone runnable Expo app with multi-step flight booking and `RecoveryModal`. (`cd examples/expo && npm install && npx expo start`)
+- 🔐 [**`examples/bare-react-native`**](examples/bare-react-native): Bare React Native project demonstrating multi-user scoping and secure Keychain persistence.
+- 🛒 [**`examples/checkout-flow`**](examples/checkout-flow): Multi-screen React Navigation checkout with address, delivery, and payment steps.
+- 🌐 [**`examples/simulator`**](examples/simulator): Interactive browser simulator for process kills (`SIGKILL`) and data tampering.
+
+---
+
+## 📚 Documentation & Resources
+
+- 🌐 [**Official Documentation Website**](https://rn-journey-recovery.vercel.app/) (Live on Vercel)
 - 📖 [**GitHub Pages Mirror**](https://imdvlpr99.github.io/react-native-journey-recovery/)
-- 🚀 **Deploy to your own Vercel in 1 click:**  
-  [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FImdvlpr99%2Freact-native-journey-recovery&project-name=react-native-journey-recovery-docs&repository-name=react-native-journey-recovery)
-- Run locally anytime: `npm run dev:docs` or open [`docs/index.html`](docs/index.html) directly in any browser.
+- 📑 [**Complete API Reference**](docs/api-reference.md)
+- 🏛️ [**Architecture Decision Records (ADRs)**](docs/adr/)
+- 📋 [**Product Blueprint**](REACT_NATIVE_JOURNEY_RECOVERY_PRODUCT_BLUEPRINT.md)
+- 📝 [**Changelog**](CHANGELOG.md)
+- 🛡️ [**Security Policy**](SECURITY.md)
 
 ---
 
-## Detailed Documentation
+## 🤝 Contributing
 
-For full props, return handles, options, and advanced architecture:
-- 📖 [**Complete API Reference**](docs/api-reference.md)
-- 🏗️ [**Product & Technical Blueprint**](REACT_NATIVE_JOURNEY_RECOVERY_PRODUCT_BLUEPRINT.md)
-- 🤝 [**Contributing Guide**](CONTRIBUTING.md)
+Contributions are welcome! Please check out [CONTRIBUTING.md](CONTRIBUTING.md) to get started.
+
+```bash
+# Clone the repository
+git clone https://github.com/Imdvlpr99/react-native-journey-recovery.git
+
+# Install dependencies
+npm install
+
+# Run tests with coverage
+npm run test:coverage
+
+# Run TypeScript typecheck
+npm run typecheck
+
+# Start docs dev server
+npm run dev:docs
+```
 
 ---
 
-## License
+## 📄 License
 
-MIT © 2026
+Distributed under the MIT License. See [`LICENSE`](LICENSE) for more information.
+
+<div align="center">
+<sub>Crafted with ❤️ for the React Native & Expo developer community.</sub>
+</div>
