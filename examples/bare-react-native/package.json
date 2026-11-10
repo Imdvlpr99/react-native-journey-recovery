@@ -1,0 +1,23 @@
+{
+  "name": "bare-react-native-journey-recovery-example",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "react-native start",
+    "android": "react-native run-android",
+    "ios": "react-native run-ios"
+  },
+  "dependencies": {
+    "react": "18.3.1",
+    "react-native": "0.76.5",
+    "@react-native-async-storage/async-storage": "^2.1.0",
+    "react-native-journey-recovery": "../.."
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.0",
+    "@types/react": "~18.3.12",
+    "typescript": "^5.3.3"
+  },
+  "private": true
+}
+

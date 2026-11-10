@@ -225,9 +225,40 @@ const { hasSavedProgress, restoreToRedux } = useJourneyRedux(
 ### 6. Storage Adapters
 - `AsyncStorageAdapter`: Standard React Native storage.
 - `MMKVStorageAdapter`: Ultra-fast synchronous-backed persistence.
+- `SecureStoreAdapter`: Hardware-backed encrypted storage for Expo (`expo-secure-store`) with automatic 2048-byte Keystore chunking for Android.
 - `MemoryStorageAdapter`: Fast in-memory storage for testing and ephemeral flows.
 
-### 7. Multi-User & Shared Device Scoping
+### 7. UI Primitives
+Drop-in accessible, themeable components or headless custom UI via render props:
+- **`RecoveryBanner`**: Inline prompt banner with title, last saved time, resume, and discard buttons.
+- **`RecoveryModal`**: Centered modal dialog with backdrop blur overlay and focus trap.
+- **`RecoveryBottomSheet`**: Mobile-first bottom sheet prompt with drag handle indicator.
+
+```tsx
+import { RecoveryModal, RecoveryBottomSheet } from 'react-native-journey-recovery';
+
+// Centered Dialog
+<RecoveryModal journeyId="loan-application" onRestored={(data) => setForm(data)} />
+
+// Bottom-anchored Sheet
+<RecoveryBottomSheet journeyId="kyc-verification" onRestored={(data) => resumeVerification(data)} />
+```
+
+### 8. CLI Diagnostic & Verification Tool
+Inspect exported checkpoint snapshots, check FNV-1a integrity, and test TTL expiration directly from your terminal:
+
+```bash
+# Detailed diagnostic report
+npx journey-recovery inspect snapshot.json
+
+# Automated CI check: exits with 0 if valid, 1 if corrupted/expired
+npx journey-recovery verify snapshot.json
+
+# Fast FNV-1a checksum calculation
+npx journey-recovery checksum '{"step":"review","cartItems":[...]}'
+```
+
+### 9. Multi-User & Shared Device Scoping
 Namespace all checkpoints per logged-in user:
 
 ```tsx

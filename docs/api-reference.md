@@ -130,6 +130,12 @@ export interface StorageAdapter {
   const mmkv = new MMKV();
   const storage = new MMKVStorageAdapter(mmkv);
   ```
+- **`SecureStoreAdapter`** (Expo & Hardware Keystore/Keychain):
+  ```ts
+  import * as SecureStore from 'expo-secure-store';
+  // Hardware-backed encrypted storage with automatic 2048-byte chunking for Android Keystore
+  const storage = new SecureStoreAdapter(SecureStore, { chunkSize: 1800 });
+  ```
 - **`MemoryStorageAdapter`**:
   ```ts
   const storage = new MemoryStorageAdapter();
@@ -296,6 +302,32 @@ Or headless with `render`:
 />
 ```
 
+### `<RecoveryModal />`
+Centered modal dialog with backdrop blur overlay and action buttons:
+
+```tsx
+<RecoveryModal
+  journeyId="loan-application"
+  title="Resume Loan Application?"
+  resumeLabel="Continue Application"
+  discardLabel="Start New"
+  onRestored={(data) => setFormData(data)}
+  onDiscarded={() => console.log('Discarded')}
+/>
+```
+
+### `<RecoveryBottomSheet />`
+Bottom-anchored sheet prompt with mobile drag pill:
+
+```tsx
+<RecoveryBottomSheet
+  journeyId="kyc-verification"
+  title="Unfinished Verification Found"
+  onRestored={(data) => resumeVerification(data)}
+  onDiscarded={() => resetVerification()}
+/>
+```
+
 ---
 
 ## 7. Diagnostics & Inspection
@@ -350,3 +382,68 @@ const previousSnapshot = await checkpointManager.restoreFromHistory('flight-book
 | `SERIALIZATION_FAILED` | Circular data structure or payload exceeded byte size limits |
 | `JOURNEY_ALREADY_ACTIVE` | Duplicate journey registration |
 | `RECOVERY_CANCELLED` | Recovery was cancelled |
+
+---
+
+## 10. CLI Diagnostic & Inspection Tool
+
+The `journey-recovery` CLI utility inspects stored checkpoint snapshots, checks integrity, and calculates checksums:
+
+```bash
+# Detailed terminal report
+npx journey-recovery inspect snapshot.json
+
+# Automated CI verification (exit code 0 if valid, 1 if invalid)
+npx journey-recovery verify snapshot.json
+
+# 32-bit FNV-1a checksum
+npx journey-recovery checksum '{"step":"review"}'
+```
+
+Or programmatically:
+```ts
+import { inspectSnapshot, formatReport } from 'react-native-journey-recovery';
+
+const report = inspectSnapshot(rawJsonString);
+console.log(formatReport(report));
+```
+
+---
+
+## 11. Developer Testing Harness
+
+### `createTestRecoveryEnvironment()` & `initTestRecoveryEnvironment()`
+Initializes an isolated in-memory test environment for Jest and Vitest without mock boilerplate:
+
+```tsx
+import { render, screen, fireEvent, act } from '@testing-library/react-native';
+import { createTestRecoveryEnvironment } from 'react-native-journey-recovery/testing';
+import { CheckoutScreen } from './CheckoutScreen';
+
+it('recovers cart draft', async () => {
+  const env = createTestRecoveryEnvironment();
+
+  const { unmount } = render(
+    <env.Wrapper>
+      <CheckoutScreen />
+    </env.Wrapper>
+  );
+
+  // Fast-forward auto-save
+  await act(async () => {
+    await env.flushPending();
+  });
+
+  // Simulate process kill
+  unmount();
+
+  // Relaunch app
+  render(
+    <env.Wrapper>
+      <CheckoutScreen />
+    </env.Wrapper>
+  );
+
+  expect(await screen.findByText('Resume where you left off?')).toBeTruthy();
+});
+```
