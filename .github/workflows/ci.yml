@@ -31,8 +31,11 @@ jobs:
       - name: Typecheck
         run: npm run typecheck
 
-      - name: Run test suite
-        run: npm test
+      - name: Run test suite with coverage
+        run: npm run test:coverage
+
+      - name: Run throughput benchmark
+        run: npm run bench
 
       - name: Build package distribution
         run: npm run build

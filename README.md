@@ -6,6 +6,9 @@
 [![npm version](https://img.shields.io/badge/version-0.1.0-blue.svg)](https://www.npmjs.com/package/react-native-journey-recovery)
 [![license](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![CI](https://github.com/Imdvlpr99/react-native-journey-recovery/actions/workflows/ci.yml/badge.svg)](https://github.com/Imdvlpr99/react-native-journey-recovery/actions/workflows/ci.yml)
+[![Tests](https://img.shields.io/badge/tests-121%20passing-brightgreen.svg)](https://rn-journey-recovery.vercel.app/)
+[![Coverage](https://img.shields.io/badge/coverage-90%25-brightgreen.svg)](https://rn-journey-recovery.vercel.app/)
+[![Vercel](https://img.shields.io/badge/docs-vercel-black?logo=vercel)](https://rn-journey-recovery.vercel.app/)
 
 ---
 
@@ -280,8 +283,9 @@ On logout, call `checkpointManager.clearUserJourneys(currentUserId)` to cleanly 
 ## Documentation Website
 
 The official developer documentation website is built with React 18 & Vite:
-- 🌐 [**Interactive Documentation Website**](https://imdvlpr99.github.io/react-native-journey-recovery/) (GitHub Pages)
-- 🚀 **Deploy to Vercel in 1 click:**  
+- 🌐 [**Interactive Documentation Website**](https://rn-journey-recovery.vercel.app/) (Live on Vercel)
+- 📖 [**GitHub Pages Mirror**](https://imdvlpr99.github.io/react-native-journey-recovery/)
+- 🚀 **Deploy to your own Vercel in 1 click:**  
   [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FImdvlpr99%2Freact-native-journey-recovery&project-name=react-native-journey-recovery-docs&repository-name=react-native-journey-recovery)
 - Run locally anytime: `npm run dev:docs` or open [`docs/index.html`](docs/index.html) directly in any browser.
 
