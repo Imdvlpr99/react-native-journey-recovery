@@ -8,3 +8,4 @@ This example demonstrates how to integrate `react-native-journey-recovery` into 
 2. **`useRecovery`**: Detects whether an unfinished booking journey exists on launch and presents a user recovery banner.
 3. **`useJourney`**: Incrementally saves checkpoints at each step (`destination` -> `passengers` -> `review`).
 4. **`journey.clear()`**: Clears the persisted checkpoint once the booking is confirmed.
+

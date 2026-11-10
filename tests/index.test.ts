@@ -19,8 +19,13 @@ describe('react-native-journey-recovery exports', () => {
     expect(JourneyRecovery.MMKVStorageAdapter).toBeDefined();
   });
 
-  it('exports navigation integration adapters', () => {
+  it('exports navigation and form integration adapters', () => {
     expect(JourneyRecovery.createNavigationAdapter).toBeDefined();
+    expect(JourneyRecovery.useJourneyForm).toBeDefined();
+  });
+
+  it('exports UI primitives', () => {
+    expect(JourneyRecovery.RecoveryBanner).toBeDefined();
   });
 
   it('exports React components and hooks', () => {

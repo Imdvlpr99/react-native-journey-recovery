@@ -8,22 +8,46 @@ export interface CheckpointSaveMetadata {
   expiry?: number;
 }
 
+export interface CheckpointManagerOptions {
+  enableHistory?: boolean;
+  maxHistory?: number;
+  userId?: string;
+}
+
 export class CheckpointManager {
   private keyPrefix: string;
+  private historyKeyPrefix: string;
   private serializer: SnapshotSerializer;
   private queues: Map<string, Promise<void>> = new Map();
+  private enableHistory: boolean;
+  private maxHistory: number;
+  private userId?: string;
 
   constructor(
     private storage: StorageAdapter,
     serializer?: SnapshotSerializer,
-    keyPrefix = '@rn_journey:'
+    keyPrefix = '@rn_journey:',
+    options?: CheckpointManagerOptions
   ) {
     this.serializer = serializer ?? new SnapshotSerializer();
     this.keyPrefix = keyPrefix;
+    this.historyKeyPrefix = `${keyPrefix}__history:`;
+    this.enableHistory = options?.enableHistory ?? false;
+    this.maxHistory = options?.maxHistory ?? 10;
+    this.userId = options?.userId;
   }
 
-  private getKey(journeyId: string): string {
-    return `${this.keyPrefix}${journeyId}`;
+  private getUserPrefix(userId?: string): string {
+    const uid = userId ?? this.userId;
+    return uid ? `u:${uid}:` : '';
+  }
+
+  private getKey(journeyId: string, userId?: string): string {
+    return `${this.keyPrefix}${this.getUserPrefix(userId)}${journeyId}`;
+  }
+
+  private getHistoryKey(journeyId: string, userId?: string): string {
+    return `${this.historyKeyPrefix}${this.getUserPrefix(userId)}${journeyId}`;
   }
 
   /**
@@ -105,7 +129,23 @@ export class CheckpointManager {
         );
       }
 
-      return this.serializer.deserialize<T>(serialized);
+      const deserialized = this.serializer.deserialize<T>(serialized);
+
+      // Record in history stack if history tracking is enabled
+      if (this.enableHistory) {
+        try {
+          const history = await this.getHistory<T>(journeyId);
+          history.push(deserialized);
+          if (history.length > this.maxHistory) {
+            history.splice(0, history.length - this.maxHistory);
+          }
+          await this.storage.setItem(this.getHistoryKey(journeyId), JSON.stringify(history));
+        } catch {
+          // Failure to append history should not fail the primary checkpoint save
+        }
+      }
+
+      return deserialized;
     });
   }
 
@@ -137,13 +177,55 @@ export class CheckpointManager {
   }
 
   /**
-   * Removes a checkpoint for a specific journey.
+   * Retrieves the recorded checkpoint history for a journey.
+   */
+  async getHistory<T>(journeyId: string): Promise<JourneySnapshot<T>[]> {
+    const historyKey = this.getHistoryKey(journeyId);
+    try {
+      const raw = await this.storage.getItem(historyKey);
+      if (!raw) {
+        return [];
+      }
+      const parsed = JSON.parse(raw);
+      return Array.isArray(parsed) ? (parsed as JourneySnapshot<T>[]) : [];
+    } catch {
+      return [];
+    }
+  }
+
+  /**
+   * Restores an earlier checkpoint from history and sets it as the active checkpoint.
+   */
+  async restoreFromHistory<T>(journeyId: string, index: number): Promise<JourneySnapshot<T>> {
+    return this.enqueue(journeyId, async () => {
+      const history = await this.getHistory<T>(journeyId);
+      if (index < 0 || index >= history.length) {
+        throw new JourneyRecoveryError(
+          'JOURNEY_NOT_FOUND',
+          `History index ${index} is out of bounds for journey "${journeyId}" (history size: ${history.length})`,
+          journeyId
+        );
+      }
+
+      const targetSnapshot = history[index];
+      const serialized = this.serializer.serialize(targetSnapshot);
+      await this.storage.setItem(this.getKey(journeyId), serialized);
+      return targetSnapshot;
+    });
+  }
+
+  /**
+   * Removes a checkpoint and its history for a specific journey.
    */
   async delete(journeyId: string): Promise<void> {
     return this.enqueue(journeyId, async () => {
       const key = this.getKey(journeyId);
+      const historyKey = this.getHistoryKey(journeyId);
       try {
         await this.storage.removeItem(key);
+        if (this.enableHistory) {
+          await this.storage.removeItem(historyKey);
+        }
       } catch (err) {
         if (err instanceof JourneyRecoveryError) {
           throw err;
@@ -159,6 +241,27 @@ export class CheckpointManager {
   }
 
   /**
+   * Clears all journeys associated with a specific user (or the current scoped user).
+   * Ideal for logout handlers on shared devices.
+   */
+  async clearUserJourneys(targetUserId?: string): Promise<void> {
+    const uid = targetUserId ?? this.userId;
+    if (!uid || typeof this.storage.getAllKeys !== 'function') {
+      return;
+    }
+
+    const userPrefix = `${this.keyPrefix}u:${uid}:`;
+    const userHistoryPrefix = `${this.historyKeyPrefix}u:${uid}:`;
+
+    const allKeys = await this.storage.getAllKeys();
+    const keysToRemove = allKeys.filter(
+      (k) => k.startsWith(userPrefix) || k.startsWith(userHistoryPrefix)
+    );
+
+    await Promise.all(keysToRemove.map((k) => this.storage.removeItem(k)));
+  }
+
+  /**
    * Deletes all journey checkpoints stored under the prefix.
    */
   async deleteAll(): Promise<void> {
@@ -167,7 +270,9 @@ export class CheckpointManager {
     }
 
     const allKeys = await this.storage.getAllKeys();
-    const journeyKeys = allKeys.filter((k) => k.startsWith(this.keyPrefix));
+    const journeyKeys = allKeys.filter(
+      (k) => k.startsWith(this.keyPrefix) && !k.startsWith(this.historyKeyPrefix)
+    );
 
     await Promise.all(
       journeyKeys.map(async (key) => {
@@ -177,4 +282,3 @@ export class CheckpointManager {
     );
   }
 }
-

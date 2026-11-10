@@ -253,3 +253,4 @@ const styles = StyleSheet.create({
   buttonRow: { flexDirection: 'row', gap: 12 },
   summaryText: { fontSize: 16, color: '#333', marginVertical: 4 },
 });
+

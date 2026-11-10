@@ -21,6 +21,9 @@ export interface RecoveryProviderOptions {
   keyPrefix?: string;
   flushOnBackground?: boolean;
   appState?: AppStateLike;
+  userId?: string;
+  enableHistory?: boolean;
+  maxHistory?: number;
 }
 
 export interface RecoveryProviderProps {
@@ -40,7 +43,16 @@ export const RecoveryProvider: React.FC<RecoveryProviderProps> = ({
   onRecoveryRef.current = onRecovery;
 
   const value = useMemo<RecoveryContextValue>(() => {
-    const checkpointManager = new CheckpointManager(storage, undefined, options?.keyPrefix);
+    const checkpointManager = new CheckpointManager(
+      storage,
+      undefined,
+      options?.keyPrefix,
+      {
+        userId: options?.userId,
+        enableHistory: options?.enableHistory,
+        maxHistory: options?.maxHistory,
+      }
+    );
     const journeyManager = new JourneyManager(checkpointManager);
     const lifecycleManager = new LifecycleManager(journeyManager);
     const recoveryManager = new RecoveryManager(journeyManager, lifecycleManager);
