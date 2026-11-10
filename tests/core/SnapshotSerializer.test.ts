@@ -72,3 +72,4 @@ describe('SnapshotSerializer', () => {
     expect(() => serializer.deserialize('"string"')).toThrow(JourneyRecoveryError);
   });
 });
+

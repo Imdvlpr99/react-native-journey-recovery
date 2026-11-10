@@ -86,3 +86,4 @@ export class SnapshotSerializer {
     return parsed as JourneySnapshot<T>;
   }
 }
+

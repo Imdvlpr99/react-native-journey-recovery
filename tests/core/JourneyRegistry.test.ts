@@ -37,3 +37,4 @@ describe('JourneyRegistry', () => {
     expect(registry.has('checkout')).toBe(false);
   });
 });
+

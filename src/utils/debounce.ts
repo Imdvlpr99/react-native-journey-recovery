@@ -1,6 +1,6 @@
 export interface DebouncedFunction<T extends (...args: any[]) => any> {
   (...args: Parameters<T>): void;
-  flush: () => void;
+  flush: () => ReturnType<T> | undefined;
   cancel: () => void;
 }
 
@@ -29,7 +29,7 @@ export function debounce<T extends (...args: any[]) => any>(
     }, waitMs);
   }
 
-  function flush() {
+  function flush(): ReturnType<T> | undefined {
     if (timeoutId !== null && lastArgs !== null) {
       clearTimeout(timeoutId);
       timeoutId = null;
@@ -37,8 +37,9 @@ export function debounce<T extends (...args: any[]) => any>(
       const context = lastThis;
       lastArgs = null;
       lastThis = null;
-      fn.apply(context, args);
+      return fn.apply(context, args);
     }
+    return undefined;
   }
 
   function cancel() {

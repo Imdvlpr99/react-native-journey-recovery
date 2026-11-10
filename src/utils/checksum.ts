@@ -9,3 +9,4 @@ export function computeChecksum(str: string): string {
   }
   return (hash >>> 0).toString(16).padStart(8, '0');
 }
+

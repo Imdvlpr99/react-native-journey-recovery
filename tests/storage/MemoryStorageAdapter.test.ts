@@ -34,3 +34,4 @@ describe('MemoryStorageAdapter', () => {
     expect(keys.length).toBe(0);
   });
 });
+

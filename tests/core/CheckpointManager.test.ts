@@ -107,3 +107,4 @@ describe('CheckpointManager', () => {
     expect(await checkpointManager.get('journey-2')).toBeNull();
   });
 });
+

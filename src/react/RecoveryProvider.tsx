@@ -7,11 +7,20 @@ import { RecoveryManager } from '../core/RecoveryManager';
 import { LifecycleManager } from '../core/LifecycleManager';
 import { RecoveryContext, RecoveryContextValue } from './RecoveryContext';
 
+export interface AppStateLike {
+  addEventListener(
+    type: 'change',
+    listener: (state: string) => void
+  ): { remove: () => void } | void;
+}
+
 export interface RecoveryProviderOptions {
   autoSave?: boolean;
   debounceMs?: number;
   defaultExpiry?: number;
   keyPrefix?: string;
+  flushOnBackground?: boolean;
+  appState?: AppStateLike;
 }
 
 export interface RecoveryProviderProps {
@@ -55,6 +64,22 @@ export const RecoveryProvider: React.FC<RecoveryProviderProps> = ({
       unsubscribe();
     };
   }, [value]);
+
+  // Hook into AppState lifecycle to perform best-effort flush when app backgrounds
+  useEffect(() => {
+    if (options?.appState && options.flushOnBackground !== false) {
+      const sub = options.appState.addEventListener('change', (nextState: string) => {
+        if (nextState === 'background' || nextState === 'inactive') {
+          value.lifecycleManager.flush();
+        }
+      });
+      return () => {
+        if (sub && typeof sub.remove === 'function') {
+          sub.remove();
+        }
+      };
+    }
+  }, [options?.appState, options?.flushOnBackground, value]);
 
   return <RecoveryContext.Provider value={value}>{children}</RecoveryContext.Provider>;
 };

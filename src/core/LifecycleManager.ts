@@ -36,7 +36,8 @@ export class LifecycleManager {
   /**
    * Flushes pending debounced auto-saves, e.g. when app changes lifecycle state.
    */
-  flush(journeyId?: string): void {
-    this.journeyManager.flushPending(journeyId);
+  async flush(journeyId?: string): Promise<void> {
+    await this.journeyManager.flushPending(journeyId);
   }
 }
+

@@ -54,3 +54,4 @@ describe('Integration: Schema Migration Pipeline', () => {
     expect(inStorage?.version).toBe(2);
   });
 });
+

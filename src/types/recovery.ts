@@ -48,3 +48,4 @@ export interface RecoveryState<T> {
   restore: () => Promise<T>;
   discard: () => Promise<void>;
 }
+

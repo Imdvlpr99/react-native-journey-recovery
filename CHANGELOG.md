@@ -19,3 +19,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - React integration: `RecoveryProvider`, `useJourney`, `useRecovery`, `useRecoveryStatus`, and `useRecoveryContext`.
 - Lifecycle events: `onRecovery` hooks for observing status transitions.
 - Multi-step checkout workflow example.
+

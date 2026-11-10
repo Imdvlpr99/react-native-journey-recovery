@@ -30,3 +30,4 @@ export class MemoryStorageAdapter implements StorageAdapter {
     this.store.clear();
   }
 }
+

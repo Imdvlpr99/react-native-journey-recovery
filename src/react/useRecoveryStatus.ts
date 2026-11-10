@@ -8,3 +8,4 @@ export function useRecoveryStatus(journeyId: string): RecoveryStatus {
   const { status } = useRecovery(journeyId);
   return status;
 }
+

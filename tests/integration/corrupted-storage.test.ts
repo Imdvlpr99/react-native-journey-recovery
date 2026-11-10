@@ -42,3 +42,4 @@ describe('Integration: Corrupted Storage Handling', () => {
     expect(inspection.error?.code).toBe('SNAPSHOT_CORRUPTED');
   });
 });
+

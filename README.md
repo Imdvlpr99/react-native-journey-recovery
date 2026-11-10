@@ -219,3 +219,4 @@ All runtime errors thrown by the engine are instances of `JourneyRecoveryError`:
 ## License
 
 MIT © 2026
+

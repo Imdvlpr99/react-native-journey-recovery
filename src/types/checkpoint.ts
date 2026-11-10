@@ -62,3 +62,4 @@ export interface CheckpointOptions {
    */
   completed?: boolean;
 }
+

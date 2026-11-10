@@ -30,3 +30,4 @@ export class JourneyRecoveryError extends Error {
     Object.setPrototypeOf(this, new.target.prototype);
   }
 }
+

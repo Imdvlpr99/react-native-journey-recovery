@@ -24,3 +24,4 @@ export interface StorageAdapter {
    */
   getAllKeys?(): Promise<string[]>;
 }
+

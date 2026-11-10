@@ -6,3 +6,4 @@ describe('Project Environment', () => {
     expect(VERSION).toBe('0.1.0');
   });
 });
+

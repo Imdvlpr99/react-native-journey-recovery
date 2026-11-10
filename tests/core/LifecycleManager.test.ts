@@ -46,3 +46,4 @@ describe('LifecycleManager', () => {
     expect(flushSpy).toHaveBeenCalled();
   });
 });
+

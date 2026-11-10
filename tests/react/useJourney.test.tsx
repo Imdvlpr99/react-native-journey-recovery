@@ -43,3 +43,4 @@ describe('useJourney', () => {
     expect(await storage.getItem('@rn_journey:checkout')).toBeNull();
   });
 });
+

@@ -19,3 +19,4 @@ export interface CheckoutJourneyData {
   shippingAddress?: ShippingAddress;
   deliveryMethod?: DeliveryMethod;
 }
+

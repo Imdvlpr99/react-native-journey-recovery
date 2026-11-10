@@ -32,3 +32,4 @@ describe('react-native-journey-recovery exports', () => {
     expect(JourneyRecovery.debounce).toBeDefined();
   });
 });
+

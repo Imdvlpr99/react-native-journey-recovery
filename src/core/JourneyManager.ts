@@ -40,14 +40,20 @@ export class JourneyManager {
 
     const mergedOptions = options ?? { version: 1 };
 
-    let debouncedSave: DebouncedFunction<(data: T, opts?: CheckpointOptions) => Promise<JourneySnapshot<T>>> | null = null;
+    let debouncedSave = this.autoSaveMap.get(id);
     if (mergedOptions.autoSave) {
-      const wait = mergedOptions.debounceMs ?? 500;
-      debouncedSave = debounce(
-        (data: T, opts?: CheckpointOptions) => this.checkpoint(id, data, opts),
-        wait
-      );
-      this.autoSaveMap.set(id, debouncedSave as any);
+      if (!debouncedSave) {
+        const wait = mergedOptions.debounceMs ?? 500;
+        debouncedSave = debounce(
+          (data: T, opts?: CheckpointOptions) => this.checkpoint(id, data, opts),
+          wait
+        );
+        this.autoSaveMap.set(id, debouncedSave as any);
+      }
+    } else if (debouncedSave) {
+      debouncedSave.cancel();
+      this.autoSaveMap.delete(id);
+      debouncedSave = undefined;
     }
 
     const handle: JourneyHandle<T> = {
@@ -153,16 +159,21 @@ export class JourneyManager {
   /**
    * Flushes any pending auto-save debounce for a journey or all journeys.
    */
-  flushPending(journeyId?: string): void {
+  async flushPending(journeyId?: string): Promise<void> {
     if (journeyId) {
       const autoSave = this.autoSaveMap.get(journeyId);
       if (autoSave) {
-        autoSave.flush();
+        await autoSave.flush();
       }
     } else {
+      const promises: Promise<any>[] = [];
       for (const autoSave of this.autoSaveMap.values()) {
-        autoSave.flush();
+        const res = autoSave.flush();
+        if (res && typeof (res as any).then === 'function') {
+          promises.push(res);
+        }
       }
+      await Promise.all(promises);
     }
   }
 
@@ -180,3 +191,4 @@ export class JourneyManager {
     await this.checkpointManager.deleteAll();
   }
 }
+

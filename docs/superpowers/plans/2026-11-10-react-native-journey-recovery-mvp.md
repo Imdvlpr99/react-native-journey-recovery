@@ -560,3 +560,4 @@ Expected: PASS with 0 type errors and 100% passing tests.
 git add src/index.ts examples/ README.md LICENSE CHANGELOG.md tests/index.test.ts
 git commit -m "feat: complete v0.1.0 exports, checkout flow example, and documentation"
 ```
+

@@ -34,3 +34,4 @@ describe('JourneyRecoveryError', () => {
     expect(codes.length).toBe(9);
   });
 });
+

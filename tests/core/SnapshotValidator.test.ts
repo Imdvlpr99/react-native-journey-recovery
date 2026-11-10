@@ -76,3 +76,4 @@ describe('SnapshotValidator', () => {
     expect(result2.valid).toBe(true);
   });
 });
+
