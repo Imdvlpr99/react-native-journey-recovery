@@ -279,9 +279,11 @@ On logout, call `checkpointManager.clearUserJourneys(currentUserId)` to cleanly 
 
 ## Documentation Website
 
-The official developer documentation website is located in [`docs/`](docs/):
-- 🌐 [**Interactive Documentation Website**](https://imdvlpr99.github.io/react-native-journey-recovery/) (Hosted via GitHub Pages)
-- Run locally anytime: `npx serve docs` or open [`docs/index.html`](docs/index.html) directly in any browser.
+The official developer documentation website is built with React 18 & Vite:
+- 🌐 [**Interactive Documentation Website**](https://imdvlpr99.github.io/react-native-journey-recovery/) (GitHub Pages)
+- 🚀 **Deploy to Vercel in 1 click:**  
+  [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FImdvlpr99%2Freact-native-journey-recovery&project-name=react-native-journey-recovery-docs&repository-name=react-native-journey-recovery)
+- Run locally anytime: `npm run dev:docs` or open [`docs/index.html`](docs/index.html) directly in any browser.
 
 ---
 
