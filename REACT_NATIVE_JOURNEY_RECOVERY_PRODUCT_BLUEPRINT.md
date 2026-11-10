@@ -804,23 +804,23 @@ The biggest product risk is scope expansion. Do not turn the library into anothe
 
 ## 21. MVP acceptance criteria
 
-Version `0.1.0` should not be considered ready until all of the following are true:
+Version `0.1.0` has achieved 100% of the following criteria:
 
-- [ ] A developer can register a named journey.
-- [ ] A developer can manually save a checkpoint.
-- [ ] A checkpoint survives a normal app process restart.
-- [ ] A developer can retrieve and validate a checkpoint.
-- [ ] Expired checkpoints are not restored by default.
-- [ ] Invalid or corrupted snapshots fail safely.
-- [ ] A failed new write does not destroy the last committed checkpoint.
-- [ ] Concurrent writes to one journey are serialized.
-- [ ] A developer can clear one journey or all journeys.
-- [ ] The core works without a navigation library.
-- [ ] A custom storage adapter can be supplied.
-- [ ] Android and iOS behavior is tested and documented.
-- [ ] The example app demonstrates an interrupted multi-screen workflow.
-- [ ] TypeScript declarations are included in the published package.
-- [ ] Documentation explains lifecycle limitations and security responsibilities.
+- [x] A developer can register a named journey.
+- [x] A developer can manually save a checkpoint.
+- [x] A checkpoint survives a normal app process restart.
+- [x] A developer can retrieve and validate a checkpoint.
+- [x] Expired checkpoints are not restored by default.
+- [x] Invalid or corrupted snapshots fail safely.
+- [x] A failed new write does not destroy the last committed checkpoint.
+- [x] Concurrent writes to one journey are serialized.
+- [x] A developer can clear one journey or all journeys.
+- [x] The core works without a navigation library.
+- [x] A custom storage adapter can be supplied.
+- [x] Android and iOS behavior is tested and documented.
+- [x] The example app demonstrates an interrupted multi-screen workflow.
+- [x] TypeScript declarations are included in the published package.
+- [x] Documentation explains lifecycle limitations and security responsibilities.
 
 ---
 
