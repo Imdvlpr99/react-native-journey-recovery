@@ -9,6 +9,7 @@ export * from './core/RecoveryManager';
 export * from './core/LifecycleManager';
 export * from './core/SnapshotSerializer';
 export * from './core/SnapshotValidator';
+export * from './core/RecoveryDiagnostics';
 
 // Storage Adapters
 export * from './storage';
@@ -22,6 +23,7 @@ export * from './forms';
 // State Management Integrations
 export * from './integrations/zustand';
 export * from './integrations/redux';
+export * from './integrations/tanstack-query';
 
 // UI Primitives
 export * from './ui';

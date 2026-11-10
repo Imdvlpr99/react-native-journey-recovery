@@ -42,11 +42,11 @@ export class CheckpointManager {
     return uid ? `u:${uid}:` : '';
   }
 
-  private getKey(journeyId: string, userId?: string): string {
+  getKey(journeyId: string, userId?: string): string {
     return `${this.keyPrefix}${this.getUserPrefix(userId)}${journeyId}`;
   }
 
-  private getHistoryKey(journeyId: string, userId?: string): string {
+  getHistoryKey(journeyId: string, userId?: string): string {
     return `${this.historyKeyPrefix}${this.getUserPrefix(userId)}${journeyId}`;
   }
 
@@ -78,7 +78,7 @@ export class CheckpointManager {
   async save<T>(
     journeyId: string,
     data: T,
-    metadata: CheckpointSaveMetadata,
+    metadata: CheckpointSaveMetadata = { version: 1 },
     options?: CheckpointOptions
   ): Promise<JourneySnapshot<T>> {
     return this.enqueue(journeyId, async () => {
@@ -147,6 +147,14 @@ export class CheckpointManager {
 
       return deserialized;
     });
+  }
+
+  /**
+   * Retrieves the raw stored JSON string for a journey without deserialization.
+   */
+  async getRaw(journeyId: string): Promise<string | null> {
+    const key = this.getKey(journeyId);
+    return this.storage.getItem(key);
   }
 
   /**

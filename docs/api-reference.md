@@ -182,6 +182,58 @@ const { hasSavedProgress, restoreToForm, clearForm } = useJourneyForm('profile-f
 });
 ```
 
+### `useJourneyFormik(journeyId, formik, options)`
+Integration with Formik:
+
+```tsx
+import { useFormik } from 'formik';
+import { useJourneyFormik } from 'react-native-journey-recovery';
+
+const formik = useFormik({
+  initialValues: { email: '', name: '' },
+  onSubmit: (values) => submit(values),
+});
+
+const { hasSavedProgress, restoreToFormik, clearFormik, checkpointFormik } = useJourneyFormik(
+  'registration-flow',
+  formik,
+  {
+    autoSave: true,
+    debounceMs: 500,
+    exclude: ['confirmPassword'],
+  }
+);
+```
+
+### `useJourneyQuery(journeyId, options)` & `createTanStackQueryCoordinator`
+Coordinates client-side journey recovery with TanStack Query server cache invalidation and revalidation:
+
+```tsx
+import { useJourneyQuery } from 'react-native-journey-recovery';
+
+const { available, restoreAndRevalidate, discardAndReset } = useJourneyQuery('checkout', {
+  queryClient,
+  invalidateOnRestore: [['cart', cartId], ['inventory']],
+  refetchOnRestore: [['pricing']],
+  resetOnClear: [['temporary-hold']],
+  onRevalidated: async (data) => {
+    console.log('Restored state with updated server queries:', data);
+  },
+});
+```
+
+Event-driven non-hook coordinator:
+```tsx
+import { createTanStackQueryCoordinator } from 'react-native-journey-recovery';
+
+const unsubscribe = createTanStackQueryCoordinator(lifecycleManager, {
+  journeyId: 'checkout',
+  queryClient,
+  invalidateOnRestore: [['cart']],
+  resetOnClear: [['temporary-hold']],
+});
+```
+
 ### `useJourneyZustand(journeyId, store, selector, options)`
 Connects a specific slice of a Zustand store:
 
@@ -246,7 +298,46 @@ Or headless with `render`:
 
 ---
 
-## 7. Error Codes
+## 7. Diagnostics & Inspection
+
+### `getRecoveryDiagnostics(journeyManager, journeyId)` / `recoveryManager.getDiagnostics(journeyId)`
+Returns deep diagnostic metadata explaining whether a journey checkpoint is safe and eligible for recovery:
+
+```tsx
+const diag = await recoveryManager.getDiagnostics('checkout');
+console.log(diag);
+```
+
+#### Diagnostic Properties:
+- `exists: boolean`: Whether a checkpoint exists in storage.
+- `status: RecoveryStatus`: Current status (`'available'`, `'expired'`, `'invalid'`, `'idle'`).
+- `isRecoverable: boolean`: `true` only if snapshot exists, checksum matches, and it is not expired.
+- `payloadSizeBytes: number`: Size of the stored payload in bytes.
+- `hasChecksum: boolean`: Whether the checkpoint carries an integrity checksum.
+- `checksumValid: boolean`: Whether the computed checksum matches the payload.
+- `isExpired: boolean`: Whether the checkpoint passed its expiration timestamp.
+- `timeUntilExpiryMs?: number`: Remaining lifetime in milliseconds.
+- `isEligibleForMigration: boolean`: `true` if current registered version is higher than snapshot version and a migration function is registered.
+- `formatVersion?: number`: Storage serialization format version.
+- `validationError?: string`: Explanatory message when recovery fails validation.
+
+---
+
+## 8. Checkpoint History & Rollback
+
+When `enableHistory: true` is configured on `RecoveryProvider` or `CheckpointManager`:
+
+```tsx
+// Inspect past versions
+const history = await checkpointManager.getHistory('flight-booking');
+
+// Roll back to previous step
+const previousSnapshot = await checkpointManager.restoreFromHistory('flight-booking', history.length - 2);
+```
+
+---
+
+## 9. Error Codes
 
 | Code | Meaning |
 |---|---|

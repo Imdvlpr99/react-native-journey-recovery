@@ -1,4 +1,4 @@
-import { RecoveryEvent } from '../types/recovery';
+import { RecoveryEvent, RecoveryStatus } from '../types/recovery';
 import { JourneyManager } from './JourneyManager';
 
 export type RecoveryEventListener = (event: RecoveryEvent<any>) => void;
@@ -6,7 +6,7 @@ export type RecoveryEventListener = (event: RecoveryEvent<any>) => void;
 export class LifecycleManager {
   private listeners = new Set<RecoveryEventListener>();
 
-  constructor(private journeyManager: JourneyManager) {}
+  constructor(private journeyManager?: JourneyManager) {}
 
   /**
    * Subscribes to recovery lifecycle events.
@@ -17,6 +17,22 @@ export class LifecycleManager {
     return () => {
       this.listeners.delete(listener);
     };
+  }
+
+  /**
+   * Alias for subscribe to support EventEmitter-like .on() syntax.
+   */
+  on(status: RecoveryStatus | 'all', listener: RecoveryEventListener): () => void {
+    return this.subscribe((event) => {
+      if (
+        status === 'all' ||
+        event.status === status ||
+        (status === 'discarded' && event.status === 'idle') ||
+        (status === 'idle' && event.status === 'discarded')
+      ) {
+        listener(event);
+      }
+    });
   }
 
   /**
@@ -37,7 +53,7 @@ export class LifecycleManager {
    * Flushes pending debounced auto-saves, e.g. when app changes lifecycle state.
    */
   async flush(journeyId?: string): Promise<void> {
-    await this.journeyManager.flushPending(journeyId);
+    await this.journeyManager?.flushPending(journeyId);
   }
 }
 

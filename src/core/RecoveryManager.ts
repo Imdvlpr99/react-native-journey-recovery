@@ -1,6 +1,7 @@
 import { JourneyManager } from './JourneyManager';
 import { LifecycleManager } from './LifecycleManager';
 import { SnapshotValidator } from './SnapshotValidator';
+import { getRecoveryDiagnostics, JourneyDiagnostics } from './RecoveryDiagnostics';
 import { RecoveryInspectionResult } from '../types/recovery';
 import { JourneyRecoveryError } from '../utils/errors';
 
@@ -116,6 +117,13 @@ export class RecoveryManager {
     });
 
     return snapshot.data;
+  }
+
+  /**
+   * Returns deep diagnostics explaining whether and why a journey is recoverable.
+   */
+  async getDiagnostics<T = any>(journeyId: string): Promise<JourneyDiagnostics<T>> {
+    return getRecoveryDiagnostics<T>(this.journeyManager, journeyId, this.validator);
   }
 
   /**

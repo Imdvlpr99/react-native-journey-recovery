@@ -8,8 +8,10 @@ export type RecoveryStatus =
   | 'idle'
   | 'checking'
   | 'available'
+  | 'active'
   | 'restoring'
   | 'restored'
+  | 'discarded'
   | 'expired'
   | 'invalid'
   | 'failed';

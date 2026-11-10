@@ -11,6 +11,7 @@ describe('react-native-journey-recovery exports', () => {
     expect(JourneyRecovery.LifecycleManager).toBeDefined();
     expect(JourneyRecovery.SnapshotSerializer).toBeDefined();
     expect(JourneyRecovery.SnapshotValidator).toBeDefined();
+    expect(JourneyRecovery.getRecoveryDiagnostics).toBeDefined();
   });
 
   it('exports storage adapters including MMKV', () => {
@@ -26,8 +27,11 @@ describe('react-native-journey-recovery exports', () => {
 
   it('exports form and state integration adapters', () => {
     expect(JourneyRecovery.useJourneyForm).toBeDefined();
+    expect(JourneyRecovery.useJourneyFormik).toBeDefined();
     expect(JourneyRecovery.useJourneyZustand).toBeDefined();
     expect(JourneyRecovery.useJourneyRedux).toBeDefined();
+    expect(JourneyRecovery.useJourneyQuery).toBeDefined();
+    expect(JourneyRecovery.createTanStackQueryCoordinator).toBeDefined();
   });
 
   it('exports UI primitives', () => {
