@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="assets/logo.png" alt="react-native-journey-recovery logo" width="160" />
+
 # 🛡️ react-native-journey-recovery
 
 ### *Never make users start over.*

@@ -7,20 +7,31 @@ export const Hero: React.FC = () => {
       borderBottom: '1px solid var(--border-color)',
       marginBottom: '48px',
     }}>
-      <div style={{
-        display: 'inline-flex',
-        alignItems: 'center',
-        gap: '8px',
-        background: 'rgba(56, 189, 248, 0.1)',
-        border: '1px solid rgba(56, 189, 248, 0.3)',
-        color: 'var(--accent-cyan)',
-        padding: '4px 12px',
-        borderRadius: '9999px',
-        fontSize: '12px',
-        fontWeight: 600,
-        marginBottom: '20px',
-      }}>
-        ⚡ Version 0.1.0 Ready for Production
+      <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '24px' }}>
+        <img
+          src="./logo.png"
+          alt="react-native-journey-recovery logo"
+          style={{
+            width: '76px',
+            height: '76px',
+            objectFit: 'contain',
+            filter: 'drop-shadow(0 10px 25px rgba(56, 189, 248, 0.35))',
+          }}
+        />
+        <div style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: '8px',
+          background: 'rgba(56, 189, 248, 0.1)',
+          border: '1px solid rgba(56, 189, 248, 0.3)',
+          color: 'var(--accent-cyan)',
+          padding: '6px 14px',
+          borderRadius: '9999px',
+          fontSize: '13px',
+          fontWeight: 600,
+        }}>
+          ⚡ Version 0.1.0 Ready for Production
+        </div>
       </div>
 
       <h1 style={{

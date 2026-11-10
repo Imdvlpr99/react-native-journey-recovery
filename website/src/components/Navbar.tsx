@@ -47,21 +47,16 @@ export const Navbar: React.FC<NavbarProps> = ({
           ☰
         </button>
         <a href="#" style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none', color: 'var(--text-primary)' }}>
-          <div style={{
-            width: '34px',
-            height: '34px',
-            background: 'linear-gradient(135deg, var(--accent-cyan), var(--accent-indigo))',
-            borderRadius: '8px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontWeight: 800,
-            fontSize: '18px',
-            color: '#020617',
-            boxShadow: '0 0 15px rgba(56, 189, 248, 0.3)',
-          }}>
-            🛡️
-          </div>
+          <img
+            src="./logo.png"
+            alt="react-native-journey-recovery"
+            style={{
+              width: '34px',
+              height: '34px',
+              objectFit: 'contain',
+              filter: 'drop-shadow(0 2px 8px rgba(56, 189, 248, 0.4))',
+            }}
+          />
           <span style={{ fontWeight: 700, fontSize: '16px', letterSpacing: '-0.2px' }}>
             react-native-journey-recovery
           </span>
