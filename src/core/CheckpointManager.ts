@@ -12,6 +12,7 @@ export interface CheckpointManagerOptions {
   enableHistory?: boolean;
   maxHistory?: number;
   userId?: string;
+  maxSizeBytes?: number;
 }
 
 export class CheckpointManager {
@@ -25,16 +26,29 @@ export class CheckpointManager {
 
   constructor(
     private storage: StorageAdapter,
-    serializer?: SnapshotSerializer,
+    serializerOrOptions?: SnapshotSerializer | CheckpointManagerOptions,
     keyPrefix = '@rn_journey:',
     options?: CheckpointManagerOptions
   ) {
-    this.serializer = serializer ?? new SnapshotSerializer();
+    let effectiveSerializer: SnapshotSerializer | undefined;
+    let effectiveOptions: CheckpointManagerOptions | undefined = options;
+
+    if (serializerOrOptions && typeof (serializerOrOptions as any).serialize !== 'function') {
+      effectiveOptions = serializerOrOptions as CheckpointManagerOptions;
+    } else {
+      effectiveSerializer = serializerOrOptions as SnapshotSerializer;
+    }
+
+    this.serializer =
+      effectiveSerializer ??
+      new SnapshotSerializer({
+        maxSizeBytes: effectiveOptions?.maxSizeBytes,
+      });
     this.keyPrefix = keyPrefix;
     this.historyKeyPrefix = `${keyPrefix}__history:`;
-    this.enableHistory = options?.enableHistory ?? false;
-    this.maxHistory = options?.maxHistory ?? 10;
-    this.userId = options?.userId;
+    this.enableHistory = effectiveOptions?.enableHistory ?? false;
+    this.maxHistory = effectiveOptions?.maxHistory ?? 10;
+    this.userId = effectiveOptions?.userId;
   }
 
   private getUserPrefix(userId?: string): string {
@@ -246,6 +260,13 @@ export class CheckpointManager {
         );
       }
     });
+  }
+
+  /**
+   * Alias for delete() to clear a checkpoint.
+   */
+  async clear(journeyId: string): Promise<void> {
+    return this.delete(journeyId);
   }
 
   /**
