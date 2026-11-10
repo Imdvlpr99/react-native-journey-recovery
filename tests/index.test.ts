@@ -13,9 +13,14 @@ describe('react-native-journey-recovery exports', () => {
     expect(JourneyRecovery.SnapshotValidator).toBeDefined();
   });
 
-  it('exports storage adapters', () => {
+  it('exports storage adapters including MMKV', () => {
     expect(JourneyRecovery.MemoryStorageAdapter).toBeDefined();
     expect(JourneyRecovery.AsyncStorageAdapter).toBeDefined();
+    expect(JourneyRecovery.MMKVStorageAdapter).toBeDefined();
+  });
+
+  it('exports navigation integration adapters', () => {
+    expect(JourneyRecovery.createNavigationAdapter).toBeDefined();
   });
 
   it('exports React components and hooks', () => {
@@ -32,4 +37,3 @@ describe('react-native-journey-recovery exports', () => {
     expect(JourneyRecovery.debounce).toBeDefined();
   });
 });
-
