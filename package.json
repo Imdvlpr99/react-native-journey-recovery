@@ -21,6 +21,9 @@
   ],
   "scripts": {
     "build": "tsc",
+    "build:docs": "vite build --config website/vite.config.ts",
+    "dev:docs": "vite --config website/vite.config.ts",
+    "bench": "vite-node benchmarks/bench-throughput.ts",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest"
@@ -44,6 +47,7 @@
     "@types/node": "^22.13.0",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.7",
+    "@vitejs/plugin-react": "^4.7.0",
     "jsdom": "^29.1.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

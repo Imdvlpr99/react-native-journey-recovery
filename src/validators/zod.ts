@@ -58,3 +58,4 @@ export function createZodValidator<T>(schema: ZodSchemaLike<T>): (data: unknown)
     return true;
   };
 }
+
