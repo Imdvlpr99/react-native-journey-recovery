@@ -246,6 +246,14 @@ On logout, call `checkpointManager.clearUserJourneys(currentUserId)` to cleanly 
 
 ---
 
+## Documentation Website
+
+The official developer documentation website is located in [`docs/`](docs/):
+- 🌐 [**Interactive Documentation Website**](https://imdvlpr99.github.io/react-native-journey-recovery/) (Hosted via GitHub Pages)
+- Run locally anytime: `npx serve docs` or open [`docs/index.html`](docs/index.html) directly in any browser.
+
+---
+
 ## Detailed Documentation
 
 For full props, return handles, options, and advanced architecture:

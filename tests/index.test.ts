@@ -51,4 +51,10 @@ describe('react-native-journey-recovery exports', () => {
     expect(JourneyRecovery.computeChecksum).toBeDefined();
     expect(JourneyRecovery.debounce).toBeDefined();
   });
+
+  it('exports Zod validation helper and testing environment utilities', () => {
+    expect(JourneyRecovery.createZodValidator).toBeDefined();
+    expect(JourneyRecovery.createTestRecoveryEnvironment).toBeDefined();
+    expect(JourneyRecovery.initTestRecoveryEnvironment).toBeDefined();
+  });
 });

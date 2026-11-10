@@ -28,6 +28,12 @@ export * from './integrations/tanstack-query';
 // UI Primitives
 export * from './ui';
 
+// Validation Helpers
+export * from './validators';
+
+// Testing Utilities
+export * from './testing';
+
 // React Integration
 export * from './react';
 
