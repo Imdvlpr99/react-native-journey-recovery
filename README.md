@@ -237,6 +237,15 @@ On logout, call `checkpointManager.clearUserJourneys(currentUserId)` to cleanly 
 
 ---
 
+## Example Applications
+
+- 🌐 [**Interactive Browser Simulator**](examples/simulator) — Standalone visual simulator with simulated process kill (SIGKILL), storage tampering, checksum validation, and real-time diagnostics.
+- 🛒 [**Multi-Screen Checkout Flow**](examples/checkout-flow) — React Navigation multi-step checkout with delivery, method, and payment steps.
+- ✈️ [**Expo Flight Booking Wizard**](examples/expo) — Expo Router flight reservation wizard using `MMKVStorageAdapter`.
+- 🔐 [**Bare React Native KYC Flow**](examples/bare-react-native) — Identity verification flow featuring multi-user scoping and sensitive field exclusions.
+
+---
+
 ## Detailed Documentation
 
 For full props, return handles, options, and advanced architecture:
