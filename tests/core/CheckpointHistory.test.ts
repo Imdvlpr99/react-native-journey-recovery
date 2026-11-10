@@ -64,3 +64,4 @@ describe('Checkpoint History Stack', () => {
     expect((await checkpointManager.getHistory('temp')).length).toBe(0);
   });
 });
+

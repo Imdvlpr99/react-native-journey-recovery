@@ -90,3 +90,4 @@ describe('RecoveryBanner UI Component', () => {
     expect(screen.getByText('Custom Prompt: Page 3')).toBeDefined();
   });
 });
+

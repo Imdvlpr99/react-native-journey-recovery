@@ -19,6 +19,9 @@ export * from './navigation';
 // Form Integration Adapters
 export * from './forms';
 
+// State Management Integrations
+export * from './integrations/zustand';
+
 // UI Primitives
 export * from './ui';
 
