@@ -41,6 +41,23 @@ export const App: React.FC = () => {
 
   const toggleTheme = () => setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
 
+  // Scroll-reveal IntersectionObserver
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+          }
+        });
+      },
+      { threshold: 0.07, rootMargin: '0px 0px -32px 0px' }
+    );
+    const revealEls = document.querySelectorAll('.reveal');
+    revealEls.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, [activeTab]);
+
   // ⌘K / Ctrl+K
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
