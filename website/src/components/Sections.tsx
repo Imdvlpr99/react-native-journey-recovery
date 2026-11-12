@@ -1,95 +1,148 @@
 import React from 'react';
 import { CodeBlock } from './CodeBlock';
-import { Simulator } from './Simulator';
-import { SchemaPlayground } from './SchemaPlayground';
+import { ArchitectureVisualizer } from './ArchitectureVisualizer';
+import { StorageComparison } from './StorageComparison';
+import {
+  IconCheck, IconShield, IconZap, IconDatabase,
+  IconLock, IconAlertTriangle, IconExternalLink
+} from './Icons';
 
 export const Sections: React.FC = () => {
   return (
     <>
       {/* Overview */}
-      <section id="overview" className="doc-section" style={{ marginBottom: '64px' }}>
-        <h2 style={{ fontSize: '28px', fontWeight: 800, color: '#f8fafc', marginBottom: '16px' }}>
-          Overview
-        </h2>
-        <p style={{ color: 'var(--text-secondary)', fontSize: '15px', lineHeight: 1.7, marginBottom: '20px' }}>
-          Mobile operating systems forcefully terminate background processes due to system memory constraints (OOM) or battery management policies without running final shutdown callbacks.
-        </p>
-        <p style={{ color: 'var(--text-secondary)', fontSize: '15px', lineHeight: 1.7, marginBottom: '24px' }}>
-          <code>react-native-journey-recovery</code> is a developer-first recovery engine designed for React Native and Expo. It establishes an explicit, safe, and verifiable checkpointing lifecycle. When your users are filling out a KYC verification, multi-screen checkout, or onboarding wizard, they will never lose progress.
+      <section id="overview" className="doc-section scroll-mt-24 mb-16 section-enter">
+        <div className="mb-4">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+            Overview
+          </h2>
+        </div>
+
+        <p className="text-base md:text-lg text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
+          Mobile operating systems forcefully terminate background processes due to system memory pressure (Android Low Memory Killer / iOS jetsam) or battery optimization policies without firing JavaScript cleanup handlers or state-flushing lifecycle callbacks.
         </p>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px', marginBlock: '24px' }}>
-          <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)', borderRadius: '12px', padding: '18px' }}>
-            <span style={{ fontSize: '24px', display: 'block', marginBottom: '8px' }}>🔒</span>
-            <h4 style={{ color: '#f8fafc', fontSize: '15px', marginBottom: '6px' }}>Atomic &amp; Mutex-Protected</h4>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '13px' }}>Per-journey promise mutex queue serializes high-frequency saves, eliminating write races. A failed save never destroys the prior committed snapshot.</p>
+        <p className="text-sm md:text-base text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
+          <code className="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-cyan-600 dark:text-cyan-400 font-mono text-xs">react-native-journey-recovery</code> is a developer-first state recovery engine designed specifically for React Native and Expo. It establishes an explicit, safe, and verifiable checkpointing lifecycle. When your users are filling out a multi-step mortgage application, complex checkout wizard, airline check-in, or KYC verification, they will never lose in-progress progress.
+        </p>
+
+        {/* Feature Cards Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-8">
+          <div className="p-5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40">
+            <div className="w-9 h-9 rounded-lg bg-slate-100 dark:bg-slate-800 text-sky-600 dark:text-sky-400 flex items-center justify-center mb-3">
+              <IconLock size={18} />
+            </div>
+            <h4 className="text-sm font-bold text-slate-900 dark:text-slate-100 mb-1">
+              Atomic &amp; Mutex-Protected
+            </h4>
+            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+              Per-journey Promise FIFO queue serializes rapid saves into sequential promises, eliminating write races. A failed or interrupted write never destroys the prior committed snapshot.
+            </p>
           </div>
-          <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)', borderRadius: '12px', padding: '18px' }}>
-            <span style={{ fontSize: '24px', display: 'block', marginBottom: '8px' }}>🛡️</span>
-            <h4 style={{ color: '#f8fafc', fontSize: '15px', marginBottom: '6px' }}>Tamper &amp; Corruption Proof</h4>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '13px' }}>Deterministic FNV-1a checksums detect storage corruption or manual tampering before any restoration occurs.</p>
+
+          <div className="p-5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40">
+            <div className="w-9 h-9 rounded-lg bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 flex items-center justify-center mb-3">
+              <IconShield size={18} />
+            </div>
+            <h4 className="text-sm font-bold text-slate-900 dark:text-slate-100 mb-1">
+              Tamper &amp; Corruption Proof
+            </h4>
+            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+              Deterministic 32-bit FNV-1a checksums detect storage corruption, truncated writes, or unauthorized payload modification before any restoration can occur.
+            </p>
           </div>
-          <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)', borderRadius: '12px', padding: '18px' }}>
-            <span style={{ fontSize: '24px', display: 'block', marginBottom: '8px' }}>🔄</span>
-            <h4 style={{ color: '#f8fafc', fontSize: '15px', marginBottom: '6px' }}>Schema Migrations</h4>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '13px' }}>Ship app updates with confidence. Older snapshot schemas are safely upgraded on restore via custom migration handlers.</p>
+
+          <div className="p-5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40">
+            <div className="w-9 h-9 rounded-lg bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 flex items-center justify-center mb-3">
+              <IconZap size={18} />
+            </div>
+            <h4 className="text-sm font-bold text-slate-900 dark:text-slate-100 mb-1">
+              Schema Version Migrations
+            </h4>
+            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+              Ship app updates with confidence. Outdated snapshot schemas from previous versions are seamlessly upgraded on the fly via the <code className="text-xs font-mono">migrate()</code> callback.
+            </p>
           </div>
-          <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)', borderRadius: '12px', padding: '18px' }}>
-            <span style={{ fontSize: '24px', display: 'block', marginBottom: '8px' }}>⏳</span>
-            <h4 style={{ color: '#f8fafc', fontSize: '15px', marginBottom: '6px' }}>TTL Expiry Policies</h4>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '13px' }}>Configurable time-to-live policies prevent stale, obsolete sessions from lingering or auto-restoring after deadlines.</p>
+
+          <div className="p-5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40">
+            <div className="w-9 h-9 rounded-lg bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 flex items-center justify-center mb-3">
+              <IconDatabase size={18} />
+            </div>
+            <h4 className="text-sm font-bold text-slate-900 dark:text-slate-100 mb-1">
+              TTL Expiry &amp; Scoping
+            </h4>
+            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+              Configurable time-to-live expiration policies prevent stale sessions from lingering, with multi-tenant user scoping for shared devices.
+            </p>
           </div>
         </div>
       </section>
 
       {/* Why Journey Recovery */}
-      <section id="why-journey-recovery" className="doc-section" style={{ marginBottom: '64px' }}>
-        <h2 style={{ fontSize: '28px', fontWeight: 800, color: '#f8fafc', marginBottom: '16px' }}>
-          Why Journey Recovery vs Simple Persistence?
-        </h2>
-        <p style={{ color: 'var(--text-secondary)', fontSize: '15px', lineHeight: 1.7, marginBottom: '20px' }}>
-          Most apps attempt session persistence by auto-serializing their entire global Redux or Zustand store. This creates critical security risks, large storage bloat, stale backend assumptions, and fragile restore bugs.
+      <section id="why-journey-recovery" className="doc-section scroll-mt-24 mb-16 section-enter">
+        <div className="mb-4">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+            Why Journey Recovery vs Generic Store Persistence?
+          </h2>
+        </div>
+
+        <p className="text-sm md:text-base text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
+          Many mobile apps attempt session persistence by auto-serializing their entire global Redux or Zustand state tree to storage on every action. In real-world production mobile apps, this generic pattern introduces serious architectural pitfalls:
         </p>
 
-        <div style={{ overflowX: 'auto', border: '1px solid var(--border-color)', borderRadius: '10px', marginBlock: '20px' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', textAlign: 'left' }}>
+        {/* Warning Callout */}
+        <div className="p-4 rounded-xl border border-amber-200 dark:border-amber-900/50 bg-amber-50/60 dark:bg-amber-950/20 flex items-start gap-3 mb-6">
+          <IconAlertTriangle size={18} className="text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
+          <div className="space-y-1">
+            <div className="text-xs font-bold text-amber-900 dark:text-amber-200">
+              The Danger of Whole-Store Dumps
+            </div>
+            <p className="text-xs text-amber-800 dark:text-amber-300/80 leading-relaxed">
+              Whole-store dumps inadvertently persist sensitive authentication tokens, confidential credit card numbers, stale backend pricing, and temporary UI toggles. Furthermore, rapid keystrokes trigger concurrent async disk writes that resolve out of order, overwriting newer state with older snapshots.
+            </p>
+          </div>
+        </div>
+
+        {/* Comparison Table */}
+        <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 overflow-x-auto shadow-2xs">
+          <table className="w-full text-left text-xs md:text-sm border-collapse min-w-[640px]">
             <thead>
-              <tr style={{ background: '#0f172a', borderBottom: '1px solid var(--border-color)' }}>
-                <th style={{ padding: '12px 16px', color: '#f8fafc' }}>Capability</th>
-                <th style={{ padding: '12px 16px', color: '#f8fafc' }}>Standard Key-Value Persistence</th>
-                <th style={{ padding: '12px 16px', color: 'var(--accent-cyan)' }}>react-native-journey-recovery</th>
+              <tr className="border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-slate-600 dark:text-slate-400 font-semibold text-[11px] uppercase tracking-wider">
+                <th className="py-3 px-4">Capability</th>
+                <th className="py-3 px-4 text-slate-500">Global Store Dump (redux-persist)</th>
+                <th className="py-3 px-4 text-sky-600 dark:text-sky-400 font-semibold">react-native-journey-recovery</th>
               </tr>
             </thead>
-            <tbody>
-              <tr style={{ borderBottom: '1px solid var(--border-subtle)' }}>
-                <td style={{ padding: '12px 16px', fontWeight: 600 }}>Scope</td>
-                <td style={{ padding: '12px 16px', color: 'var(--text-secondary)' }}>Global store dump (entire state tree)</td>
-                <td style={{ padding: '12px 16px', color: '#f8fafc', fontWeight: 600 }}>Selective journey checkpoints (explicit fields only)</td>
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-800/80 text-xs">
+              <tr className="hover:bg-slate-50/50 dark:hover:bg-slate-900/30">
+                <td className="py-3 px-4 font-semibold text-slate-900 dark:text-slate-100">Storage Scope</td>
+                <td className="py-3 px-4 text-slate-500">Entire state tree (massive disk bloat)</td>
+                <td className="py-3 px-4 font-medium text-slate-900 dark:text-slate-100">Selective journey checkpoints (explicit fields only)</td>
               </tr>
-              <tr style={{ borderBottom: '1px solid var(--border-subtle)' }}>
-                <td style={{ padding: '12px 16px', fontWeight: 600 }}>Concurrent Writes</td>
-                <td style={{ padding: '12px 16px', color: 'var(--text-secondary)' }}>Last-write-wins (silent data races)</td>
-                <td style={{ padding: '12px 16px', color: 'var(--accent-emerald)', fontWeight: 600 }}>Serialized Promise Mutex Queue</td>
+              <tr className="hover:bg-slate-50/50 dark:hover:bg-slate-900/30">
+                <td className="py-3 px-4 font-semibold text-slate-900 dark:text-slate-100">Concurrent Write Races</td>
+                <td className="py-3 px-4 text-slate-500">Last-write-wins (silent race conditions)</td>
+                <td className="py-3 px-4 font-medium text-slate-900 dark:text-slate-100">Serialized Promise FIFO Mutex Queue</td>
               </tr>
-              <tr style={{ borderBottom: '1px solid var(--border-subtle)' }}>
-                <td style={{ padding: '12px 16px', fontWeight: 600 }}>Write Failure Safety</td>
-                <td style={{ padding: '12px 16px', color: 'var(--text-secondary)' }}>Corrupts key if write is interrupted</td>
-                <td style={{ padding: '12px 16px', color: '#f8fafc', fontWeight: 600 }}>Atomic preservation of prior checkpoint</td>
+              <tr className="hover:bg-slate-50/50 dark:hover:bg-slate-900/30">
+                <td className="py-3 px-4 font-semibold text-slate-900 dark:text-slate-100">Write Failure Safety</td>
+                <td className="py-3 px-4 text-slate-500">Leaves partial corrupted JSON on disk</td>
+                <td className="py-3 px-4 font-medium text-slate-900 dark:text-slate-100">Atomic preservation of previous committed snapshot</td>
               </tr>
-              <tr style={{ borderBottom: '1px solid var(--border-subtle)' }}>
-                <td style={{ padding: '12px 16px', fontWeight: 600 }}>Corruption Detection</td>
-                <td style={{ padding: '12px 16px', color: 'var(--text-secondary)' }}>Syntax errors only</td>
-                <td style={{ padding: '12px 16px', color: 'var(--accent-cyan)', fontWeight: 600 }}>Deterministic FNV-1a Checksum</td>
+              <tr className="hover:bg-slate-50/50 dark:hover:bg-slate-900/30">
+                <td className="py-3 px-4 font-semibold text-slate-900 dark:text-slate-100">Data Corruption Detection</td>
+                <td className="py-3 px-4 text-slate-500">JSON syntax errors only</td>
+                <td className="py-3 px-4 font-medium text-slate-900 dark:text-slate-100">Deterministic 32-bit FNV-1a Checksums</td>
               </tr>
-              <tr style={{ borderBottom: '1px solid var(--border-subtle)' }}>
-                <td style={{ padding: '12px 16px', fontWeight: 600 }}>Schema Evolution</td>
-                <td style={{ padding: '12px 16px', color: 'var(--text-secondary)' }}>Breaks app on version change</td>
-                <td style={{ padding: '12px 16px', color: '#f8fafc', fontWeight: 600 }}>Built-in migrate() handler</td>
+              <tr className="hover:bg-slate-50/50 dark:hover:bg-slate-900/30">
+                <td className="py-3 px-4 font-semibold text-slate-900 dark:text-slate-100">Schema Evolution</td>
+                <td className="py-3 px-4 text-slate-500">App crashes on changed field types</td>
+                <td className="py-3 px-4 font-medium text-slate-900 dark:text-slate-100">Built-in <code className="font-mono text-xs">migrate()</code> version upgrade hook</td>
               </tr>
-              <tr>
-                <td style={{ padding: '12px 16px', fontWeight: 600 }}>Server Cache Sync</td>
-                <td style={{ padding: '12px 16px', color: 'var(--text-secondary)' }}>Assumes saved UI is backend truth</td>
-                <td style={{ padding: '12px 16px', color: 'var(--accent-indigo)', fontWeight: 600 }}>TanStack Query cache revalidation</td>
+              <tr className="hover:bg-slate-50/50 dark:hover:bg-slate-900/30">
+                <td className="py-3 px-4 font-semibold text-slate-900 dark:text-slate-100">Server Cache Sync</td>
+                <td className="py-3 px-4 text-slate-500">Assumes saved UI state is backend truth</td>
+                <td className="py-3 px-4 font-medium text-slate-900 dark:text-slate-100">TanStack Query automatic cache revalidation</td>
               </tr>
             </tbody>
           </table>
@@ -97,195 +150,347 @@ export const Sections: React.FC = () => {
       </section>
 
       {/* Installation */}
-      <section id="installation" className="doc-section" style={{ marginBottom: '64px' }}>
-        <h2 style={{ fontSize: '28px', fontWeight: 800, color: '#f8fafc', marginBottom: '16px' }}>
-          Installation
-        </h2>
-        <p style={{ color: 'var(--text-secondary)', fontSize: '15px', lineHeight: 1.7 }}>
-          Install <code>react-native-journey-recovery</code> alongside your preferred persistent storage adapter:
+      <section id="installation" className="doc-section scroll-mt-24 mb-16 section-enter">
+        <div className="mb-4">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+            Installation
+          </h2>
+        </div>
+
+        <p className="text-sm md:text-base text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
+          Install <code className="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-cyan-600 dark:text-cyan-400 font-mono text-xs">react-native-journey-recovery</code> using your preferred package manager alongside your choice of storage adapter:
         </p>
 
         <CodeBlock
-          language="bash"
-          title="Terminal"
-          code={`# npm
-npm install react-native-journey-recovery @react-native-async-storage/async-storage
-
-# yarn
-yarn add react-native-journey-recovery @react-native-async-storage/async-storage
-
-# pnpm
-pnpm add react-native-journey-recovery @react-native-async-storage/async-storage
-
-# Expo
-npx expo install react-native-journey-recovery @react-native-async-storage/async-storage`}
+          tabs={[
+            {
+              label: 'npm',
+              language: 'bash',
+              code: 'npm install react-native-journey-recovery @react-native-async-storage/async-storage',
+            },
+            {
+              label: 'pnpm',
+              language: 'bash',
+              code: 'pnpm add react-native-journey-recovery @react-native-async-storage/async-storage',
+            },
+            {
+              label: 'yarn',
+              language: 'bash',
+              code: 'yarn add react-native-journey-recovery @react-native-async-storage/async-storage',
+            },
+            {
+              label: 'bun',
+              language: 'bash',
+              code: 'bun add react-native-journey-recovery @react-native-async-storage/async-storage',
+            },
+            {
+              label: 'Expo',
+              language: 'bash',
+              code: 'npx expo install react-native-journey-recovery @react-native-async-storage/async-storage',
+            },
+          ]}
         />
       </section>
 
-      {/* Quickstart */}
-      <section id="quickstart" className="doc-section" style={{ marginBottom: '64px' }}>
-        <h2 style={{ fontSize: '28px', fontWeight: 800, color: '#f8fafc', marginBottom: '16px' }}>
-          Quickstart (3 Steps)
-        </h2>
+      {/* Quickstart in 3 Steps */}
+      <section id="quickstart" className="doc-section scroll-mt-24 mb-16 section-enter">
+        <div className="mb-4">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+            Quickstart in 3 Steps
+          </h2>
+        </div>
 
-        <h3 style={{ fontSize: '18px', fontWeight: 600, color: '#e2e8f0', marginBlock: '24px 10px' }}>
-          Step 1: Wrap App with RecoveryProvider
-        </h3>
-        <CodeBlock
-          language="tsx"
-          title="App.tsx"
-          code={`import React from 'react';
+        <div className="space-y-8 mt-6">
+          {/* Step 1 */}
+          <div className="flex gap-4 items-start">
+            <div className="flex flex-col items-center">
+              <span className="w-7 h-7 rounded-lg bg-slate-900 text-white dark:bg-sky-500 dark:text-slate-950 font-bold font-mono text-xs flex items-center justify-center shrink-0">
+                1
+              </span>
+              <div className="w-0.5 h-full bg-slate-200 dark:bg-slate-800 mt-3 min-h-[40px]" />
+            </div>
+            <div className="flex-1 space-y-2">
+              <h3 className="text-base font-bold text-slate-900 dark:text-slate-100">
+                Wrap App with RecoveryProvider
+              </h3>
+              <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-3">
+                Initialize your preferred storage adapter (AsyncStorage, MMKV, or SecureStore) and wrap your root component tree:
+              </p>
+              <CodeBlock
+                language="tsx"
+                title="App.tsx"
+                code={`import React from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { RecoveryProvider, AsyncStorageAdapter } from 'react-native-journey-recovery';
-import { AppNavigator } from './AppNavigator';
+import { AppNavigator } from './navigation/AppNavigator';
 
+// 1. Initialize persistent storage adapter
 const storage = new AsyncStorageAdapter(AsyncStorage);
 
 export default function App() {
   return (
-    <RecoveryProvider storage={storage} options={{ defaultExpiry: 24 * 60 * 60 * 1000 }}>
+    <RecoveryProvider
+      storage={storage}
+      options={{
+        defaultExpiry: 24 * 60 * 60 * 1000, // 24 hours TTL
+      }}
+    >
       <AppNavigator />
     </RecoveryProvider>
   );
 }`}
-        />
+              />
+            </div>
+          </div>
 
-        <h3 style={{ fontSize: '18px', fontWeight: 600, color: '#e2e8f0', marginBlock: '24px 10px' }}>
-          Step 2: Checkpoint Journey Progress
-        </h3>
-        <CodeBlock
-          language="tsx"
-          title="CheckoutScreen.tsx"
-          code={`import { useJourney } from 'react-native-journey-recovery';
+          {/* Step 2 */}
+          <div className="flex gap-4 items-start">
+            <div className="flex flex-col items-center">
+              <span className="w-7 h-7 rounded-lg bg-slate-900 text-white dark:bg-sky-500 dark:text-slate-950 font-bold font-mono text-xs flex items-center justify-center shrink-0">
+                2
+              </span>
+              <div className="w-0.5 h-full bg-slate-200 dark:bg-slate-800 mt-3 min-h-[40px]" />
+            </div>
+            <div className="flex-1 space-y-2">
+              <h3 className="text-base font-bold text-slate-900 dark:text-slate-100">
+                Checkpoint Journey State
+              </h3>
+              <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-3">
+                Use <code className="font-mono text-xs">useJourney</code> to checkpoint form values and navigation step transitions. Sensitive fields are excluded:
+              </p>
+              <CodeBlock
+                language="tsx"
+                title="CheckoutScreen.tsx"
+                code={`import React, { useState } from 'react';
+import { View, Button } from 'react-native';
+import { useJourney } from 'react-native-journey-recovery';
 
-export function CheckoutScreen({ currentStep, cartData }) {
-  const journey = useJourney('checkout-flow', {
+interface CheckoutState {
+  step: number;
+  shippingAddress: string;
+  creditCardNumber: string; // Excluded!
+}
+
+export function CheckoutScreen() {
+  const [step, setStep] = useState(1);
+  const [address, setAddress] = useState('');
+  const [ccNumber, setCcNumber] = useState('');
+
+  // Per-journey checkpointing with automatic mutex write serialization
+  const journey = useJourney<CheckoutState>('checkout-flow', {
     version: 1,
     autoSave: true,
-    debounceMs: 500,
+    debounceMs: 400,
   });
 
-  const onNextStep = async (nextStepData) => {
-    // Automatically saved with mutex protection and checksum
+  const handleNextStep = async () => {
     await journey.checkpoint({
-      step: currentStep + 1,
-      ...nextStepData,
+      step: step + 1,
+      shippingAddress: address,
+      creditCardNumber: ccNumber,
     }, {
-      exclude: ['creditCardNumber', 'cvv'], // Sensitive fields stripped
+      exclude: ['creditCardNumber'], // Stripped before disk serialization!
     });
+    setStep(step + 1);
   };
 
-  // ...
+  return (
+    <View>
+      {/* Screen inputs */}
+      <Button title="Continue" onPress={handleNextStep} />
+    </View>
+  );
 }`}
-        />
+              />
+            </div>
+          </div>
 
-        <h3 style={{ fontSize: '18px', fontWeight: 600, color: '#e2e8f0', marginBlock: '24px 10px' }}>
-          Step 3: Restore or Offer Recovery
-        </h3>
-        <CodeBlock
-          language="tsx"
-          title="HomeScreen.tsx"
-          code={`import { useRecovery, RecoveryBanner } from 'react-native-journey-recovery';
+          {/* Step 3 */}
+          <div className="flex gap-4 items-start">
+            <div className="flex flex-col items-center">
+              <span className="w-7 h-7 rounded-lg bg-slate-900 text-white dark:bg-sky-500 dark:text-slate-950 font-bold font-mono text-xs flex items-center justify-center shrink-0">
+                3
+              </span>
+            </div>
+            <div className="flex-1 space-y-2">
+              <h3 className="text-base font-bold text-slate-900 dark:text-slate-100">
+                Prompt Recovery on App Launch
+              </h3>
+              <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-3">
+                When the user returns to the app, <code className="font-mono text-xs">RecoveryBanner</code> or <code className="font-mono text-xs">useRecovery</code> checks for uncommitted checkpoints and prompts the user to resume:
+              </p>
+              <CodeBlock
+                language="tsx"
+                title="HomeScreen.tsx"
+                code={`import React from 'react';
+import { View, Text } from 'react-native';
+import { RecoveryBanner } from 'react-native-journey-recovery';
 
 export function HomeScreen({ navigation }) {
   return (
     <View style={{ flex: 1 }}>
+      {/* Appears automatically if an eligible checkpoint exists */}
       <RecoveryBanner
         journeyId="checkout-flow"
-        title="Resume unfinished checkout?"
-        onRestored={(savedData) => {
+        title="Resume your unfinished order?"
+        onResume={(savedData) => {
           navigation.navigate('Checkout', savedData);
         }}
+        onDiscard={() => {
+          console.log('Checkpoint purged');
+        }}
       />
-      {/* Rest of your Home Screen */}
+
+      <Text>Welcome back!</Text>
     </View>
+  );
+}`}
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Engine Architecture Visualizer */}
+      <section id="architecture-diagram" className="doc-section scroll-mt-24 mb-16 section-enter">
+        <div className="mb-4">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+            Engine Architecture &amp; Data Pipeline
+          </h2>
+        </div>
+
+        <p className="text-sm md:text-base text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
+          Explore the five sequential stages of the recovery pipeline. Click each stage node below to inspect internal queuing, failure safety, and code implementation:
+        </p>
+
+        <ArchitectureVisualizer />
+      </section>
+
+      {/* Write Serialization & Mutex */}
+      <section id="write-serialization" className="doc-section scroll-mt-24 mb-16 section-enter">
+        <div className="mb-4">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+            Write Serialization &amp; Mutex Queue
+          </h2>
+        </div>
+
+        <p className="text-sm md:text-base text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
+          When forms auto-save on rapid typing, asynchronous storage operations can resolve out of order due to OS scheduling and thread pool variations. <code className="font-mono text-xs">CheckpointManager</code> contains a lightweight per-journey Promise FIFO mutex queue guaranteeing that saves execute sequentially:
+        </p>
+
+        <CodeBlock
+          language="typescript"
+          title="Concurrency Execution Trace"
+          code={`// User types "A", "AB", "ABC" in 60 milliseconds:
+// Write 1 ("A")   ───► Locked in Mutex ───► Commits to Storage
+// Write 2 ("AB")  ───► Queued in FIFO  ───► Awaits Write 1 ───► Commits
+// Write 3 ("ABC") ───► Queued in FIFO  ───► Awaits Write 2 ───► Commits (Final State)
+
+// Result: Zero write race conditions. Write 3 is always the committed snapshot.`}
+        />
+
+        <div className="mt-6 p-4 md:p-5 rounded-xl border border-cyan-500/30 bg-cyan-500/5 dark:bg-cyan-950/20 flex items-start gap-3.5">
+          <IconZap size={20} className="text-cyan-500 shrink-0 mt-0.5" />
+          <div>
+            <div className="text-sm font-bold text-slate-900 dark:text-white mb-1">
+              Benchmarked Throughput Overhead
+            </div>
+            <p className="text-xs md:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+              The promise mutex queue adds less than 0.1ms overhead per operation, delivering over 25,000 serialized operations per second in automated microbenchmarks.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Atomic Snapshot Safety */}
+      <section id="atomic-safety" className="doc-section scroll-mt-24 mb-16 section-enter">
+        <div className="mb-4">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+            Atomic Snapshot Preservation
+          </h2>
+        </div>
+
+        <p className="text-sm md:text-base text-slate-600 dark:text-slate-400 leading-relaxed">
+          If a mobile device experiences sudden low storage disk exhaustion, OS sandbox permissions denial, or hardware power cut midway through writing a new checkpoint, <code className="font-mono text-xs">CheckpointManager</code> preserves the previously committed checkpoint in storage. It never leaves partial, truncated, or unparseable JSON on disk.
+        </p>
+      </section>
+
+      {/* FNV-1a Checksum Integrity */}
+      <section id="checksum-integrity" className="doc-section scroll-mt-24 mb-16 section-enter">
+        <div className="mb-4">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+            32-Bit FNV-1a Checksum Integrity
+          </h2>
+        </div>
+
+        <p className="text-sm md:text-base text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
+          Every stored checkpoint snapshot embeds an 8-character deterministic 32-bit Fowler–Noll–Vo (FNV-1a) hash computed across the serialized data payload. Upon restoration, <code className="font-mono text-xs">SnapshotValidator</code> recalculates the hash:
+        </p>
+
+        <CodeBlock
+          language="typescript"
+          title="Integrity Verification Logic"
+          code={`const computedChecksum = computeChecksum(JSON.stringify(snapshot.data));
+
+if (snapshot.checksum !== computedChecksum) {
+  // Checksum mismatch detected! Storage has been tampered with or corrupted on disk.
+  throw new JourneyRecoveryError(
+    'CORRUPTED_STORAGE_REJECTED',
+    \`Expected checksum \${snapshot.checksum}, computed \${computedChecksum}\`
   );
 }`}
         />
       </section>
 
-      {/* Write Serialization & Mutex */}
-      <section id="write-serialization" className="doc-section" style={{ marginBottom: '64px' }}>
-        <h2 style={{ fontSize: '28px', fontWeight: 800, color: '#f8fafc', marginBottom: '16px' }}>
-          Write Serialization &amp; Mutex Queue
-        </h2>
-        <p style={{ color: 'var(--text-secondary)', fontSize: '15px', lineHeight: 1.7 }}>
-          When forms auto-save on rapid keystrokes, storage writes can resolve out of order. <code>CheckpointManager</code> maintains an internal per-journey Promise FIFO queue guaranteeing that operations execute strictly sequentially:
-        </p>
-        <CodeBlock
-          language="typescript"
-          title="Concurrency Model"
-          code={`// User types "A", then "AB", then "ABC" within 50ms:
-// Write 1 ("A")   ---> Enqueued & starts writing
-// Write 2 ("AB")  ---> Waits for Write 1
-// Write 3 ("ABC") ---> Waits for Write 2
-// Guaranteed: Write 3 commits last. Zero race conditions.`}
-        />
-      </section>
+      {/* TTL Expiration Policies */}
+      <section id="expiry-policies" className="doc-section scroll-mt-24 mb-16 section-enter">
+        <div className="mb-4">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+            TTL Expiration Policies
+          </h2>
+        </div>
 
-      {/* Atomic Snapshot Safety */}
-      <section id="atomic-safety" className="doc-section" style={{ marginBottom: '64px' }}>
-        <h2 style={{ fontSize: '28px', fontWeight: 800, color: '#f8fafc', marginBottom: '16px' }}>
-          Atomic Snapshot Preservation
-        </h2>
-        <p style={{ color: 'var(--text-secondary)', fontSize: '15px', lineHeight: 1.7 }}>
-          If a device experiences a sudden out-of-quota error or disk I/O interruption during an in-flight write, <code>CheckpointManager</code> preserves the previous valid checkpoint. It never leaves partial, corrupt JSON on disk.
+        <p className="text-sm md:text-base text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
+          Prevent zombie sessions. Configure expiry either globally at the <code className="font-mono text-xs">RecoveryProvider</code> level or per journey:
         </p>
-      </section>
 
-      {/* FNV-1a Checksums */}
-      <section id="checksum-integrity" className="doc-section" style={{ marginBottom: '64px' }}>
-        <h2 style={{ fontSize: '28px', fontWeight: 800, color: '#f8fafc', marginBottom: '16px' }}>
-          FNV-1a Checksum Integrity
-        </h2>
-        <p style={{ color: 'var(--text-secondary)', fontSize: '15px', lineHeight: 1.7 }}>
-          Every snapshot stored carries an 8-character deterministic 32-bit FNV-1a hash of the serialized payload. Upon restoration, <code>SnapshotValidator</code> re-computes the hash:
-        </p>
-        <CodeBlock
-          language="typescript"
-          title="Integrity Verification"
-          code={`const expectedChecksum = computeChecksum(JSON.stringify(snapshot.data));
-if (snapshot.checksum !== expectedChecksum) {
-  // Integrity compromised! Recovery denied for safety.
-  throw new JourneyRecoveryError('SNAPSHOT_CORRUPTED');
-}`}
-        />
-      </section>
-
-      {/* TTL Expiration */}
-      <section id="expiry-policies" className="doc-section" style={{ marginBottom: '64px' }}>
-        <h2 style={{ fontSize: '28px', fontWeight: 800, color: '#f8fafc', marginBottom: '16px' }}>
-          TTL Expiration Policies
-        </h2>
-        <p style={{ color: 'var(--text-secondary)', fontSize: '15px', lineHeight: 1.7 }}>
-          Avoid zombie sessions. Configure expiry at the provider level or per journey:
-        </p>
         <CodeBlock
           language="tsx"
-          title="Per-Journey Expiry"
-          code={`const journey = useJourney('checkout', {
-  expiry: 2 * 60 * 60 * 1000, // 2 hours
+          title="Per-Journey Expiry Configuration"
+          code={`const journey = useJourney('flight-booking', {
+  // Expire checkpoint after 2 hours
+  expiry: 2 * 60 * 60 * 1000,
 });`}
         />
       </section>
 
-      {/* Schema Migration */}
-      <section id="schema-migration" className="doc-section" style={{ marginBottom: '64px' }}>
-        <h2 style={{ fontSize: '28px', fontWeight: 800, color: '#f8fafc', marginBottom: '16px' }}>
-          Schema Version Migration
-        </h2>
-        <p style={{ color: 'var(--text-secondary)', fontSize: '15px', lineHeight: 1.7 }}>
-          When shipping v2 of your application with changed form field names, older v1 checkpoints are smoothly upgraded on the fly:
+      {/* Schema Version Migration */}
+      <section id="schema-migration" className="doc-section scroll-mt-24 mb-16 section-enter">
+        <div className="mb-4">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+            Schema Version Migration
+          </h2>
+        </div>
+
+        <p className="text-sm md:text-base text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
+          When deploying an app update with restructured field names or revised data contracts, older checkpoints saved on users&apos; devices are cleanly upgraded before restoration via the <code className="font-mono text-xs">migrate()</code> handler:
         </p>
+
         <CodeBlock
           language="tsx"
-          title="Migration Callback"
-          code={`const journey = useJourney('user-profile', {
-  version: 2,
-  migrate: (oldData: any, oldVersion: number) => {
+          title="Schema Migration Handler"
+          code={`interface UserProfileV2 {
+  fullName: string;
+  email: string;
+}
+
+const journey = useJourney<UserProfileV2>('user-profile', {
+  version: 2, // Active version
+  migrate: (oldData: any, oldVersion: number): UserProfileV2 => {
     if (oldVersion === 1) {
+      // Migrate v1 (firstName, lastName) to v2 (fullName)
       return {
-        fullName: \`\${oldData.firstName} \${oldData.lastName}\`,
+        fullName: \`\${oldData.firstName} \${oldData.lastName}\`.trim(),
         email: oldData.email,
       };
     }
@@ -296,103 +501,174 @@ if (snapshot.checksum !== expectedChecksum) {
       </section>
 
       {/* Storage Adapters */}
-      <section id="storage-async" className="doc-section" style={{ marginBottom: '64px' }}>
-        <h2 style={{ fontSize: '28px', fontWeight: 800, color: '#f8fafc', marginBottom: '16px' }}>
-          Storage Adapters
-        </h2>
+      <section id="storage-adapters" className="doc-section scroll-mt-24 mb-16 section-enter">
+        <div className="mb-4">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+            Storage Adapters
+          </h2>
+        </div>
 
-        <h3 id="storage-mmkv" style={{ fontSize: '18px', fontWeight: 600, color: '#e2e8f0', marginBlock: '20px 8px' }}>
-          1. MMKV Storage Adapter (High Performance)
-        </h3>
-        <CodeBlock
-          language="tsx"
-          title="MMKV Adapter"
-          code={`import { MMKV } from 'react-native-mmkv';
+        <p className="text-sm md:text-base text-slate-600 dark:text-slate-400 leading-relaxed mb-8">
+          <code className="font-mono text-xs">react-native-journey-recovery</code> decouples state lifecycle logic from storage implementations via the <code className="font-mono text-xs">StorageAdapter</code> interface:
+        </p>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div id="storage-mmkv" className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 shadow-sm flex flex-col justify-between">
+            <div className="mb-4">
+              <span className="inline-block px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border border-cyan-500/20 mb-2">
+                HIGH SPEED
+              </span>
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1.5">
+                MMKVStorageAdapter
+              </h3>
+              <p className="text-xs md:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                Direct memory-mapped C++ storage backed by Tencent MMKV. Delivers sub-millisecond synchronous writes with negligible battery consumption.
+              </p>
+            </div>
+            <CodeBlock
+              language="tsx"
+              title="MMKV Adapter"
+              code={`import { MMKV } from 'react-native-mmkv';
 import { MMKVStorageAdapter, RecoveryProvider } from 'react-native-journey-recovery';
 
-const mmkv = new MMKV({ id: 'journey-storage' });
+const mmkv = new MMKV({ id: 'journey-store' });
 const storage = new MMKVStorageAdapter(mmkv);
 
-<RecoveryProvider storage={storage}> ... </RecoveryProvider>`}
-        />
+<RecoveryProvider storage={storage}>
+  <App />
+</RecoveryProvider>`}
+            />
+          </div>
 
-        <h3 id="storage-secure" style={{ fontSize: '18px', fontWeight: 600, color: '#e2e8f0', marginBlock: '20px 8px' }}>
-          2. SecureStoreAdapter (Expo &amp; Hardware Keystore / Keychain)
-        </h3>
-        <p style={{ color: 'var(--text-secondary)', fontSize: '14px', marginBottom: '12px' }}>
-          Includes automatic payload chunking to prevent Android&apos;s native 2048-byte Keystore limits from crashing your app during large form recovery.
-        </p>
-        <CodeBlock
-          language="tsx"
-          title="SecureStore Adapter (Expo)"
-          code={`import * as SecureStore from 'expo-secure-store';
+          <div id="storage-secure" className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 shadow-sm flex flex-col justify-between">
+            <div className="mb-4">
+              <span className="inline-block px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 mb-2">
+                HARDWARE ENCRYPTED
+              </span>
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1.5">
+                SecureStoreAdapter (Expo)
+              </h3>
+              <p className="text-xs md:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                Hardware-backed security backed by iOS Keychain and Android Keystore. Includes automated chunking to prevent Android native 2048-byte Keystore buffer overflows.
+              </p>
+            </div>
+            <CodeBlock
+              language="tsx"
+              title="SecureStore Adapter (Expo)"
+              code={`import * as SecureStore from 'expo-secure-store';
 import { SecureStoreAdapter, RecoveryProvider } from 'react-native-journey-recovery';
 
-// Hardware-backed encrypted storage for Fintech & Healthcare journeys
+// Hardware-backed encrypted storage with safe chunking
 const storage = new SecureStoreAdapter(SecureStore, {
-  chunkSize: 1800, // Safe chunking for Android Keystore
+  chunkSize: 1800, // Safe chunking for Android Keystore limits
 });
 
-<RecoveryProvider storage={storage}> ... </RecoveryProvider>`}
-        />
+<RecoveryProvider storage={storage}>
+  <App />
+</RecoveryProvider>`}
+            />
+          </div>
 
-        <h3 id="storage-memory" style={{ fontSize: '18px', fontWeight: 600, color: '#e2e8f0', marginBlock: '20px 8px' }}>
-          3. Memory Storage Adapter (Testing &amp; Ephemeral Flows)
-        </h3>
-        <CodeBlock
-          language="typescript"
-          code={`import { MemoryStorageAdapter } from 'react-native-journey-recovery';
+          <div id="storage-async" className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 shadow-sm flex flex-col justify-between">
+            <div className="mb-4">
+              <span className="inline-block px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 mb-2">
+                STANDARD PERSISTENCE
+              </span>
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1.5">
+                AsyncStorageAdapter
+              </h3>
+              <p className="text-xs md:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                Standard React Native persistent storage. Fully supported in Expo Go sandbox with zero native setup.
+              </p>
+            </div>
+            <CodeBlock
+              language="tsx"
+              title="AsyncStorage Adapter"
+              code={`import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AsyncStorageAdapter, RecoveryProvider } from 'react-native-journey-recovery';
+
+const storage = new AsyncStorageAdapter(AsyncStorage);
+
+<RecoveryProvider storage={storage}>
+  <App />
+</RecoveryProvider>`}
+            />
+          </div>
+
+          <div id="storage-memory" className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 shadow-sm flex flex-col justify-between">
+            <div className="mb-4">
+              <span className="inline-block px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20 mb-2">
+                EPHEMERAL TESTING
+              </span>
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1.5">
+                MemoryStorageAdapter
+              </h3>
+              <p className="text-xs md:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                In-memory pure JavaScript Map adapter for Jest, Vitest, CI pipelines, and Storybook previews.
+              </p>
+            </div>
+            <CodeBlock
+              language="typescript"
+              title="Memory Adapter"
+              code={`import { MemoryStorageAdapter } from 'react-native-journey-recovery';
+
 const storage = new MemoryStorageAdapter();`}
-        />
+            />
+          </div>
+        </div>
+      </section>
 
-        <h3 id="storage-custom" style={{ fontSize: '18px', fontWeight: 600, color: '#e2e8f0', marginBlock: '20px 8px' }}>
-          3. Custom Storage Adapter
-        </h3>
-        <CodeBlock
-          language="typescript"
-          title="Custom Adapter Interface"
-          code={`import { StorageAdapter } from 'react-native-journey-recovery';
-
-export class EncryptedSQLCipherAdapter implements StorageAdapter {
-  async getItem(key: string): Promise<string | null> {
-    return db.query('SELECT val FROM store WHERE key = ?', [key]);
-  }
-  async setItem(key: string, value: string): Promise<void> {
-    await db.execute('REPLACE INTO store (key, val) VALUES (?, ?)', [key, value]);
-  }
-  async removeItem(key: string): Promise<void> {
-    await db.execute('DELETE FROM store WHERE key = ?', [key]);
-  }
-}`}
-        />
+      {/* Storage Comparison & Calculator */}
+      <section id="storage-comparison" className="doc-section scroll-mt-24 mb-16 section-enter">
+        <StorageComparison />
       </section>
 
       {/* Navigation Adapters */}
-      <section id="nav-react-navigation" className="doc-section" style={{ marginBottom: '64px' }}>
-        <h2 style={{ fontSize: '28px', fontWeight: 800, color: '#f8fafc', marginBottom: '16px' }}>
-          Navigation Adapters
-        </h2>
+      <section id="navigation-adapters" className="doc-section scroll-mt-24 mb-16 section-enter">
+        <div className="mb-4">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+            Navigation Adapters
+          </h2>
+        </div>
 
-        <h3 style={{ fontSize: '18px', fontWeight: 600, color: '#e2e8f0', marginBlock: '20px 8px' }}>
-          React Navigation Stack Adapter
-        </h3>
-        <CodeBlock
-          language="typescript"
-          title="React Navigation"
-          code={`import { createNavigationAdapter } from 'react-native-journey-recovery';
+        <p className="text-sm md:text-base text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
+          Seamlessly restore active route stacks, nested screen parameters, and tab indices after an OS process crash:
+        </p>
 
-const adapter = createNavigationAdapter(navigation);
-const navContext = adapter.getNavigationContext(); // { currentRoute, params, routeHistory }
-adapter.restoreNavigation(navContext, { resetStack: true });`}
-        />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div id="nav-react-navigation" className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 shadow-sm">
+            <h3 className="text-base font-bold text-slate-900 dark:text-white mb-1.5">
+              React Navigation Stack Adapter
+            </h3>
+            <p className="text-xs md:text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+              Synchronizes route name, params, and history with the React Navigation container:
+            </p>
+            <CodeBlock
+              language="typescript"
+              title="React Navigation Adapter"
+              code={`import { createNavigationAdapter } from 'react-native-journey-recovery';
 
-        <h3 id="nav-expo-router" style={{ fontSize: '18px', fontWeight: 600, color: '#e2e8f0', marginBlock: '20px 8px' }}>
-          Expo Router File-Based Adapter
-        </h3>
-        <CodeBlock
-          language="typescript"
-          title="Expo Router"
-          code={`import { useRouter, usePathname, useSegments, useLocalSearchParams } from 'expo-router';
+const navAdapter = createNavigationAdapter(navigationRef);
+
+// Capture route context on checkpoint
+const navContext = navAdapter.getNavigationContext();
+
+// Restore user directly to the interrupted screen
+navAdapter.restoreNavigation(navContext, { resetStack: true });`}
+            />
+          </div>
+
+          <div id="nav-expo-router" className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 shadow-sm">
+            <h3 className="text-base font-bold text-slate-900 dark:text-white mb-1.5">
+              Expo Router File-Based Adapter
+            </h3>
+            <p className="text-xs md:text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+              Restores file-based paths, segments, and search params in Expo Router:
+            </p>
+            <CodeBlock
+              language="typescript"
+              title="Expo Router Adapter"
+              code={`import { useRouter, usePathname, useSegments, useLocalSearchParams } from 'expo-router';
 import { createExpoRouterAdapter } from 'react-native-journey-recovery';
 
 const router = useRouter();
@@ -402,44 +678,67 @@ const params = useLocalSearchParams();
 
 const adapter = createExpoRouterAdapter(router, () => ({ pathname, segments, params }));
 adapter.restoreRoute(savedRouteContext, { mode: 'replace' });`}
-        />
+            />
+          </div>
+        </div>
       </section>
 
       {/* Form & State Integrations */}
-      <section id="integration-hook-form" className="doc-section" style={{ marginBottom: '64px' }}>
-        <h2 style={{ fontSize: '28px', fontWeight: 800, color: '#f8fafc', marginBottom: '16px' }}>
-          Form &amp; State Integrations
-        </h2>
+      <section id="form-integrations" className="doc-section scroll-mt-24 mb-16 section-enter">
+        <div className="mb-4">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+            Form &amp; State Integrations
+          </h2>
+        </div>
 
-        <h3 style={{ fontSize: '18px', fontWeight: 600, color: '#e2e8f0', marginBlock: '20px 8px' }}>
-          React Hook Form (`useJourneyForm`)
-        </h3>
-        <CodeBlock
-          language="tsx"
-          code={`import { useForm } from 'react-hook-form';
+        <p className="text-sm md:text-base text-slate-600 dark:text-slate-400 leading-relaxed mb-8">
+          Pre-built hooks for the most popular React Native form and state libraries:
+        </p>
+
+        <div className="space-y-8">
+          <div id="integration-hook-form">
+            <h3 className="text-base font-bold text-slate-900 dark:text-white mb-1">
+              1. React Hook Form (`useJourneyForm`)
+            </h3>
+            <p className="text-xs md:text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-3">
+              Syncs dirty form state to storage automatically with debouncing and field exclusion:
+            </p>
+            <CodeBlock
+              language="tsx"
+              title="React Hook Form"
+              code={`import { useForm } from 'react-hook-form';
 import { useJourneyForm } from 'react-native-journey-recovery';
 
-export function ProfileForm() {
-  const form = useForm<ProfileData>();
-  const { hasSavedProgress, restoreToForm, clearForm } = useJourneyForm('profile-flow', form, {
-    autoSave: true,
-    exclude: ['password'],
-  });
+export function OnboardingForm() {
+  const form = useForm<OnboardingData>();
+  const { hasSavedProgress, restoreToForm, clearForm } = useJourneyForm(
+    'onboarding-journey',
+    form,
+    {
+      autoSave: true,
+      exclude: ['password', 'confirmPassword'],
+    }
+  );
 
   return (
     <View>
-      {hasSavedProgress && <Button title="Resume Draft" onPress={restoreToForm} />}
+      {hasSavedProgress && (
+        <Button title="Resume Saved Draft" onPress={restoreToForm} />
+      )}
     </View>
   );
 }`}
-        />
+            />
+          </div>
 
-        <h3 id="integration-formik" style={{ fontSize: '18px', fontWeight: 600, color: '#e2e8f0', marginBlock: '20px 8px' }}>
-          Formik (`useJourneyFormik`)
-        </h3>
-        <CodeBlock
-          language="tsx"
-          code={`import { useFormik } from 'formik';
+          <div id="integration-formik">
+            <h3 className="text-base font-bold text-slate-900 dark:text-white mb-1">
+              2. Formik (`useJourneyFormik`)
+            </h3>
+            <CodeBlock
+              language="tsx"
+              title="Formik"
+              code={`import { useFormik } from 'formik';
 import { useJourneyFormik } from 'react-native-journey-recovery';
 
 const formik = useFormik({
@@ -448,319 +747,437 @@ const formik = useFormik({
 });
 
 const { hasSavedProgress, restoreToFormik } = useJourneyFormik('signup-flow', formik);`}
-        />
+            />
+          </div>
 
-        <h3 id="integration-zustand" style={{ fontSize: '18px', fontWeight: 600, color: '#e2e8f0', marginBlock: '20px 8px' }}>
-          Zustand Slice Persistence (`useJourneyZustand`)
-        </h3>
-        <CodeBlock
-          language="tsx"
-          code={`const { hasSavedProgress, restoreToStore } = useJourneyZustand(
+          <div id="integration-zustand">
+            <h3 className="text-base font-bold text-slate-900 dark:text-white mb-1">
+              3. Zustand Slice Sync (`useJourneyZustand`)
+            </h3>
+            <CodeBlock
+              language="tsx"
+              title="Zustand"
+              code={`import { useJourneyZustand } from 'react-native-journey-recovery';
+import { useAppStore } from './store';
+
+const { hasSavedProgress, restoreToStore } = useJourneyZustand(
   'cart-slice',
   useAppStore,
   (state) => state.cart
 );`}
-        />
+            />
+          </div>
 
-        <h3 id="integration-redux" style={{ fontSize: '18px', fontWeight: 600, color: '#e2e8f0', marginBlock: '20px 8px' }}>
-          Redux Slice Persistence (`useJourneyRedux`)
-        </h3>
-        <CodeBlock
-          language="tsx"
-          code={`const { hasSavedProgress, restoreToRedux } = useJourneyRedux(
-  'loan-slice',
+          <div id="integration-redux">
+            <h3 className="text-base font-bold text-slate-900 dark:text-white mb-1">
+              4. Redux Slice Sync (`useJourneyRedux`)
+            </h3>
+            <CodeBlock
+              language="tsx"
+              title="Redux Toolkit"
+              code={`import { useJourneyRedux } from 'react-native-journey-recovery';
+import { reduxStore } from './store';
+
+const { hasSavedProgress, restoreToRedux } = useJourneyRedux(
+  'loan-application-slice',
   reduxStore,
   (state) => state.loanApplication
 );`}
-        />
+            />
+          </div>
 
-        <h3 id="integration-tanstack-query" style={{ fontSize: '18px', fontWeight: 600, color: '#e2e8f0', marginBlock: '20px 8px' }}>
-          TanStack Query Server Cache Coordination (`useJourneyQuery`)
-        </h3>
-        <p style={{ color: 'var(--text-secondary)', fontSize: '14px', lineHeight: 1.6 }}>
-          Coordinate client state recovery with server-owned cache invalidation:
-        </p>
-        <CodeBlock
-          language="tsx"
-          code={`import { useJourneyQuery } from 'react-native-journey-recovery';
+          <div id="integration-tanstack-query">
+            <h3 className="text-base font-bold text-slate-900 dark:text-white mb-1">
+              5. TanStack Query Server Sync (`useJourneyQuery`)
+            </h3>
+            <p className="text-xs md:text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-3">
+              Coordinates client checkpoint restoration with server-side query cache invalidation and refetching:
+            </p>
+            <CodeBlock
+              language="tsx"
+              title="TanStack Query"
+              code={`import { useJourneyQuery } from 'react-native-journey-recovery';
 
 const { available, restoreAndRevalidate, discardAndReset } = useJourneyQuery('checkout-flow', {
   queryClient,
   invalidateOnRestore: [['cart', cartId], ['inventory']],
   refetchOnRestore: [['pricing']],
-  resetOnClear: [['temporary-hold']],
-  onRevalidated: async (data) => {
-    console.log('Restored with fresh server prices:', data);
+  resetOnClear: [['temporary-reservation']],
+  onRevalidated: async (restoredData) => {
+    console.log('Restored with fresh server prices:', restoredData);
   },
 });`}
-        />
+            />
+          </div>
+        </div>
       </section>
 
       {/* Zod Validation */}
-      <section id="validation-zod" className="doc-section" style={{ marginBottom: '64px' }}>
-        <h2 style={{ fontSize: '28px', fontWeight: 800, color: '#f8fafc', marginBottom: '16px' }}>
-          Zod Schema Validation
-        </h2>
-        <p style={{ color: 'var(--text-secondary)', fontSize: '15px', lineHeight: 1.7 }}>
-          Enforce strict runtime validation on restored data using <code>createZodValidator</code>:
+      <section id="validation-zod" className="doc-section scroll-mt-24 mb-16 section-enter">
+        <div className="mb-4">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+            Zod Runtime Schema Validation
+          </h2>
+        </div>
+
+        <p className="text-sm md:text-base text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
+          Enforce strict runtime validation against stored payloads using <code className="font-mono text-xs">createZodValidator</code>. Checkpoints failing schema parsing are safely rejected:
         </p>
+
         <CodeBlock
           language="tsx"
-          title="Zod Validator"
+          title="Zod Schema Validation"
           code={`import { z } from 'zod';
 import { useJourney, createZodValidator } from 'react-native-journey-recovery';
 
-const BookingSchema = z.object({
-  flightNumber: z.string(),
-  seats: z.number().int().positive(),
-  destination: z.string(),
+const FlightBookingSchema = z.object({
+  flightNumber: z.string().min(3),
+  seatClass: z.enum(['economy', 'premium', 'business']),
+  passengerCount: z.number().int().positive(),
 });
 
-type BookingData = z.infer<typeof BookingSchema>;
+type FlightBookingData = z.infer<typeof FlightBookingSchema>;
 
 export function BookingWizard() {
-  const journey = useJourney<BookingData>('flight-booking', {
+  const journey = useJourney<FlightBookingData>('flight-booking', {
     version: 1,
-    validate: createZodValidator(BookingSchema), // Rejects malformed checkpoints
+    validate: createZodValidator(FlightBookingSchema),
   });
 }`}
         />
       </section>
 
       {/* Privacy & User Scoping */}
-      <section id="security-privacy" className="doc-section" style={{ marginBottom: '64px' }}>
-        <h2 style={{ fontSize: '28px', fontWeight: 800, color: '#f8fafc', marginBottom: '16px' }}>
-          Privacy &amp; Field Exclusions
-        </h2>
-        <p style={{ color: 'var(--text-secondary)', fontSize: '15px', lineHeight: 1.7 }}>
-          Never persist passwords, PINs, or raw credit cards. Always supply the <code>exclude</code> parameter:
+      <section id="security-privacy" className="doc-section scroll-mt-24 mb-16 section-enter">
+        <div className="mb-4">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+            Confidential Field Exclusions &amp; User Scoping
+          </h2>
+        </div>
+
+        <p className="text-sm md:text-base text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
+          Never persist raw passwords, CVV codes, biometric credentials, or credit cards. Provide the <code className="font-mono text-xs">exclude</code> option:
         </p>
+
         <CodeBlock
           language="typescript"
+          title="Field Exclusion Parameter"
           code={`await journey.checkpoint(formState, {
-  exclude: ['password', 'confirmPassword', 'cvv', 'token'],
+  exclude: ['password', 'confirmPassword', 'cvv', 'rawCardNumber', 'authPin'],
 });`}
         />
 
-        <h3 id="user-scoping" style={{ fontSize: '18px', fontWeight: 600, color: '#e2e8f0', marginBlock: '20px 8px' }}>
-          User Identity Scoping (Shared Devices)
-        </h3>
-        <p style={{ color: 'var(--text-secondary)', fontSize: '15px', lineHeight: 1.7 }}>
-          Scope all checkpoints per authenticated user ID:
-        </p>
-        <CodeBlock
-          language="tsx"
-          code={`<RecoveryProvider storage={storage} options={{ userId: currentUserId }}>
+        <div id="user-scoping" className="mt-8">
+          <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">
+            User Identity Scoping (Shared Devices)
+          </h3>
+          <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+            For apps used by multiple people on a single device, scope all checkpoints by user ID:
+          </p>
+          <CodeBlock
+            language="tsx"
+            title="User Scoping & Logout Cleanup"
+            code={`// Scope checkpoints to the authenticated user ID
+<RecoveryProvider storage={storage} options={{ userId: currentUserId }}>
+  <App />
+</RecoveryProvider>
 
-// On user logout:
+// On user logout, wipe all cached checkpoints for that user:
 await checkpointManager.clearUserJourneys(currentUserId);`}
-        />
+          />
+        </div>
       </section>
 
-      {/* RecoveryBanner Component */}
-      <section id="ui-recovery-banner" className="doc-section" style={{ marginBottom: '64px' }}>
-        <h2 style={{ fontSize: '28px', fontWeight: 800, color: '#f8fafc', marginBottom: '16px' }}>
-          RecoveryBanner Component
-        </h2>
-        <p style={{ color: 'var(--text-secondary)', fontSize: '15px', lineHeight: 1.7 }}>
-          Accessible, themed recovery banner out of the box, or headless via the <code>render</code> prop:
+      {/* UI Components */}
+      <section id="ui-components" className="doc-section scroll-mt-24 mb-16 section-enter">
+        <div className="mb-4">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+            Recovery UI Components
+          </h2>
+        </div>
+
+        <p className="text-sm md:text-base text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
+          Accessible, drop-in UI components for workflow recovery prompts:
         </p>
-        <CodeBlock
-          language="tsx"
-          code={`import { RecoveryBanner } from 'react-native-journey-recovery';
+
+        <div id="ui-recovery-banner" className="mb-8">
+          <h3 className="text-base font-bold text-slate-900 dark:text-white mb-2">
+            RecoveryBanner
+          </h3>
+          <CodeBlock
+            language="tsx"
+            title="RecoveryBanner"
+            code={`import { RecoveryBanner } from 'react-native-journey-recovery';
 
 <RecoveryBanner
   journeyId="checkout-flow"
   title="Resume your unfinished order?"
-  onRestored={(data) => navigateToCheckout(data)}
+  onResume={(data) => navigation.navigate('Checkout', data)}
+  onDiscard={() => console.log('Discarded')}
 />`}
-        />
-      </section>
+          />
+        </div>
 
-      {/* RecoveryModal & RecoveryBottomSheet */}
-      <section id="ui-recovery-modal" className="doc-section" style={{ marginBottom: '64px' }}>
-        <h2 style={{ fontSize: '28px', fontWeight: 800, color: '#f8fafc', marginBottom: '16px' }}>
-          RecoveryModal &amp; RecoveryBottomSheet
-        </h2>
-        <p style={{ color: 'var(--text-secondary)', fontSize: '15px', lineHeight: 1.7, marginBottom: '16px' }}>
-          When you want to prompt the user with a focused dialog or slide-up sheet rather than an inline banner:
-        </p>
-        <CodeBlock
-          language="tsx"
-          title="Modal & Sheet Dialogs"
-          code={`import { RecoveryModal, RecoveryBottomSheet } from 'react-native-journey-recovery';
+        <div id="ui-recovery-modal" className="mb-8">
+          <h3 className="text-base font-bold text-slate-900 dark:text-white mb-2">
+            RecoveryModal &amp; RecoveryBottomSheet
+          </h3>
+          <CodeBlock
+            language="tsx"
+            title="Modal & Sheet Components"
+            code={`import { RecoveryModal, RecoveryBottomSheet } from 'react-native-journey-recovery';
 
-// 1. Centered Modal with dark backdrop blur
+// Centered modal dialog
 <RecoveryModal
-  journeyId="loan-application"
-  title="Resume Loan Application?"
-  resumeLabel="Continue Application"
-  discardLabel="Start New"
-  onRestored={(data) => setFormData(data)}
+  journeyId="kyc-verification"
+  title="Resume KYC Verification?"
+  resumeLabel="Continue"
+  discardLabel="Start Over"
+  onResume={(data) => resumeFlow(data)}
 />
 
-// 2. Mobile-first Bottom Sheet sliding up from viewport base
+// Slide-up bottom sheet
 <RecoveryBottomSheet
-  journeyId="kyc-verification"
-  title="Unfinished Verification Found"
-  onRestored={(data) => resumeVerification(data)}
+  journeyId="loan-application"
+  title="Unfinished Loan Application"
+  onResume={(data) => resumeLoan(data)}
 />`}
-        />
-      </section>
-
-      {/* Diagnostics */}
-      <section id="diagnostics" className="doc-section" style={{ marginBottom: '64px' }}>
-        <h2 style={{ fontSize: '28px', fontWeight: 800, color: '#f8fafc', marginBottom: '16px' }}>
-          Recovery Diagnostics
-        </h2>
-        <p style={{ color: 'var(--text-secondary)', fontSize: '15px', lineHeight: 1.7 }}>
-          Inspect whether and why a journey checkpoint is recoverable:
-        </p>
-        <CodeBlock
-          language="typescript"
-          code={`const diag = await recoveryManager.getDiagnostics('checkout-flow');
-console.log(diag);
-// {
-//   exists: true,
-//   status: 'available',
-//   isRecoverable: true,
-//   payloadSizeBytes: 1482,
-//   hasChecksum: true,
-//   checksumValid: true,
-//   isExpired: false,
-//   timeUntilExpiryMs: 86392000,
-//   isEligibleForMigration: false,
-//   formatVersion: 1
-// }`}
-        />
+          />
+        </div>
       </section>
 
       {/* CLI Tools */}
-      <section id="cli-tools" className="doc-section" style={{ marginBottom: '64px' }}>
-        <h2 style={{ fontSize: '28px', fontWeight: 800, color: '#f8fafc', marginBottom: '16px' }}>
-          CLI Diagnostic &amp; Inspection Tool
-        </h2>
-        <p style={{ color: 'var(--text-secondary)', fontSize: '15px', lineHeight: 1.7, marginBottom: '16px' }}>
-          Inspect exported checkpoint snapshots, verify FNV-1a checksums, check TTL expiration, and debug corrupted state right from your terminal:
+      <section id="cli-tools" className="doc-section scroll-mt-24 mb-16 section-enter">
+        <div className="mb-4">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+            CLI Diagnostic Tool &amp; CI Verification
+          </h2>
+        </div>
+
+        <p className="text-sm md:text-base text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
+          Inspect exported checkpoint snapshots, verify FNV-1a checksums, test TTL expiration, and automate integrity testing in CI:
         </p>
+
         <CodeBlock
           language="bash"
           title="CLI Commands"
           code={`# Inspect snapshot and output colorized diagnostic report
 npx journey-recovery inspect snapshot.json
 
-# Automated CI verification: exits with code 0 if valid, 1 if corrupted/expired
+# Automated CI verification: exits with code 0 if valid, code 1 if corrupted/expired
 npx journey-recovery verify snapshot.json
 
-# Calculate 32-bit FNV-1a checksum for an arbitrary payload string
-npx journey-recovery checksum '{"step":"review","cartItems":[...]}'`}
+# Compute 32-bit FNV-1a checksum for an arbitrary payload string
+npx journey-recovery checksum '{"step":2,"name":"Alex"}'`}
         />
       </section>
 
       {/* Testing Utilities */}
-      <section id="testing-utilities" className="doc-section" style={{ marginBottom: '64px' }}>
-        <h2 style={{ fontSize: '28px', fontWeight: 800, color: '#f8fafc', marginBottom: '16px' }}>
-          Developer Testing Utilities
-        </h2>
-        <p style={{ color: 'var(--text-secondary)', fontSize: '15px', lineHeight: 1.7 }}>
-          Write robust unit tests for your screens with <code>initTestRecoveryEnvironment</code>:
+      <section id="testing-utilities" className="doc-section scroll-mt-24 mb-16 section-enter">
+        <div className="mb-4">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+            Testing Utilities
+          </h2>
+        </div>
+
+        <p className="text-sm md:text-base text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
+          Write lightning-fast unit tests using <code className="font-mono text-xs">initTestRecoveryEnvironment</code> with MemoryStorageAdapter:
         </p>
+
         <CodeBlock
           language="tsx"
-          title="Jest / Vitest Test"
-          code={`import { renderHook } from '@testing-library/react';
+          title="Jest / Vitest Integration Test"
+          code={`import { renderHook, act } from '@testing-library/react';
 import { initTestRecoveryEnvironment, useRecovery } from 'react-native-journey-recovery';
 
-it('detects draft recovery', async () => {
+it('detects and recovers saved draft session', async () => {
   const env = await initTestRecoveryEnvironment({
     initialCheckpoints: {
-      'checkout': { data: { step: 2, total: 99 } },
+      'checkout-flow': {
+        data: { step: 2, shippingMethod: 'express' },
+      },
     },
   });
 
-  const { result } = renderHook(() => useRecovery('checkout'), {
+  const { result } = renderHook(() => useRecovery('checkout-flow'), {
     wrapper: env.wrapper,
   });
 
   expect(result.current.available).toBe(true);
   expect(result.current.snapshot?.data.step).toBe(2);
+
+  await act(async () => {
+    await result.current.discard();
+  });
+
+  expect(result.current.available).toBe(false);
 });`}
         />
       </section>
 
-      {/* Live Interactive Simulator */}
-      <section id="interactive-simulator" className="doc-section" style={{ marginBottom: '64px' }}>
-        <h2 style={{ fontSize: '28px', fontWeight: 800, color: '#f8fafc', marginBottom: '16px' }}>
-          Live Interactive Simulator
-        </h2>
-        <p style={{ color: 'var(--text-secondary)', fontSize: '15px', lineHeight: 1.7, marginBottom: '16px' }}>
-          Experience the engine right now in your browser. Type into the form, test background OS process termination (SIGKILL), tamper with data, and verify FNV-1a checksum protection:
-        </p>
-
-        <Simulator />
-      </section>
-
-      {/* Schema & Hash Playground */}
-      <section id="interactive-playground" className="doc-section" style={{ marginBottom: '64px' }}>
-        <h2 style={{ fontSize: '28px', fontWeight: 800, color: '#f8fafc', marginBottom: '16px' }}>
-          Schema &amp; Hash Playground
-        </h2>
-        <p style={{ color: 'var(--text-secondary)', fontSize: '15px', lineHeight: 1.7 }}>
-          Prototype your data model, inspect live FNV-1a checksums, evaluate size limits, and generate production TypeScript code:
-        </p>
-
-        <SchemaPlayground />
-      </section>
-
       {/* API Reference */}
-      <section id="api-reference" className="doc-section" style={{ marginBottom: '64px' }}>
-        <h2 style={{ fontSize: '28px', fontWeight: 800, color: '#f8fafc', marginBottom: '16px' }}>
-          API Reference &amp; ADRs
-        </h2>
-        <p style={{ color: 'var(--text-secondary)', fontSize: '15px', lineHeight: 1.7 }}>
-          Complete method contracts and architectural decision records:
+      <section id="api-reference" className="doc-section scroll-mt-24 mb-16 section-enter">
+        <div className="mb-4">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+            API Reference &amp; Error Contracts
+          </h2>
+        </div>
+
+        <p className="text-sm md:text-base text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
+          Complete interface contracts, return values, options, and error codes:
         </p>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '16px', marginBlock: '20px' }}>
+
+        <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 overflow-x-auto shadow-sm mb-8">
+          <table className="w-full text-left text-xs md:text-sm border-collapse min-w-[720px]">
+            <thead>
+              <tr className="border-b border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-900/80 text-slate-600 dark:text-slate-400 font-semibold text-[11px] uppercase tracking-wider">
+                <th className="py-3 px-4">Hook / Method / Component</th>
+                <th className="py-3 px-4">Signature / Props</th>
+                <th className="py-3 px-4">Description</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-800/80">
+              <tr className="hover:bg-slate-50/50 dark:hover:bg-slate-900/40">
+                <td className="py-3 px-4 font-mono text-cyan-600 dark:text-cyan-400 font-bold whitespace-nowrap"><code>useJourney&lt;T&gt;(id, options)</code></td>
+                <td className="py-3 px-4 font-mono text-xs text-slate-500 whitespace-nowrap"><code>(id: string, options?: JourneyOptions) =&gt; JourneyHandle&lt;T&gt;</code></td>
+                <td className="py-3 px-4 text-slate-600 dark:text-slate-400">Manages active journey checkpointing, auto-save debounce, and field exclusions.</td>
+              </tr>
+              <tr className="hover:bg-slate-50/50 dark:hover:bg-slate-900/40">
+                <td className="py-3 px-4 font-mono text-cyan-600 dark:text-cyan-400 font-bold whitespace-nowrap"><code>useRecovery&lt;T&gt;(id)</code></td>
+                <td className="py-3 px-4 font-mono text-xs text-slate-500 whitespace-nowrap"><code>(id: string) =&gt; RecoveryHandle&lt;T&gt;</code></td>
+                <td className="py-3 px-4 text-slate-600 dark:text-slate-400">Detects eligible uncommitted checkpoints for restoration or discard.</td>
+              </tr>
+              <tr className="hover:bg-slate-50/50 dark:hover:bg-slate-900/40">
+                <td className="py-3 px-4 font-mono text-cyan-600 dark:text-cyan-400 font-bold whitespace-nowrap"><code>useJourneyForm(id, form, options)</code></td>
+                <td className="py-3 px-4 font-mono text-xs text-slate-500 whitespace-nowrap"><code>(id: string, form: UseFormReturn, options?: FormOptions)</code></td>
+                <td className="py-3 px-4 text-slate-600 dark:text-slate-400">React Hook Form two-way integration with dirty-tracking and draft resume.</td>
+              </tr>
+              <tr className="hover:bg-slate-50/50 dark:hover:bg-slate-900/40">
+                <td className="py-3 px-4 font-mono text-cyan-600 dark:text-cyan-400 font-bold whitespace-nowrap"><code>RecoveryBanner</code></td>
+                <td className="py-3 px-4 font-mono text-xs text-slate-500 whitespace-nowrap"><code>{`{ journeyId, onResume, onDiscard, title? }`}</code></td>
+                <td className="py-3 px-4 text-slate-600 dark:text-slate-400">Drop-in accessible notification banner prompting user to resume draft.</td>
+              </tr>
+              <tr className="hover:bg-slate-50/50 dark:hover:bg-slate-900/40">
+                <td className="py-3 px-4 font-mono text-cyan-600 dark:text-cyan-400 font-bold whitespace-nowrap"><code>RecoveryModal</code></td>
+                <td className="py-3 px-4 font-mono text-xs text-slate-500 whitespace-nowrap"><code>{`{ journeyId, onResume, onDiscard, title? }`}</code></td>
+                <td className="py-3 px-4 text-slate-600 dark:text-slate-400">Focused modal dialog with frosted background blur for workflow resumption.</td>
+              </tr>
+              <tr className="hover:bg-slate-50/50 dark:hover:bg-slate-900/40">
+                <td className="py-3 px-4 font-mono text-cyan-600 dark:text-cyan-400 font-bold whitespace-nowrap"><code>RecoveryBottomSheet</code></td>
+                <td className="py-3 px-4 font-mono text-xs text-slate-500 whitespace-nowrap"><code>{`{ journeyId, onResume, onDiscard, title? }`}</code></td>
+                <td className="py-3 px-4 text-slate-600 dark:text-slate-400">Mobile slide-up bottom sheet with gesture drag handle.</td>
+              </tr>
+              <tr className="hover:bg-slate-50/50 dark:hover:bg-slate-900/40">
+                <td className="py-3 px-4 font-mono text-cyan-600 dark:text-cyan-400 font-bold whitespace-nowrap"><code>createZodValidator(schema)</code></td>
+                <td className="py-3 px-4 font-mono text-xs text-slate-500 whitespace-nowrap"><code>(schema: ZodSchema) =&gt; ValidatorFn</code></td>
+                <td className="py-3 px-4 text-slate-600 dark:text-slate-400">Runtime schema validator rejecting malformed or invalid restored states.</td>
+              </tr>
+              <tr className="hover:bg-slate-50/50 dark:hover:bg-slate-900/40">
+                <td className="py-3 px-4 font-mono text-cyan-600 dark:text-cyan-400 font-bold whitespace-nowrap"><code>computeChecksum(payload)</code></td>
+                <td className="py-3 px-4 font-mono text-xs text-slate-500 whitespace-nowrap"><code>(payload: string) =&gt; string</code></td>
+                <td className="py-3 px-4 text-slate-600 dark:text-slate-400">Computes 8-character deterministic 32-bit FNV-1a hex checksum hash.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        {/* Error Codes */}
+        <div className="mt-8">
+          <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-3">
+            Engine Error Codes
+          </h3>
+          <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 overflow-x-auto shadow-sm">
+            <table className="w-full text-left text-xs md:text-sm border-collapse min-w-[640px]">
+              <thead>
+                <tr className="border-b border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-900/80 text-slate-600 dark:text-slate-400 font-semibold text-[11px] uppercase tracking-wider">
+                  <th className="py-3 px-4">Error Code</th>
+                  <th className="py-3 px-4">Trigger Condition</th>
+                  <th className="py-3 px-4">Engine Response</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-800/80">
+                <tr className="hover:bg-slate-50/50 dark:hover:bg-slate-900/40">
+                  <td className="py-3 px-4 font-mono font-bold text-rose-500 whitespace-nowrap"><code>CORRUPTED_STORAGE_REJECTED</code></td>
+                  <td className="py-3 px-4 text-slate-600 dark:text-slate-400">Computed FNV-1a checksum does not match stored hash.</td>
+                  <td className="py-3 px-4 text-slate-800 dark:text-slate-200">Restoration blocked. Throws error or triggers error prompt.</td>
+                </tr>
+                <tr className="hover:bg-slate-50/50 dark:hover:bg-slate-900/40">
+                  <td className="py-3 px-4 font-mono font-bold text-amber-500 whitespace-nowrap"><code>SESSION_EXPIRED</code></td>
+                  <td className="py-3 px-4 text-slate-600 dark:text-slate-400">Current timestamp exceeds snapshot <code>expiresAt</code>.</td>
+                  <td className="py-3 px-4 text-slate-800 dark:text-slate-200">Checkpoint automatically purged from storage.</td>
+                </tr>
+                <tr className="hover:bg-slate-50/50 dark:hover:bg-slate-900/40">
+                  <td className="py-3 px-4 font-mono font-bold text-purple-500 whitespace-nowrap"><code>SCHEMA_VALIDATION_FAILED</code></td>
+                  <td className="py-3 px-4 text-slate-600 dark:text-slate-400">Payload fails Zod or custom validator check.</td>
+                  <td className="py-3 px-4 text-slate-800 dark:text-slate-200">Restoration rejected to protect component integrity.</td>
+                </tr>
+                <tr className="hover:bg-slate-50/50 dark:hover:bg-slate-900/40">
+                  <td className="py-3 px-4 font-mono font-bold text-cyan-500 whitespace-nowrap"><code>STORAGE_WRITE_FAILED</code></td>
+                  <td className="py-3 px-4 text-slate-600 dark:text-slate-400">Storage adapter throws disk quota / IO error.</td>
+                  <td className="py-3 px-4 text-slate-800 dark:text-slate-200">Prior committed checkpoint preserved untouched.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* Architecture Decision Records Links */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
           <a
-            href="https://github.com/Imdvlpr99/react-native-journey-recovery/blob/master/docs/api-reference.md"
+            href="https://github.com/Imdvlpr99/react-native-journey-recovery/blob/master/docs/adr/0001-pure-typescript-core.md"
             target="_blank"
             rel="noreferrer"
-            style={{
-              display: 'block',
-              background: 'var(--bg-card)',
-              border: '1px solid var(--border-color)',
-              borderRadius: '12px',
-              padding: '20px',
-              textDecoration: 'none',
-              color: 'inherit',
-            }}
+            className="group p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 hover:border-cyan-500/50 transition-all flex items-start gap-3 shadow-sm hover:shadow"
           >
-            <span style={{ fontSize: '24px', display: 'block', marginBottom: '8px' }}>📖</span>
-            <h4 style={{ color: 'var(--accent-cyan)', fontSize: '16px', marginBottom: '6px' }}>API Reference Document</h4>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '13px' }}>Every method, prop, handle, and error code exhaustively documented.</p>
+            <div className="text-xl p-2 rounded-lg bg-cyan-500/10 shrink-0">🏛️</div>
+            <div className="flex-1">
+              <div className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-cyan-500 transition-colors flex items-center gap-1">
+                <span>ADR 0001: Pure TypeScript Core</span>
+                <IconExternalLink size={12} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+              </div>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
+                Zero native binaries, universal Expo Go compatibility, and zero-linkage overhead.
+              </p>
+            </div>
           </a>
 
           <a
-            href="https://github.com/Imdvlpr99/react-native-journey-recovery/tree/master/docs/adr"
+            href="https://github.com/Imdvlpr99/react-native-journey-recovery/blob/master/docs/adr/0002-storage-adapter-architecture.md"
             target="_blank"
             rel="noreferrer"
-            style={{
-              display: 'block',
-              background: 'var(--bg-card)',
-              border: '1px solid var(--border-color)',
-              borderRadius: '12px',
-              padding: '20px',
-              textDecoration: 'none',
-              color: 'inherit',
-            }}
+            className="group p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 hover:border-emerald-500/50 transition-all flex items-start gap-3 shadow-sm hover:shadow"
           >
-            <span style={{ fontSize: '24px', display: 'block', marginBottom: '8px' }}>🏛️</span>
-            <h4 style={{ color: 'var(--accent-cyan)', fontSize: '16px', marginBottom: '6px' }}>Architecture Decision Records</h4>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '13px' }}>ADR 0001 (Pure TS), ADR 0002 (Storage Adapter Architecture), ADR 0003 (Write Serialization).</p>
+            <div className="text-xl p-2 rounded-lg bg-emerald-500/10 shrink-0">🏛️</div>
+            <div className="flex-1">
+              <div className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-emerald-500 transition-colors flex items-center gap-1">
+                <span>ADR 0002: Storage Adapter Architecture</span>
+                <IconExternalLink size={12} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+              </div>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
+                Decoupled adapter interfaces for AsyncStorage, MMKV, and hardware-chunked SecureStore.
+              </p>
+            </div>
+          </a>
+
+          <a
+            href="https://github.com/Imdvlpr99/react-native-journey-recovery/blob/master/docs/adr/0003-write-serialization-and-atomic-failure-safety.md"
+            target="_blank"
+            rel="noreferrer"
+            className="group p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 hover:border-indigo-500/50 transition-all flex items-start gap-3 shadow-sm hover:shadow"
+          >
+            <div className="text-xl p-2 rounded-lg bg-indigo-500/10 shrink-0">🏛️</div>
+            <div className="flex-1">
+              <div className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-indigo-500 transition-colors flex items-center gap-1">
+                <span>ADR 0003: Write Serialization &amp; Mutex</span>
+                <IconExternalLink size={12} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+              </div>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
+                Per-journey Promise FIFO queue eliminating race conditions and providing atomic failure safety.
+              </p>
+            </div>
           </a>
         </div>
       </section>
     </>
   );
 };
-
