@@ -1,159 +1,261 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import {
+  IconSearch, IconSun, IconMoon, IconGithub, IconMenu, IconX,
+  IconLayers, IconDatabase
+} from './Icons';
+
+export type ActiveTab = 'home' | 'docs' | 'architecture' | 'storage';
 
 interface NavbarProps {
-  searchTerm: string;
-  onSearchChange: (value: string) => void;
-  onMenuToggle: () => void;
+  activeTab: ActiveTab;
+  onNavigate: (tab: ActiveTab, sectionId?: string) => void;
+  onOpenSearch: () => void;
+  onMenuToggle?: () => void;
+  sidebarOpen?: boolean;
   theme: 'dark' | 'light';
   onThemeToggle: () => void;
+  showSidebarToggle?: boolean;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
-  searchTerm,
-  onSearchChange,
+  activeTab,
+  onNavigate,
+  onOpenSearch,
   onMenuToggle,
+  sidebarOpen = false,
   theme,
   onThemeToggle,
+  showSidebarToggle = false,
 }) => {
-  return (
-    <header style={{
-      position: 'sticky',
-      top: 0,
-      zIndex: 50,
-      height: 'var(--header-height)',
-      background: 'rgba(10, 15, 29, 0.85)',
-      backdropFilter: 'blur(12px)',
-      WebkitBackdropFilter: 'blur(12px)',
-      borderBottom: '1px solid var(--border-color)',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      paddingInline: '24px',
-    }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-        <button
-          onClick={onMenuToggle}
-          className="menu-toggle-btn"
-          aria-label="Toggle navigation"
-          style={{
-            background: 'transparent',
-            border: 'none',
-            color: 'var(--text-primary)',
-            fontSize: '22px',
-            cursor: 'pointer',
-            display: 'none',
-          }}
-        >
-          ☰
-        </button>
-        <a href="#" style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none', color: 'var(--text-primary)' }}>
-          <img
-            src="./logo.png"
-            alt="react-native-journey-recovery"
-            style={{
-              width: '34px',
-              height: '34px',
-              objectFit: 'contain',
-              filter: 'drop-shadow(0 2px 8px rgba(56, 189, 248, 0.4))',
-            }}
-          />
-          <span style={{ fontWeight: 700, fontSize: '16px', letterSpacing: '-0.2px' }}>
-            react-native-journey-recovery
-          </span>
-          <span style={{
-            fontSize: '11px',
-            background: 'var(--bg-tertiary)',
-            color: 'var(--accent-cyan)',
-            padding: '2px 8px',
-            borderRadius: '9999px',
-            border: '1px solid var(--border-color)',
-            fontWeight: 600,
-          }}>
-            v0.1.0
-          </span>
-        </a>
-      </div>
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-        <div style={{ position: 'relative', width: '280px' }}>
-          <span style={{
-            position: 'absolute',
-            left: '10px',
-            top: '50%',
-            transform: 'translateY(-50%)',
-            color: 'var(--text-muted)',
-            fontSize: '14px',
-            pointerEvents: 'none',
-          }}>
-            🔍
-          </span>
-          <input
-            type="text"
-            value={searchTerm}
-            onChange={(e) => onSearchChange(e.target.value)}
-            placeholder="Search docs (Ctrl+K)..."
-            style={{
-              width: '100%',
-              background: 'var(--bg-secondary)',
-              border: '1px solid var(--border-color)',
-              color: 'var(--text-primary)',
-              borderRadius: '8px',
-              padding: '8px 12px 8px 32px',
-              fontSize: '13px',
-              outline: 'none',
-              transition: 'border-color 0.2s, box-shadow 0.2s',
+  useEffect(() => {
+    const handleScroll = () => {
+      const totalScroll = document.documentElement.scrollTop;
+      const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      if (windowHeight > 0) {
+        setScrollProgress((totalScroll / windowHeight) * 100);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const handleTabClick = (tab: ActiveTab) => {
+    setMobileMenuOpen(false);
+    onNavigate(tab);
+  };
+
+  return (
+    <header className="sticky top-0 z-50 h-14 w-full border-b border-slate-200/80 dark:border-slate-800/80 bg-white/90 dark:bg-[#090b10]/90 backdrop-blur-md transition-colors">
+      {/* Top subtle scroll indicator */}
+      <div
+        className="absolute top-0 left-0 h-[2px] bg-sky-500 transition-all duration-100"
+        style={{ width: `${scrollProgress}%` }}
+      />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center justify-between gap-4">
+        {/* Left: Sidebar toggle (docs only) & Brand */}
+        <div className="flex items-center gap-3">
+          {showSidebarToggle && onMenuToggle && (
+            <button
+              onClick={onMenuToggle}
+              className="lg:hidden flex items-center gap-1.5 px-2 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white text-xs font-medium cursor-pointer"
+              aria-label="Toggle documentation sidebar"
+              title="Toggle sidebar"
+            >
+              {sidebarOpen ? <IconX size={15} /> : <IconMenu size={15} />}
+              <span>Menu</span>
+            </button>
+          )}
+
+          <a
+            href="#/"
+            onClick={(e) => {
+              e.preventDefault();
+              handleTabClick('home');
             }}
-          />
+            className="flex items-center gap-2.5 text-slate-900 dark:text-slate-100 font-semibold tracking-tight text-sm hover:opacity-90 transition-opacity"
+          >
+            <img
+              src="./logo.png"
+              alt="react-native-journey-recovery"
+              className="w-6 h-6 rounded-md object-contain"
+            />
+            <span className="hidden sm:inline font-bold text-slate-900 dark:text-slate-100">
+              journey-recovery
+            </span>
+            <span className="px-1.5 py-0.5 rounded text-[10px] font-mono text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-800">
+              v0.1.0
+            </span>
+          </a>
         </div>
 
-        <button
-          onClick={onThemeToggle}
-          aria-label="Toggle theme"
-          title={theme === 'dark' ? 'Switch to Light mode' : 'Switch to Dark mode'}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: '36px',
-            height: '36px',
-            background: 'var(--bg-secondary)',
-            border: '1px solid var(--border-color)',
-            borderRadius: '8px',
-            cursor: 'pointer',
-            fontSize: '16px',
-            color: 'var(--text-primary)',
-            transition: 'all 0.2s',
-          }}
-        >
-          {theme === 'dark' ? '☀️' : '🌙'}
-        </button>
+        {/* Center: Desktop Navigation Tabs */}
+        <nav className="hidden md:flex items-center gap-0.5 p-0.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50">
+          <button
+            type="button"
+            onClick={() => handleTabClick('home')}
+            className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors cursor-pointer flex items-center gap-1.5 ${
+              activeTab === 'home'
+                ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-semibold shadow-sm'
+                : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-white/60 dark:hover:bg-slate-800/60'
+            }`}
+          >
+            Overview
+          </button>
+          <button
+            type="button"
+            onClick={() => handleTabClick('docs')}
+            className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors cursor-pointer flex items-center gap-1.5 ${
+              activeTab === 'docs'
+                ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-semibold shadow-sm'
+                : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-white/60 dark:hover:bg-slate-800/60'
+            }`}
+          >
+            Documentation
+          </button>
+          <button
+            type="button"
+            onClick={() => handleTabClick('architecture')}
+            className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors cursor-pointer flex items-center gap-1.5 ${
+              activeTab === 'architecture'
+                ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-semibold shadow-sm'
+                : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-white/60 dark:hover:bg-slate-800/60'
+            }`}
+          >
+            <IconLayers size={13} />
+            <span>Architecture</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => handleTabClick('storage')}
+            className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors cursor-pointer flex items-center gap-1.5 ${
+              activeTab === 'storage'
+                ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-semibold shadow-sm'
+                : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-white/60 dark:hover:bg-slate-800/60'
+            }`}
+          >
+            <IconDatabase size={13} />
+            <span>Storage Matrix</span>
+          </button>
+        </nav>
 
-        <a
-          href="https://github.com/Imdvlpr99/react-native-journey-recovery"
-          target="_blank"
-          rel="noreferrer"
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            background: 'var(--bg-secondary)',
-            border: '1px solid var(--border-color)',
-            color: 'var(--text-primary)',
-            padding: '7px 14px',
-            borderRadius: '8px',
-            fontSize: '13px',
-            fontWeight: 600,
-            textDecoration: 'none',
-            transition: 'all 0.2s',
-          }}
-        >
-          <svg height="18" width="18" viewBox="0 0 16 16" fill="currentColor">
-            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
-          </svg>
-          <span>GitHub</span>
-        </a>
+        {/* Right: Search, Theme Toggle, GitHub */}
+        <div className="flex items-center gap-2">
+          {/* Spotlight Search Trigger */}
+          <button
+            type="button"
+            onClick={onOpenSearch}
+            className="hidden sm:flex items-center gap-2 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-900/60 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 text-xs transition-colors cursor-pointer"
+            aria-label="Search documentation"
+            title="Search documentation (⌘K or Ctrl+K)"
+          >
+            <IconSearch size={13} className="text-slate-400" />
+            <span>Search docs...</span>
+            <kbd className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-700 shadow-2xs">
+              ⌘K
+            </kbd>
+          </button>
+
+          {/* Mobile search icon only */}
+          <button
+            type="button"
+            onClick={onOpenSearch}
+            className="sm:hidden p-2 rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/50 cursor-pointer"
+            aria-label="Search documentation"
+          >
+            <IconSearch size={17} />
+          </button>
+
+          {/* Theme Switcher Button */}
+          <button
+            type="button"
+            onClick={onThemeToggle}
+            className="p-2 rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-colors cursor-pointer"
+            aria-label={theme === 'dark' ? 'Switch to Light theme' : 'Switch to Dark theme'}
+            title={theme === 'dark' ? 'Switch to Light theme' : 'Switch to Dark theme'}
+          >
+            {theme === 'dark' ? <IconSun size={16} className="text-amber-400" /> : <IconMoon size={16} className="text-slate-700" />}
+          </button>
+
+          {/* GitHub Repository Link */}
+          <a
+            href="https://github.com/Imdvlpr99/react-native-journey-recovery"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="p-2 rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-colors"
+            aria-label="GitHub Repository"
+            title="GitHub Repository"
+          >
+            <IconGithub size={17} />
+          </a>
+
+          {/* Mobile navigation menu toggle */}
+          <button
+            type="button"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="md:hidden p-2 rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/50 cursor-pointer"
+            aria-label="Toggle navigation menu"
+          >
+            {mobileMenuOpen ? <IconX size={18} /> : <IconMenu size={18} />}
+          </button>
+        </div>
       </div>
+
+      {/* Mobile navigation dropdown drawer */}
+      {mobileMenuOpen && (
+        <div className="md:hidden border-b border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-[#090b10]/95 backdrop-blur-sm px-4 py-3 space-y-0.5">
+          <button
+            type="button"
+            onClick={() => handleTabClick('home')}
+            className={`w-full text-left px-3 py-2 rounded-lg text-xs font-medium transition-colors ${
+              activeTab === 'home'
+                ? 'bg-slate-100 text-sky-700 dark:bg-slate-800 dark:text-sky-300 font-semibold'
+                : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-900'
+            }`}
+          >
+            Overview
+          </button>
+          <button
+            type="button"
+            onClick={() => handleTabClick('docs')}
+            className={`w-full text-left px-3 py-2 rounded-lg text-xs font-medium transition-colors ${
+              activeTab === 'docs'
+                ? 'bg-slate-100 text-sky-700 dark:bg-slate-800 dark:text-sky-300 font-semibold'
+                : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-900'
+            }`}
+          >
+            Documentation
+          </button>
+          <button
+            type="button"
+            onClick={() => handleTabClick('architecture')}
+            className={`w-full text-left px-3 py-2 rounded-lg text-xs font-medium flex items-center justify-between transition-colors ${
+              activeTab === 'architecture'
+                ? 'bg-slate-100 text-sky-700 dark:bg-slate-800 dark:text-sky-300 font-semibold'
+                : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-900'
+            }`}
+          >
+            <span>Architecture</span>
+            <IconLayers size={14} />
+          </button>
+          <button
+            type="button"
+            onClick={() => handleTabClick('storage')}
+            className={`w-full text-left px-3 py-2 rounded-lg text-xs font-medium flex items-center justify-between transition-colors ${
+              activeTab === 'storage'
+                ? 'bg-slate-100 text-sky-700 dark:bg-slate-800 dark:text-sky-300 font-semibold'
+                : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-900'
+            }`}
+          >
+            <span>Storage Matrix</span>
+            <IconDatabase size={14} />
+          </button>
+        </div>
+      )}
     </header>
   );
 };
-
