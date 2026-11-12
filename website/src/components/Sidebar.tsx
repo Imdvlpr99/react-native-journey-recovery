@@ -120,19 +120,19 @@ export const Sidebar: React.FC<SidebarProps> = ({
       )}
 
       <aside
-        className={`fixed top-0 bottom-0 left-0 z-50 w-72 bg-white dark:bg-[#090b10] p-6 overflow-y-auto border-r border-slate-200 dark:border-slate-800/80 transition-transform duration-200 ease-in-out lg:static lg:z-auto lg:w-64 lg:p-0 lg:border-none lg:bg-transparent ${
+        className={`fixed top-0 bottom-0 left-0 z-50 w-72 bg-white/10 backdrop-blur-xl p-6 overflow-y-auto border-r border-white/10 transition-transform duration-200 ease-in-out lg:static lg:z-auto lg:w-64 lg:p-0 lg:border-none lg:bg-transparent lg:backdrop-blur-none ${
           isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
         } lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)]`}
       >
         {/* Quick Filter Box */}
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded-md border border-slate-200/80 dark:border-slate-800/60 bg-transparent focus-within:border-sky-500/60 text-xs text-slate-800 dark:text-slate-300 mb-5 transition-colors">
+        <div className="flex items-center gap-2 px-3 py-1.5 rounded-md border border-white/10 bg-white/5 focus-within:border-violet-400/40 text-xs text-white/70 mb-5 transition-colors backdrop-blur-sm">
           <IconSearch size={13} className="text-slate-400 shrink-0" />
           <input
             type="text"
             value={filterText}
             onChange={(e) => setFilterText(e.target.value)}
             placeholder="Filter documentation..."
-            className="w-full bg-transparent border-none outline-none text-xs text-slate-900 placeholder-slate-400 dark:text-slate-200 dark:placeholder-slate-500"
+            className="w-full bg-transparent border-none outline-none text-xs text-white/80 placeholder-white/30"
             aria-label="Filter documentation navigation"
           />
           {filterText && (
@@ -157,12 +157,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
             return (
               <div key={group.title} className="space-y-1">
-                <div className="w-full flex items-center gap-2 py-1 text-[11px] font-semibold tracking-wider uppercase text-slate-400 dark:text-slate-500">
-                  <span className="text-slate-300 dark:text-slate-700">{group.icon}</span>
+                <div className="w-full flex items-center gap-2 py-1 text-[11px] font-semibold tracking-wider uppercase text-white/30">
+                  <span className="text-white/20">{group.icon}</span>
                   <span>{group.title}</span>
                 </div>
 
-                <div className="space-y-0.5 pl-2.5 border-l border-slate-200 dark:border-slate-800/60">
+                <div className="space-y-0.5 pl-2.5 border-l border-white/10">
                   {filteredItems.map((item) => {
                     const isActive = activeId === item.id;
                     return (
@@ -180,13 +180,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
                         }}
                         className={`flex items-center justify-between px-2.5 py-1.5 rounded-md text-xs transition-colors ${
                           isActive
-                            ? 'text-sky-600 dark:text-sky-400 font-semibold bg-sky-50/60 dark:bg-sky-950/30'
-                            : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/60 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:bg-slate-900/50'
+                            ? 'text-violet-300 font-semibold bg-violet-500/15 border-l-2 -ml-[2px] border-violet-400'
+                            : 'text-white/50 hover:text-white/80 hover:bg-white/8'
                         }`}
                       >
                         <span className="truncate">{item.label}</span>
                         {item.badge && (
-                          <span className="ml-1 px-1.5 py-0.5 rounded text-[10px] font-mono text-slate-500 bg-slate-100 dark:bg-slate-800 dark:text-slate-400 border border-slate-200 dark:border-slate-700 shrink-0">
+                          <span className="ml-1 px-1.5 py-0.5 rounded text-[10px] font-mono text-violet-300 bg-violet-500/15 border border-violet-400/25 shrink-0">
                             {item.badge}
                           </span>
                         )}

@@ -128,7 +128,7 @@ export const App: React.FC = () => {
   }, [activeTab]);
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 dark:bg-[#090b10] dark:text-slate-100 selection:bg-sky-500/20 selection:text-sky-300 transition-colors duration-150">
+    <div className="min-h-screen flex flex-col bg-transparent text-[var(--text-main)] selection:bg-violet-500/20 selection:text-violet-300">
       {/* Universal Spotlight Search Palette */}
       <SearchModal
         isOpen={searchModalOpen}
@@ -192,12 +192,12 @@ export const App: React.FC = () => {
       {/* ── VIEW 3: ARCHITECTURE PIPELINE VISUALIZER ── */}
       {activeTab === 'architecture' && (
         <div className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
-          <div className="space-y-1 pb-2 border-b border-slate-200/60 dark:border-slate-800/60">
-            <p className="text-xs font-mono uppercase tracking-wider text-slate-400 dark:text-slate-500">Engine Deep Dive</p>
-            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+          <div className="space-y-1 pb-2 border-b border-white/10">
+            <p className="text-xs font-mono uppercase tracking-wider text-violet-400/70">Engine Deep Dive</p>
+            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
               Recovery Pipeline &amp; Mutex Queue
             </h1>
-            <p className="text-sm text-slate-500 dark:text-slate-400 max-w-2xl leading-relaxed">
+            <p className="text-sm text-[var(--text-muted)] max-w-2xl leading-relaxed">
               Trace how user input flows from React hooks through the Promise FIFO mutex queue, checksum serializer, and storage adapters to flash storage.
             </p>
           </div>
@@ -209,12 +209,12 @@ export const App: React.FC = () => {
       {/* ── VIEW 4: STORAGE COMPARISON & CALCULATOR ── */}
       {activeTab === 'storage' && (
         <div className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
-          <div className="space-y-1 pb-2 border-b border-slate-200/60 dark:border-slate-800/60">
-            <p className="text-xs font-mono uppercase tracking-wider text-slate-400 dark:text-slate-500">Benchmarks &amp; Sizing</p>
-            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+          <div className="space-y-1 pb-2 border-b border-white/10">
+            <p className="text-xs font-mono uppercase tracking-wider text-violet-400/70">Benchmarks &amp; Sizing</p>
+            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
               Storage Adapter Decision Matrix
             </h1>
-            <p className="text-sm text-slate-500 dark:text-slate-400 max-w-2xl leading-relaxed">
+            <p className="text-sm text-[var(--text-muted)] max-w-2xl leading-relaxed">
               Compare write latency, memory usage, and security across MMKV, SecureStore, and AsyncStorage with an interactive flash write calculator.
             </p>
           </div>

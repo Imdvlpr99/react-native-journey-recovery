@@ -49,10 +49,10 @@ export const Navbar: React.FC<NavbarProps> = ({
   };
 
   return (
-    <header className="sticky top-0 z-50 h-14 w-full border-b border-slate-200/80 dark:border-slate-800/80 bg-white/90 dark:bg-[#090b10]/90 backdrop-blur-md transition-colors">
-      {/* Top subtle scroll indicator */}
+    <header className="sticky top-0 z-50 h-14 w-full border-b border-white/10 bg-white/5 backdrop-blur-xl backdrop-saturate-150 transition-colors">
+      {/* Top scroll progress bar */}
       <div
-        className="absolute top-0 left-0 h-[2px] bg-sky-500 transition-all duration-100"
+        className="absolute top-0 left-0 h-[2px] bg-gradient-to-r from-violet-500 to-blue-400 transition-all duration-100"
         style={{ width: `${scrollProgress}%` }}
       />
 
@@ -62,7 +62,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           {showSidebarToggle && onMenuToggle && (
             <button
               onClick={onMenuToggle}
-              className="lg:hidden flex items-center gap-1.5 px-2 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white text-xs font-medium cursor-pointer"
+              className="lg:hidden flex items-center gap-1.5 px-2 py-1.5 rounded-lg border border-white/15 bg-white/8 text-white/70 hover:text-white text-xs font-medium cursor-pointer backdrop-blur-sm"
               aria-label="Toggle documentation sidebar"
               title="Toggle sidebar"
             >
@@ -77,31 +77,31 @@ export const Navbar: React.FC<NavbarProps> = ({
               e.preventDefault();
               handleTabClick('home');
             }}
-            className="flex items-center gap-2.5 text-slate-900 dark:text-slate-100 font-semibold tracking-tight text-sm hover:opacity-90 transition-opacity"
+            className="flex items-center gap-2.5 text-white font-semibold tracking-tight text-sm hover:opacity-90 transition-opacity"
           >
             <img
               src="./logo.png"
               alt="react-native-journey-recovery"
               className="w-6 h-6 rounded-md object-contain"
             />
-            <span className="hidden sm:inline font-bold text-slate-900 dark:text-slate-100">
+            <span className="hidden sm:inline font-bold text-white">
               journey-recovery
             </span>
-            <span className="px-1.5 py-0.5 rounded text-[10px] font-mono text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-800">
+            <span className="px-1.5 py-0.5 rounded text-[10px] font-mono text-violet-300 bg-violet-500/15 border border-violet-400/25">
               v0.1.0
             </span>
           </a>
         </div>
 
         {/* Center: Desktop Navigation Tabs */}
-        <nav className="hidden md:flex items-center gap-0.5 p-0.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50">
+        <nav className="hidden md:flex items-center gap-0.5 p-0.5 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm">
           <button
             type="button"
             onClick={() => handleTabClick('home')}
-            className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors cursor-pointer flex items-center gap-1.5 ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer flex items-center gap-1.5 ${
               activeTab === 'home'
-                ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-semibold shadow-sm'
-                : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-white/60 dark:hover:bg-slate-800/60'
+                ? 'bg-violet-500/20 text-violet-200 font-semibold border border-violet-400/30 shadow-sm shadow-violet-500/20'
+                : 'text-white/50 hover:text-white/80 hover:bg-white/8'
             }`}
           >
             Overview
@@ -109,10 +109,10 @@ export const Navbar: React.FC<NavbarProps> = ({
           <button
             type="button"
             onClick={() => handleTabClick('docs')}
-            className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors cursor-pointer flex items-center gap-1.5 ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer flex items-center gap-1.5 ${
               activeTab === 'docs'
-                ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-semibold shadow-sm'
-                : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-white/60 dark:hover:bg-slate-800/60'
+                ? 'bg-violet-500/20 text-violet-200 font-semibold border border-violet-400/30 shadow-sm shadow-violet-500/20'
+                : 'text-white/50 hover:text-white/80 hover:bg-white/8'
             }`}
           >
             Documentation
@@ -120,10 +120,10 @@ export const Navbar: React.FC<NavbarProps> = ({
           <button
             type="button"
             onClick={() => handleTabClick('architecture')}
-            className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors cursor-pointer flex items-center gap-1.5 ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer flex items-center gap-1.5 ${
               activeTab === 'architecture'
-                ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-semibold shadow-sm'
-                : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-white/60 dark:hover:bg-slate-800/60'
+                ? 'bg-violet-500/20 text-violet-200 font-semibold border border-violet-400/30 shadow-sm shadow-violet-500/20'
+                : 'text-white/50 hover:text-white/80 hover:bg-white/8'
             }`}
           >
             <IconLayers size={13} />
@@ -132,10 +132,10 @@ export const Navbar: React.FC<NavbarProps> = ({
           <button
             type="button"
             onClick={() => handleTabClick('storage')}
-            className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors cursor-pointer flex items-center gap-1.5 ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer flex items-center gap-1.5 ${
               activeTab === 'storage'
-                ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-semibold shadow-sm'
-                : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-white/60 dark:hover:bg-slate-800/60'
+                ? 'bg-violet-500/20 text-violet-200 font-semibold border border-violet-400/30 shadow-sm shadow-violet-500/20'
+                : 'text-white/50 hover:text-white/80 hover:bg-white/8'
             }`}
           >
             <IconDatabase size={13} />
@@ -149,13 +149,13 @@ export const Navbar: React.FC<NavbarProps> = ({
           <button
             type="button"
             onClick={onOpenSearch}
-            className="hidden sm:flex items-center gap-2 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-900/60 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 text-xs transition-colors cursor-pointer"
+            className="hidden sm:flex items-center gap-2 px-2.5 py-1.5 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 text-white/50 hover:text-white/80 text-xs transition-colors cursor-pointer"
             aria-label="Search documentation"
             title="Search documentation (⌘K or Ctrl+K)"
           >
-            <IconSearch size={13} className="text-slate-400" />
+            <IconSearch size={13} className="text-white/40" />
             <span>Search docs...</span>
-            <kbd className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-700 shadow-2xs">
+            <kbd className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-white/8 text-white/40 border border-white/10">
               ⌘K
             </kbd>
           </button>
@@ -164,7 +164,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           <button
             type="button"
             onClick={onOpenSearch}
-            className="sm:hidden p-2 rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/50 cursor-pointer"
+            className="sm:hidden p-2 rounded-lg text-white/50 hover:text-white hover:bg-white/10 cursor-pointer"
             aria-label="Search documentation"
           >
             <IconSearch size={17} />
@@ -174,11 +174,11 @@ export const Navbar: React.FC<NavbarProps> = ({
           <button
             type="button"
             onClick={onThemeToggle}
-            className="p-2 rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-colors cursor-pointer"
+            className="p-2 rounded-lg text-white/50 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
             aria-label={theme === 'dark' ? 'Switch to Light theme' : 'Switch to Dark theme'}
             title={theme === 'dark' ? 'Switch to Light theme' : 'Switch to Dark theme'}
           >
-            {theme === 'dark' ? <IconSun size={16} className="text-amber-400" /> : <IconMoon size={16} className="text-slate-700" />}
+            {theme === 'dark' ? <IconSun size={16} className="text-amber-300" /> : <IconMoon size={16} className="text-violet-300" />}
           </button>
 
           {/* GitHub Repository Link */}
@@ -186,7 +186,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             href="https://github.com/Imdvlpr99/react-native-journey-recovery"
             target="_blank"
             rel="noopener noreferrer"
-            className="p-2 rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-colors"
+            className="p-2 rounded-lg text-white/50 hover:text-white hover:bg-white/10 transition-colors"
             aria-label="GitHub Repository"
             title="GitHub Repository"
           >
@@ -197,7 +197,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           <button
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2 rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/50 cursor-pointer"
+            className="md:hidden p-2 rounded-lg text-white/50 hover:text-white hover:bg-white/10 cursor-pointer"
             aria-label="Toggle navigation menu"
           >
             {mobileMenuOpen ? <IconX size={18} /> : <IconMenu size={18} />}
@@ -207,14 +207,14 @@ export const Navbar: React.FC<NavbarProps> = ({
 
       {/* Mobile navigation dropdown drawer */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-b border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-[#090b10]/95 backdrop-blur-sm px-4 py-3 space-y-0.5">
+        <div className="md:hidden border-b border-white/10 bg-white/5 backdrop-blur-xl px-4 py-3 space-y-0.5">
           <button
             type="button"
             onClick={() => handleTabClick('home')}
             className={`w-full text-left px-3 py-2 rounded-lg text-xs font-medium transition-colors ${
               activeTab === 'home'
-                ? 'bg-slate-100 text-sky-700 dark:bg-slate-800 dark:text-sky-300 font-semibold'
-                : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-900'
+                ? 'bg-violet-500/20 text-violet-200 font-semibold'
+                : 'text-white/60 hover:text-white hover:bg-white/8'
             }`}
           >
             Overview
@@ -224,8 +224,8 @@ export const Navbar: React.FC<NavbarProps> = ({
             onClick={() => handleTabClick('docs')}
             className={`w-full text-left px-3 py-2 rounded-lg text-xs font-medium transition-colors ${
               activeTab === 'docs'
-                ? 'bg-slate-100 text-sky-700 dark:bg-slate-800 dark:text-sky-300 font-semibold'
-                : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-900'
+                ? 'bg-violet-500/20 text-violet-200 font-semibold'
+                : 'text-white/60 hover:text-white hover:bg-white/8'
             }`}
           >
             Documentation
@@ -235,8 +235,8 @@ export const Navbar: React.FC<NavbarProps> = ({
             onClick={() => handleTabClick('architecture')}
             className={`w-full text-left px-3 py-2 rounded-lg text-xs font-medium flex items-center justify-between transition-colors ${
               activeTab === 'architecture'
-                ? 'bg-slate-100 text-sky-700 dark:bg-slate-800 dark:text-sky-300 font-semibold'
-                : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-900'
+                ? 'bg-violet-500/20 text-violet-200 font-semibold'
+                : 'text-white/60 hover:text-white hover:bg-white/8'
             }`}
           >
             <span>Architecture</span>
@@ -247,8 +247,8 @@ export const Navbar: React.FC<NavbarProps> = ({
             onClick={() => handleTabClick('storage')}
             className={`w-full text-left px-3 py-2 rounded-lg text-xs font-medium flex items-center justify-between transition-colors ${
               activeTab === 'storage'
-                ? 'bg-slate-100 text-sky-700 dark:bg-slate-800 dark:text-sky-300 font-semibold'
-                : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-900'
+                ? 'bg-violet-500/20 text-violet-200 font-semibold'
+                : 'text-white/60 hover:text-white hover:bg-white/8'
             }`}
           >
             <span>Storage Matrix</span>

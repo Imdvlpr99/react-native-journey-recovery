@@ -174,29 +174,29 @@ export function HomeScreen({ navigation }) {
         <div className="max-w-3xl mx-auto px-4 sm:px-6 space-y-7 flex flex-col items-center">
 
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 text-slate-500 dark:text-slate-400">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs border border-white/15 bg-white/8 text-white/70 backdrop-blur-sm">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="font-mono font-medium text-slate-700 dark:text-slate-300">v0.1.0</span>
-            <span className="text-slate-300 dark:text-slate-700">·</span>
+            <span className="font-mono font-medium text-violet-300">v0.1.0</span>
+            <span className="text-white/20">·</span>
             <span>Zero Native Dependencies</span>
-            <span className="text-slate-300 dark:text-slate-700">·</span>
+            <span className="text-white/20">·</span>
             <span>Pure TypeScript</span>
           </div>
 
           {/* Headline */}
-          <h1 className="text-4xl sm:text-6xl font-bold tracking-tight text-slate-900 dark:text-slate-50 leading-[1.06]">
+          <h1 className="text-4xl sm:text-6xl font-bold tracking-tight leading-[1.06] bg-gradient-to-br from-white via-violet-100 to-violet-300 bg-clip-text text-transparent">
             Deterministic state recovery<br className="hidden sm:block" /> for React Native &amp; Expo.
           </h1>
 
           {/* Sub-headline */}
-          <p className="text-base sm:text-lg text-slate-500 dark:text-slate-400 max-w-xl leading-relaxed">
+          <p className="text-base sm:text-lg text-white/60 max-w-xl leading-relaxed">
             Checkpoint multi-screen flows, eliminate async write races with a Promise FIFO mutex, and restore in-flight progress after OS background kills.
           </p>
 
-          {/* Install bar */}
-          <div className="w-full max-w-lg rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0d1117] overflow-hidden shadow-sm">
-            <div className="flex items-center justify-between px-4 py-2 border-b border-slate-100 dark:border-slate-800/80 bg-slate-50/60 dark:bg-slate-900/40">
-              <span className="text-[11px] font-mono text-slate-400">$ install</span>
+          {/* Install bar — frosted glass */}
+          <div className="w-full max-w-lg rounded-xl border border-white/10 bg-white/5 backdrop-blur-md overflow-hidden shadow-lg shadow-black/20">
+            <div className="flex items-center justify-between px-4 py-2 border-b border-white/8">
+              <span className="text-[11px] font-mono text-white/30">$ install</span>
               <div className="flex items-center gap-0.5">
                 {(['npm', 'pnpm', 'yarn', 'bun', 'expo'] as PkgManager[]).map((pkg) => (
                   <button
@@ -205,8 +205,8 @@ export function HomeScreen({ navigation }) {
                     onClick={() => setPkgManager(pkg)}
                     className={`px-2 py-0.5 rounded text-[11px] font-mono transition-colors cursor-pointer ${
                       pkgManager === pkg
-                        ? 'bg-slate-900 text-white dark:bg-sky-500 dark:text-slate-950 font-semibold'
-                        : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
+                        ? 'bg-violet-500 text-white font-semibold'
+                        : 'text-white/40 hover:text-white/70'
                     }`}
                   >
                     {pkg}
@@ -215,7 +215,7 @@ export function HomeScreen({ navigation }) {
               </div>
             </div>
             <div className="flex items-center justify-between gap-3 px-4 py-3">
-              <code className="text-xs sm:text-sm font-mono text-slate-700 dark:text-sky-300 truncate">
+              <code className="text-xs sm:text-sm font-mono text-violet-300 truncate">
                 {installCommands[pkgManager]}
               </code>
               <button
@@ -223,14 +223,14 @@ export function HomeScreen({ navigation }) {
                 onClick={handleCopyInstall}
                 className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-sans transition-colors cursor-pointer shrink-0 ${
                   copiedInstall
-                    ? 'bg-emerald-50 text-emerald-800 border border-emerald-300 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800'
-                    : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800 dark:text-slate-300 dark:border-slate-800'
+                    ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-400/30'
+                    : 'bg-white/8 hover:bg-white/15 text-white/60 hover:text-white border border-white/10'
                 }`}
                 title="Copy installation command"
               >
                 {copiedInstall ? (
                   <>
-                    <IconCheck size={13} className="text-emerald-500" />
+                    <IconCheck size={13} className="text-emerald-400" />
                     <span>Copied</span>
                   </>
                 ) : (
@@ -248,7 +248,7 @@ export function HomeScreen({ navigation }) {
             <button
               type="button"
               onClick={() => onNavigate('docs', 'quickstart')}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold bg-slate-900 hover:bg-slate-700 text-white dark:bg-sky-500 dark:hover:bg-sky-400 dark:text-slate-950 transition-colors shadow-sm cursor-pointer"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold bg-gradient-to-r from-violet-600 to-violet-500 hover:from-violet-500 hover:to-violet-400 text-white transition-all shadow-lg shadow-violet-500/30 cursor-pointer"
             >
               Read the Docs
               <IconChevronRight size={14} />
@@ -256,9 +256,9 @@ export function HomeScreen({ navigation }) {
             <button
               type="button"
               onClick={() => onNavigate('architecture')}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/60 text-slate-700 dark:text-slate-300 transition-colors cursor-pointer"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium border border-white/15 bg-white/8 hover:bg-white/15 text-white/80 hover:text-white transition-colors cursor-pointer backdrop-blur-sm"
             >
-              <IconLayers size={15} className="text-sky-500 dark:text-sky-400" />
+              <IconLayers size={15} className="text-violet-400" />
               Engine Architecture
             </button>
           </div>
@@ -269,20 +269,20 @@ export function HomeScreen({ navigation }) {
       <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
         <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4">
           <div className="space-y-1">
-            <p className="text-[11px] font-mono uppercase tracking-wider text-slate-400 dark:text-slate-500">
+            <p className="text-[11px] font-mono uppercase tracking-wider text-violet-400/70">
               Interactive Walkthrough
             </p>
-            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
+            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
               How the engine works in 3 steps
             </h2>
-            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 max-w-xl">
+            <p className="text-xs sm:text-sm text-white/50 max-w-xl">
               Click through each step to see how clean checkpoint recovery is in production:
             </p>
           </div>
           <button
             type="button"
             onClick={() => onNavigate('docs', 'quickstart')}
-            className="text-xs font-semibold text-sky-600 hover:text-sky-500 dark:text-sky-400 dark:hover:text-sky-300 flex items-center gap-1 cursor-pointer shrink-0"
+            className="text-xs font-semibold text-violet-400 hover:text-violet-300 flex items-center gap-1 cursor-pointer shrink-0"
           >
             <span>Read Step-by-Step Guide</span>
             <IconChevronRight size={13} />
@@ -295,30 +295,30 @@ export function HomeScreen({ navigation }) {
             {/* Step 1 */}
             <div
               onClick={() => setActiveStep('provider')}
-              className={`p-4 rounded-xl border transition-all cursor-pointer ${
+              className={`p-4 rounded-xl border transition-all cursor-pointer backdrop-blur-sm ${
                 activeStep === 'provider'
-                  ? 'border-sky-400/60 dark:border-sky-500/40 bg-sky-50/40 dark:bg-slate-900 shadow-sm'
-                  : 'border-slate-200/80 dark:border-slate-800/60 bg-white dark:bg-slate-900/20 hover:border-slate-300 dark:hover:border-slate-700/80'
+                  ? 'border-violet-400/40 bg-violet-500/10 shadow-sm shadow-violet-500/20'
+                  : 'border-white/10 bg-white/5 hover:border-white/20 hover:bg-white/8'
               }`}
             >
               <div className="flex items-center gap-2.5">
                 <span className={`text-[11px] font-mono font-bold px-2 py-0.5 rounded ${
                   activeStep === 'provider'
-                    ? 'bg-sky-500 text-white'
-                    : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'
+                    ? 'bg-violet-500 text-white'
+                    : 'bg-white/10 text-white/40'
                 }`}>
                   01
                 </span>
-                <h4 className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+                <h4 className="text-sm font-semibold text-white">
                   Wrap Root with RecoveryProvider
                 </h4>
               </div>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-2 pl-8 leading-relaxed">
+              <p className="text-xs text-white/50 mt-2 pl-8 leading-relaxed">
                 Configure your chosen storage adapter once at the application root. Supports TTL expiry and automatic schema migration callbacks.
               </p>
               {activeStep === 'provider' && (
                 <div className="mt-3 pl-8 flex items-center gap-1.5 pt-1">
-                  <span className="text-[10px] text-slate-400 uppercase font-mono">Adapter:</span>
+                  <span className="text-[10px] text-white/30 uppercase font-mono">Adapter:</span>
                   {(['async-storage', 'mmkv', 'secure-store'] as AdapterChoice[]).map((adapter) => (
                     <button
                       key={adapter}
@@ -329,8 +329,8 @@ export function HomeScreen({ navigation }) {
                       }}
                       className={`px-2 py-0.5 rounded text-[10px] font-mono transition-colors cursor-pointer ${
                         selectedAdapter === adapter
-                          ? 'bg-sky-500/20 text-sky-700 dark:text-sky-300 font-semibold border border-sky-400/30'
-                          : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'
+                          ? 'bg-violet-500/25 text-violet-300 font-semibold border border-violet-400/40'
+                          : 'bg-white/8 text-white/40 hover:text-white/60'
                       }`}
                     >
                       {adapter === 'async-storage' ? 'AsyncStorage' : adapter === 'mmkv' ? 'MMKV' : 'SecureStore'}
@@ -343,25 +343,25 @@ export function HomeScreen({ navigation }) {
             {/* Step 2 */}
             <div
               onClick={() => setActiveStep('journey')}
-              className={`p-4 rounded-xl border transition-all cursor-pointer ${
+              className={`p-4 rounded-xl border transition-all cursor-pointer backdrop-blur-sm ${
                 activeStep === 'journey'
-                  ? 'border-sky-400/60 dark:border-sky-500/40 bg-sky-50/40 dark:bg-slate-900 shadow-sm'
-                  : 'border-slate-200/80 dark:border-slate-800/60 bg-white dark:bg-slate-900/20 hover:border-slate-300 dark:hover:border-slate-700/80'
+                  ? 'border-violet-400/40 bg-violet-500/10 shadow-sm shadow-violet-500/20'
+                  : 'border-white/10 bg-white/5 hover:border-white/20 hover:bg-white/8'
               }`}
             >
               <div className="flex items-center gap-2.5">
                 <span className={`text-[11px] font-mono font-bold px-2 py-0.5 rounded ${
                   activeStep === 'journey'
-                    ? 'bg-sky-500 text-white'
-                    : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'
+                    ? 'bg-violet-500 text-white'
+                    : 'bg-white/10 text-white/40'
                 }`}>
                   02
                 </span>
-                <h4 className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+                <h4 className="text-sm font-semibold text-white">
                   Checkpoint State with useJourney()
                 </h4>
               </div>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-2 pl-8 leading-relaxed">
+              <p className="text-xs text-white/50 mt-2 pl-8 leading-relaxed">
                 Bind any screen, form, or checkout wizard to a journey ID. Rapid keystrokes are automatically debounced and serialized through the Mutex Queue.
               </p>
             </div>
@@ -369,26 +369,26 @@ export function HomeScreen({ navigation }) {
             {/* Step 3 */}
             <div
               onClick={() => setActiveStep('recovery')}
-              className={`p-4 rounded-xl border transition-all cursor-pointer ${
+              className={`p-4 rounded-xl border transition-all cursor-pointer backdrop-blur-sm ${
                 activeStep === 'recovery'
-                  ? 'border-sky-400/60 dark:border-sky-500/40 bg-sky-50/40 dark:bg-slate-900 shadow-sm'
-                  : 'border-slate-200/80 dark:border-slate-800/60 bg-white dark:bg-slate-900/20 hover:border-slate-300 dark:hover:border-slate-700/80'
+                  ? 'border-violet-400/40 bg-violet-500/10 shadow-sm shadow-violet-500/20'
+                  : 'border-white/10 bg-white/5 hover:border-white/20 hover:bg-white/8'
               }`}
             >
               <div className="flex items-center gap-2.5">
                 <span className={`text-[11px] font-mono font-bold px-2 py-0.5 rounded ${
                   activeStep === 'recovery'
-                    ? 'bg-sky-500 text-white'
-                    : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'
+                    ? 'bg-violet-500 text-white'
+                    : 'bg-white/10 text-white/40'
                 }`}>
                   03
                 </span>
-                <h4 className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+                <h4 className="text-sm font-semibold text-white">
                   Prompt Recovery with RecoveryBanner
                 </h4>
               </div>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-2 pl-8 leading-relaxed">
-                When the app relaunches after an OS background termination, drop in <code className="font-mono text-[11px]">&lt;RecoveryBanner /&gt;</code> to prompt the user to seamlessly resume.
+              <p className="text-xs text-white/50 mt-2 pl-8 leading-relaxed">
+                When the app relaunches after an OS background termination, drop in <code className="font-mono text-[11px] text-violet-300">&lt;RecoveryBanner /&gt;</code> to prompt the user to seamlessly resume.
               </p>
             </div>
           </div>
@@ -413,42 +413,42 @@ export function HomeScreen({ navigation }) {
       {/* ── FEATURE GRID ── */}
       <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-          <div className="p-5 rounded-xl border border-slate-200/80 dark:border-slate-800/60 bg-white dark:bg-slate-900/30 space-y-2.5 hover:border-slate-300 dark:hover:border-slate-700 transition-colors">
-            <div className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800/80 flex items-center justify-center">
-              <IconLock size={15} className="text-sky-500 dark:text-sky-400" />
+          <div className="p-5 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm space-y-2.5 hover:border-violet-400/30 hover:bg-white/8 transition-all">
+            <div className="w-8 h-8 rounded-lg bg-violet-500/15 flex items-center justify-center">
+              <IconLock size={15} className="text-violet-400" />
             </div>
-            <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Promise FIFO Mutex</h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+            <h3 className="text-sm font-semibold text-white">Promise FIFO Mutex</h3>
+            <p className="text-xs text-white/50 leading-relaxed">
               Serializes rapid keystrokes into sequential writes. Never drops writes, eliminates async race conditions entirely.
             </p>
           </div>
 
-          <div className="p-5 rounded-xl border border-slate-200/80 dark:border-slate-800/60 bg-white dark:bg-slate-900/30 space-y-2.5 hover:border-slate-300 dark:hover:border-slate-700 transition-colors">
-            <div className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800/80 flex items-center justify-center">
-              <IconShield size={15} className="text-slate-600 dark:text-slate-400" />
+          <div className="p-5 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm space-y-2.5 hover:border-violet-400/30 hover:bg-white/8 transition-all">
+            <div className="w-8 h-8 rounded-lg bg-violet-500/15 flex items-center justify-center">
+              <IconShield size={15} className="text-violet-400" />
             </div>
-            <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100">FNV-1a Checksums</h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+            <h3 className="text-sm font-semibold text-white">FNV-1a Checksums</h3>
+            <p className="text-xs text-white/50 leading-relaxed">
               32-bit deterministic hash verifies integrity before restoring. Rejects corrupted or truncated disk snapshots.
             </p>
           </div>
 
-          <div className="p-5 rounded-xl border border-slate-200/80 dark:border-slate-800/60 bg-white dark:bg-slate-900/30 space-y-2.5 hover:border-slate-300 dark:hover:border-slate-700 transition-colors">
-            <div className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800/80 flex items-center justify-center">
-              <IconZap size={15} className="text-slate-600 dark:text-slate-400" />
+          <div className="p-5 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm space-y-2.5 hover:border-violet-400/30 hover:bg-white/8 transition-all">
+            <div className="w-8 h-8 rounded-lg bg-violet-500/15 flex items-center justify-center">
+              <IconZap size={15} className="text-violet-400" />
             </div>
-            <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Field-Level Privacy</h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-              Declare sensitive fields like <code className="font-mono text-[11px]">password</code> or <code className="font-mono text-[11px]">cvv</code>. Stripped before serialization — never touches flash.
+            <h3 className="text-sm font-semibold text-white">Field-Level Privacy</h3>
+            <p className="text-xs text-white/50 leading-relaxed">
+              Declare sensitive fields like <code className="font-mono text-[11px] text-violet-300">password</code> or <code className="font-mono text-[11px] text-violet-300">cvv</code>. Stripped before serialization — never touches flash.
             </p>
           </div>
 
-          <div className="p-5 rounded-xl border border-slate-200/80 dark:border-slate-800/60 bg-white dark:bg-slate-900/30 space-y-2.5 hover:border-slate-300 dark:hover:border-slate-700 transition-colors">
-            <div className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800/80 flex items-center justify-center">
-              <IconDatabase size={15} className="text-slate-600 dark:text-slate-400" />
+          <div className="p-5 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm space-y-2.5 hover:border-violet-400/30 hover:bg-white/8 transition-all">
+            <div className="w-8 h-8 rounded-lg bg-violet-500/15 flex items-center justify-center">
+              <IconDatabase size={15} className="text-violet-400" />
             </div>
-            <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Pluggable Adapters</h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+            <h3 className="text-sm font-semibold text-white">Pluggable Adapters</h3>
+            <p className="text-xs text-white/50 leading-relaxed">
               Native drivers for MMKV (C++ sync), Expo SecureStore (Hardware Keychain), and AsyncStorage.
             </p>
           </div>

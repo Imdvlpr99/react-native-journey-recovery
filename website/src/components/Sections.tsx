@@ -13,65 +13,65 @@ export const Sections: React.FC = () => {
       {/* Overview */}
       <section id="overview" className="doc-section scroll-mt-24 mb-16 section-enter">
         <div className="mb-4">
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
             Overview
           </h2>
         </div>
 
-        <p className="text-base md:text-lg text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
+        <p className="text-base md:text-lg text-white/70 leading-relaxed mb-4">
           Mobile operating systems forcefully terminate background processes due to system memory pressure (Android Low Memory Killer / iOS jetsam) or battery optimization policies without firing JavaScript cleanup handlers or state-flushing lifecycle callbacks.
         </p>
 
-        <p className="text-sm md:text-base text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
-          <code className="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-cyan-600 dark:text-cyan-400 font-mono text-xs">react-native-journey-recovery</code> is a developer-first state recovery engine designed specifically for React Native and Expo. It establishes an explicit, safe, and verifiable checkpointing lifecycle. When your users are filling out a multi-step mortgage application, complex checkout wizard, airline check-in, or KYC verification, they will never lose in-progress progress.
+        <p className="text-sm md:text-base text-white/60 leading-relaxed mb-6">
+          <code className="px-1.5 py-0.5 rounded bg-violet-500/15 text-violet-300 font-mono text-xs border border-violet-400/20">react-native-journey-recovery</code> is a developer-first state recovery engine designed specifically for React Native and Expo. It establishes an explicit, safe, and verifiable checkpointing lifecycle. When your users are filling out a multi-step mortgage application, complex checkout wizard, airline check-in, or KYC verification, they will never lose in-progress progress.
         </p>
 
         {/* Feature Cards Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-8">
-          <div className="p-5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40">
-            <div className="w-9 h-9 rounded-lg bg-slate-100 dark:bg-slate-800 text-sky-600 dark:text-sky-400 flex items-center justify-center mb-3">
+          <div className="p-5 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm">
+            <div className="w-9 h-9 rounded-lg bg-violet-500/15 text-violet-400 flex items-center justify-center mb-3">
               <IconLock size={18} />
             </div>
-            <h4 className="text-sm font-bold text-slate-900 dark:text-slate-100 mb-1">
+            <h4 className="text-sm font-bold text-white mb-1">
               Atomic &amp; Mutex-Protected
             </h4>
-            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+            <p className="text-xs text-white/55 leading-relaxed">
               Per-journey Promise FIFO queue serializes rapid saves into sequential promises, eliminating write races. A failed or interrupted write never destroys the prior committed snapshot.
             </p>
           </div>
 
-          <div className="p-5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40">
-            <div className="w-9 h-9 rounded-lg bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 flex items-center justify-center mb-3">
+          <div className="p-5 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm">
+            <div className="w-9 h-9 rounded-lg bg-violet-500/15 text-violet-400 flex items-center justify-center mb-3">
               <IconShield size={18} />
             </div>
-            <h4 className="text-sm font-bold text-slate-900 dark:text-slate-100 mb-1">
+            <h4 className="text-sm font-bold text-white mb-1">
               Tamper &amp; Corruption Proof
             </h4>
-            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+            <p className="text-xs text-white/55 leading-relaxed">
               Deterministic 32-bit FNV-1a checksums detect storage corruption, truncated writes, or unauthorized payload modification before any restoration can occur.
             </p>
           </div>
 
-          <div className="p-5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40">
-            <div className="w-9 h-9 rounded-lg bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 flex items-center justify-center mb-3">
+          <div className="p-5 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm">
+            <div className="w-9 h-9 rounded-lg bg-violet-500/15 text-violet-400 flex items-center justify-center mb-3">
               <IconZap size={18} />
             </div>
-            <h4 className="text-sm font-bold text-slate-900 dark:text-slate-100 mb-1">
+            <h4 className="text-sm font-bold text-white mb-1">
               Schema Version Migrations
             </h4>
-            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-              Ship app updates with confidence. Outdated snapshot schemas from previous versions are seamlessly upgraded on the fly via the <code className="text-xs font-mono">migrate()</code> callback.
+            <p className="text-xs text-white/55 leading-relaxed">
+              Ship app updates with confidence. Outdated snapshot schemas from previous versions are seamlessly upgraded on the fly via the <code className="text-xs font-mono text-violet-300">migrate()</code> callback.
             </p>
           </div>
 
-          <div className="p-5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40">
-            <div className="w-9 h-9 rounded-lg bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 flex items-center justify-center mb-3">
+          <div className="p-5 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm">
+            <div className="w-9 h-9 rounded-lg bg-violet-500/15 text-violet-400 flex items-center justify-center mb-3">
               <IconDatabase size={18} />
             </div>
-            <h4 className="text-sm font-bold text-slate-900 dark:text-slate-100 mb-1">
+            <h4 className="text-sm font-bold text-white mb-1">
               TTL Expiry &amp; Scoping
             </h4>
-            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+            <p className="text-xs text-white/55 leading-relaxed">
               Configurable time-to-live expiration policies prevent stale sessions from lingering, with multi-tenant user scoping for shared devices.
             </p>
           </div>
@@ -81,12 +81,12 @@ export const Sections: React.FC = () => {
       {/* Why Journey Recovery */}
       <section id="why-journey-recovery" className="doc-section scroll-mt-24 mb-16 section-enter">
         <div className="mb-4">
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
             Why Journey Recovery vs Generic Store Persistence?
           </h2>
         </div>
 
-        <p className="text-sm md:text-base text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
+        <p className="text-sm md:text-base text-white/60 leading-relaxed mb-6">
           Many mobile apps attempt session persistence by auto-serializing their entire global Redux or Zustand state tree to storage on every action. In real-world production mobile apps, this generic pattern introduces serious architectural pitfalls:
         </p>
 
@@ -104,45 +104,45 @@ export const Sections: React.FC = () => {
         </div>
 
         {/* Comparison Table */}
-        <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 overflow-x-auto shadow-2xs">
+        <div className="rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm overflow-x-auto">
           <table className="w-full text-left text-xs md:text-sm border-collapse min-w-[640px]">
             <thead>
-              <tr className="border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-slate-600 dark:text-slate-400 font-semibold text-[11px] uppercase tracking-wider">
+              <tr className="border-b border-white/10 bg-white/5 text-white/40 font-semibold text-[11px] uppercase tracking-wider">
                 <th className="py-3 px-4">Capability</th>
-                <th className="py-3 px-4 text-slate-500">Global Store Dump (redux-persist)</th>
-                <th className="py-3 px-4 text-sky-600 dark:text-sky-400 font-semibold">react-native-journey-recovery</th>
+                <th className="py-3 px-4 text-white/30">Global Store Dump (redux-persist)</th>
+                <th className="py-3 px-4 text-violet-400 font-semibold">react-native-journey-recovery</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-slate-800/80 text-xs">
-              <tr className="hover:bg-slate-50/50 dark:hover:bg-slate-900/30">
-                <td className="py-3 px-4 font-semibold text-slate-900 dark:text-slate-100">Storage Scope</td>
-                <td className="py-3 px-4 text-slate-500">Entire state tree (massive disk bloat)</td>
-                <td className="py-3 px-4 font-medium text-slate-900 dark:text-slate-100">Selective journey checkpoints (explicit fields only)</td>
+            <tbody className="divide-y divide-white/8 text-xs">
+              <tr className="hover:bg-white/5">
+                <td className="py-3 px-4 font-semibold text-white">Storage Scope</td>
+                <td className="py-3 px-4 text-white/40">Entire state tree (massive disk bloat)</td>
+                <td className="py-3 px-4 font-medium text-white">Selective journey checkpoints (explicit fields only)</td>
               </tr>
-              <tr className="hover:bg-slate-50/50 dark:hover:bg-slate-900/30">
-                <td className="py-3 px-4 font-semibold text-slate-900 dark:text-slate-100">Concurrent Write Races</td>
-                <td className="py-3 px-4 text-slate-500">Last-write-wins (silent race conditions)</td>
-                <td className="py-3 px-4 font-medium text-slate-900 dark:text-slate-100">Serialized Promise FIFO Mutex Queue</td>
+              <tr className="hover:bg-white/5">
+                <td className="py-3 px-4 font-semibold text-white">Concurrent Write Races</td>
+                <td className="py-3 px-4 text-white/40">Last-write-wins (silent race conditions)</td>
+                <td className="py-3 px-4 font-medium text-white">Serialized Promise FIFO Mutex Queue</td>
               </tr>
-              <tr className="hover:bg-slate-50/50 dark:hover:bg-slate-900/30">
-                <td className="py-3 px-4 font-semibold text-slate-900 dark:text-slate-100">Write Failure Safety</td>
-                <td className="py-3 px-4 text-slate-500">Leaves partial corrupted JSON on disk</td>
-                <td className="py-3 px-4 font-medium text-slate-900 dark:text-slate-100">Atomic preservation of previous committed snapshot</td>
+              <tr className="hover:bg-white/5">
+                <td className="py-3 px-4 font-semibold text-white">Write Failure Safety</td>
+                <td className="py-3 px-4 text-white/40">Leaves partial corrupted JSON on disk</td>
+                <td className="py-3 px-4 font-medium text-white">Atomic preservation of previous committed snapshot</td>
               </tr>
-              <tr className="hover:bg-slate-50/50 dark:hover:bg-slate-900/30">
-                <td className="py-3 px-4 font-semibold text-slate-900 dark:text-slate-100">Data Corruption Detection</td>
-                <td className="py-3 px-4 text-slate-500">JSON syntax errors only</td>
-                <td className="py-3 px-4 font-medium text-slate-900 dark:text-slate-100">Deterministic 32-bit FNV-1a Checksums</td>
+              <tr className="hover:bg-white/5">
+                <td className="py-3 px-4 font-semibold text-white">Data Corruption Detection</td>
+                <td className="py-3 px-4 text-white/40">JSON syntax errors only</td>
+                <td className="py-3 px-4 font-medium text-white">Deterministic 32-bit FNV-1a Checksums</td>
               </tr>
-              <tr className="hover:bg-slate-50/50 dark:hover:bg-slate-900/30">
-                <td className="py-3 px-4 font-semibold text-slate-900 dark:text-slate-100">Schema Evolution</td>
-                <td className="py-3 px-4 text-slate-500">App crashes on changed field types</td>
-                <td className="py-3 px-4 font-medium text-slate-900 dark:text-slate-100">Built-in <code className="font-mono text-xs">migrate()</code> version upgrade hook</td>
+              <tr className="hover:bg-white/5">
+                <td className="py-3 px-4 font-semibold text-white">Schema Evolution</td>
+                <td className="py-3 px-4 text-white/40">App crashes on changed field types</td>
+                <td className="py-3 px-4 font-medium text-white">Built-in <code className="font-mono text-xs text-violet-300">migrate()</code> version upgrade hook</td>
               </tr>
-              <tr className="hover:bg-slate-50/50 dark:hover:bg-slate-900/30">
-                <td className="py-3 px-4 font-semibold text-slate-900 dark:text-slate-100">Server Cache Sync</td>
-                <td className="py-3 px-4 text-slate-500">Assumes saved UI state is backend truth</td>
-                <td className="py-3 px-4 font-medium text-slate-900 dark:text-slate-100">TanStack Query automatic cache revalidation</td>
+              <tr className="hover:bg-white/5">
+                <td className="py-3 px-4 font-semibold text-white">Server Cache Sync</td>
+                <td className="py-3 px-4 text-white/40">Assumes saved UI state is backend truth</td>
+                <td className="py-3 px-4 font-medium text-white">TanStack Query automatic cache revalidation</td>
               </tr>
             </tbody>
           </table>
@@ -152,13 +152,13 @@ export const Sections: React.FC = () => {
       {/* Installation */}
       <section id="installation" className="doc-section scroll-mt-24 mb-16 section-enter">
         <div className="mb-4">
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
             Installation
           </h2>
         </div>
 
-        <p className="text-sm md:text-base text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
-          Install <code className="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-cyan-600 dark:text-cyan-400 font-mono text-xs">react-native-journey-recovery</code> using your preferred package manager alongside your choice of storage adapter:
+        <p className="text-sm md:text-base text-white/60 leading-relaxed mb-6">
+          Install <code className="px-1.5 py-0.5 rounded bg-violet-500/15 text-violet-300 border border-violet-400/20 font-mono text-xs">react-native-journey-recovery</code> using your preferred package manager alongside your choice of storage adapter:
         </p>
 
         <CodeBlock
@@ -195,7 +195,7 @@ export const Sections: React.FC = () => {
       {/* Quickstart in 3 Steps */}
       <section id="quickstart" className="doc-section scroll-mt-24 mb-16 section-enter">
         <div className="mb-4">
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
             Quickstart in 3 Steps
           </h2>
         </div>
@@ -204,16 +204,16 @@ export const Sections: React.FC = () => {
           {/* Step 1 */}
           <div className="flex gap-4 items-start">
             <div className="flex flex-col items-center">
-              <span className="w-7 h-7 rounded-lg bg-slate-900 text-white dark:bg-sky-500 dark:text-slate-950 font-bold font-mono text-xs flex items-center justify-center shrink-0">
+              <span className="w-7 h-7 rounded-lg bg-violet-500 text-white font-bold font-mono text-xs flex items-center justify-center shrink-0">
                 1
               </span>
-              <div className="w-0.5 h-full bg-slate-200 dark:bg-slate-800 mt-3 min-h-[40px]" />
+              <div className="w-0.5 h-full bg-white/10 mt-3 min-h-[40px]" />
             </div>
             <div className="flex-1 space-y-2">
-              <h3 className="text-base font-bold text-slate-900 dark:text-slate-100">
+              <h3 className="text-base font-bold text-white">
                 Wrap App with RecoveryProvider
               </h3>
-              <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-3">
+              <p className="text-sm text-white/60 leading-relaxed mb-3">
                 Initialize your preferred storage adapter (AsyncStorage, MMKV, or SecureStore) and wrap your root component tree:
               </p>
               <CodeBlock
@@ -246,16 +246,16 @@ export default function App() {
           {/* Step 2 */}
           <div className="flex gap-4 items-start">
             <div className="flex flex-col items-center">
-              <span className="w-7 h-7 rounded-lg bg-slate-900 text-white dark:bg-sky-500 dark:text-slate-950 font-bold font-mono text-xs flex items-center justify-center shrink-0">
+              <span className="w-7 h-7 rounded-lg bg-violet-500 text-white font-bold font-mono text-xs flex items-center justify-center shrink-0">
                 2
               </span>
-              <div className="w-0.5 h-full bg-slate-200 dark:bg-slate-800 mt-3 min-h-[40px]" />
+              <div className="w-0.5 h-full bg-white/10 mt-3 min-h-[40px]" />
             </div>
             <div className="flex-1 space-y-2">
-              <h3 className="text-base font-bold text-slate-900 dark:text-slate-100">
+              <h3 className="text-base font-bold text-white">
                 Checkpoint Journey State
               </h3>
-              <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-3">
+              <p className="text-sm text-white/60 leading-relaxed mb-3">
                 Use <code className="font-mono text-xs">useJourney</code> to checkpoint form values and navigation step transitions. Sensitive fields are excluded:
               </p>
               <CodeBlock
@@ -308,15 +308,15 @@ export function CheckoutScreen() {
           {/* Step 3 */}
           <div className="flex gap-4 items-start">
             <div className="flex flex-col items-center">
-              <span className="w-7 h-7 rounded-lg bg-slate-900 text-white dark:bg-sky-500 dark:text-slate-950 font-bold font-mono text-xs flex items-center justify-center shrink-0">
+              <span className="w-7 h-7 rounded-lg bg-violet-500 text-white font-bold font-mono text-xs flex items-center justify-center shrink-0">
                 3
               </span>
             </div>
             <div className="flex-1 space-y-2">
-              <h3 className="text-base font-bold text-slate-900 dark:text-slate-100">
+              <h3 className="text-base font-bold text-white">
                 Prompt Recovery on App Launch
               </h3>
-              <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-3">
+              <p className="text-sm text-white/60 leading-relaxed mb-3">
                 When the user returns to the app, <code className="font-mono text-xs">RecoveryBanner</code> or <code className="font-mono text-xs">useRecovery</code> checks for uncommitted checkpoints and prompts the user to resume:
               </p>
               <CodeBlock
@@ -354,12 +354,12 @@ export function HomeScreen({ navigation }) {
       {/* Engine Architecture Visualizer */}
       <section id="architecture-diagram" className="doc-section scroll-mt-24 mb-16 section-enter">
         <div className="mb-4">
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
             Engine Architecture &amp; Data Pipeline
           </h2>
         </div>
 
-        <p className="text-sm md:text-base text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
+        <p className="text-sm md:text-base text-white/60 leading-relaxed mb-6">
           Explore the five sequential stages of the recovery pipeline. Click each stage node below to inspect internal queuing, failure safety, and code implementation:
         </p>
 
@@ -369,12 +369,12 @@ export function HomeScreen({ navigation }) {
       {/* Write Serialization & Mutex */}
       <section id="write-serialization" className="doc-section scroll-mt-24 mb-16 section-enter">
         <div className="mb-4">
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
             Write Serialization &amp; Mutex Queue
           </h2>
         </div>
 
-        <p className="text-sm md:text-base text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
+        <p className="text-sm md:text-base text-white/60 leading-relaxed mb-6">
           When forms auto-save on rapid typing, asynchronous storage operations can resolve out of order due to OS scheduling and thread pool variations. <code className="font-mono text-xs">CheckpointManager</code> contains a lightweight per-journey Promise FIFO mutex queue guaranteeing that saves execute sequentially:
         </p>
 
@@ -395,7 +395,7 @@ export function HomeScreen({ navigation }) {
             <div className="text-sm font-bold text-slate-900 dark:text-white mb-1">
               Benchmarked Throughput Overhead
             </div>
-            <p className="text-xs md:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+            <p className="text-xs md:text-sm text-white/60 leading-relaxed">
               The promise mutex queue adds less than 0.1ms overhead per operation, delivering over 25,000 serialized operations per second in automated microbenchmarks.
             </p>
           </div>
@@ -405,12 +405,12 @@ export function HomeScreen({ navigation }) {
       {/* Atomic Snapshot Safety */}
       <section id="atomic-safety" className="doc-section scroll-mt-24 mb-16 section-enter">
         <div className="mb-4">
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
             Atomic Snapshot Preservation
           </h2>
         </div>
 
-        <p className="text-sm md:text-base text-slate-600 dark:text-slate-400 leading-relaxed">
+        <p className="text-sm md:text-base text-white/60 leading-relaxed">
           If a mobile device experiences sudden low storage disk exhaustion, OS sandbox permissions denial, or hardware power cut midway through writing a new checkpoint, <code className="font-mono text-xs">CheckpointManager</code> preserves the previously committed checkpoint in storage. It never leaves partial, truncated, or unparseable JSON on disk.
         </p>
       </section>
@@ -418,12 +418,12 @@ export function HomeScreen({ navigation }) {
       {/* FNV-1a Checksum Integrity */}
       <section id="checksum-integrity" className="doc-section scroll-mt-24 mb-16 section-enter">
         <div className="mb-4">
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
             32-Bit FNV-1a Checksum Integrity
           </h2>
         </div>
 
-        <p className="text-sm md:text-base text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
+        <p className="text-sm md:text-base text-white/60 leading-relaxed mb-6">
           Every stored checkpoint snapshot embeds an 8-character deterministic 32-bit Fowler–Noll–Vo (FNV-1a) hash computed across the serialized data payload. Upon restoration, <code className="font-mono text-xs">SnapshotValidator</code> recalculates the hash:
         </p>
 
@@ -445,12 +445,12 @@ if (snapshot.checksum !== computedChecksum) {
       {/* TTL Expiration Policies */}
       <section id="expiry-policies" className="doc-section scroll-mt-24 mb-16 section-enter">
         <div className="mb-4">
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
             TTL Expiration Policies
           </h2>
         </div>
 
-        <p className="text-sm md:text-base text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
+        <p className="text-sm md:text-base text-white/60 leading-relaxed mb-6">
           Prevent zombie sessions. Configure expiry either globally at the <code className="font-mono text-xs">RecoveryProvider</code> level or per journey:
         </p>
 
@@ -467,12 +467,12 @@ if (snapshot.checksum !== computedChecksum) {
       {/* Schema Version Migration */}
       <section id="schema-migration" className="doc-section scroll-mt-24 mb-16 section-enter">
         <div className="mb-4">
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
             Schema Version Migration
           </h2>
         </div>
 
-        <p className="text-sm md:text-base text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
+        <p className="text-sm md:text-base text-white/60 leading-relaxed mb-6">
           When deploying an app update with restructured field names or revised data contracts, older checkpoints saved on users&apos; devices are cleanly upgraded before restoration via the <code className="font-mono text-xs">migrate()</code> handler:
         </p>
 
@@ -503,17 +503,17 @@ const journey = useJourney<UserProfileV2>('user-profile', {
       {/* Storage Adapters */}
       <section id="storage-adapters" className="doc-section scroll-mt-24 mb-16 section-enter">
         <div className="mb-4">
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
             Storage Adapters
           </h2>
         </div>
 
-        <p className="text-sm md:text-base text-slate-600 dark:text-slate-400 leading-relaxed mb-8">
+        <p className="text-sm md:text-base text-white/60 leading-relaxed mb-8">
           <code className="font-mono text-xs">react-native-journey-recovery</code> decouples state lifecycle logic from storage implementations via the <code className="font-mono text-xs">StorageAdapter</code> interface:
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div id="storage-mmkv" className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 shadow-sm flex flex-col justify-between">
+          <div id="storage-mmkv" className="p-5 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm flex flex-col justify-between">
             <div className="mb-4">
               <span className="inline-block px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border border-cyan-500/20 mb-2">
                 HIGH SPEED
@@ -521,7 +521,7 @@ const journey = useJourney<UserProfileV2>('user-profile', {
               <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1.5">
                 MMKVStorageAdapter
               </h3>
-              <p className="text-xs md:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+              <p className="text-xs md:text-sm text-white/60 leading-relaxed">
                 Direct memory-mapped C++ storage backed by Tencent MMKV. Delivers sub-millisecond synchronous writes with negligible battery consumption.
               </p>
             </div>
@@ -540,7 +540,7 @@ const storage = new MMKVStorageAdapter(mmkv);
             />
           </div>
 
-          <div id="storage-secure" className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 shadow-sm flex flex-col justify-between">
+          <div id="storage-secure" className="p-5 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm flex flex-col justify-between">
             <div className="mb-4">
               <span className="inline-block px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 mb-2">
                 HARDWARE ENCRYPTED
@@ -548,7 +548,7 @@ const storage = new MMKVStorageAdapter(mmkv);
               <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1.5">
                 SecureStoreAdapter (Expo)
               </h3>
-              <p className="text-xs md:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+              <p className="text-xs md:text-sm text-white/60 leading-relaxed">
                 Hardware-backed security backed by iOS Keychain and Android Keystore. Includes automated chunking to prevent Android native 2048-byte Keystore buffer overflows.
               </p>
             </div>
@@ -569,7 +569,7 @@ const storage = new SecureStoreAdapter(SecureStore, {
             />
           </div>
 
-          <div id="storage-async" className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 shadow-sm flex flex-col justify-between">
+          <div id="storage-async" className="p-5 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm flex flex-col justify-between">
             <div className="mb-4">
               <span className="inline-block px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 mb-2">
                 STANDARD PERSISTENCE
@@ -577,7 +577,7 @@ const storage = new SecureStoreAdapter(SecureStore, {
               <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1.5">
                 AsyncStorageAdapter
               </h3>
-              <p className="text-xs md:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+              <p className="text-xs md:text-sm text-white/60 leading-relaxed">
                 Standard React Native persistent storage. Fully supported in Expo Go sandbox with zero native setup.
               </p>
             </div>
@@ -595,7 +595,7 @@ const storage = new AsyncStorageAdapter(AsyncStorage);
             />
           </div>
 
-          <div id="storage-memory" className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 shadow-sm flex flex-col justify-between">
+          <div id="storage-memory" className="p-5 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm flex flex-col justify-between">
             <div className="mb-4">
               <span className="inline-block px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20 mb-2">
                 EPHEMERAL TESTING
@@ -603,7 +603,7 @@ const storage = new AsyncStorageAdapter(AsyncStorage);
               <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1.5">
                 MemoryStorageAdapter
               </h3>
-              <p className="text-xs md:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+              <p className="text-xs md:text-sm text-white/60 leading-relaxed">
                 In-memory pure JavaScript Map adapter for Jest, Vitest, CI pipelines, and Storybook previews.
               </p>
             </div>
@@ -626,21 +626,21 @@ const storage = new MemoryStorageAdapter();`}
       {/* Navigation Adapters */}
       <section id="navigation-adapters" className="doc-section scroll-mt-24 mb-16 section-enter">
         <div className="mb-4">
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
             Navigation Adapters
           </h2>
         </div>
 
-        <p className="text-sm md:text-base text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
+        <p className="text-sm md:text-base text-white/60 leading-relaxed mb-6">
           Seamlessly restore active route stacks, nested screen parameters, and tab indices after an OS process crash:
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div id="nav-react-navigation" className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 shadow-sm">
+          <div id="nav-react-navigation" className="p-5 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm">
             <h3 className="text-base font-bold text-slate-900 dark:text-white mb-1.5">
               React Navigation Stack Adapter
             </h3>
-            <p className="text-xs md:text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+            <p className="text-xs md:text-sm text-white/60 leading-relaxed mb-4">
               Synchronizes route name, params, and history with the React Navigation container:
             </p>
             <CodeBlock
@@ -658,11 +658,11 @@ navAdapter.restoreNavigation(navContext, { resetStack: true });`}
             />
           </div>
 
-          <div id="nav-expo-router" className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 shadow-sm">
+          <div id="nav-expo-router" className="p-5 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm">
             <h3 className="text-base font-bold text-slate-900 dark:text-white mb-1.5">
               Expo Router File-Based Adapter
             </h3>
-            <p className="text-xs md:text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+            <p className="text-xs md:text-sm text-white/60 leading-relaxed mb-4">
               Restores file-based paths, segments, and search params in Expo Router:
             </p>
             <CodeBlock
@@ -686,12 +686,12 @@ adapter.restoreRoute(savedRouteContext, { mode: 'replace' });`}
       {/* Form & State Integrations */}
       <section id="form-integrations" className="doc-section scroll-mt-24 mb-16 section-enter">
         <div className="mb-4">
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
             Form &amp; State Integrations
           </h2>
         </div>
 
-        <p className="text-sm md:text-base text-slate-600 dark:text-slate-400 leading-relaxed mb-8">
+        <p className="text-sm md:text-base text-white/60 leading-relaxed mb-8">
           Pre-built hooks for the most popular React Native form and state libraries:
         </p>
 
@@ -700,7 +700,7 @@ adapter.restoreRoute(savedRouteContext, { mode: 'replace' });`}
             <h3 className="text-base font-bold text-slate-900 dark:text-white mb-1">
               1. React Hook Form (`useJourneyForm`)
             </h3>
-            <p className="text-xs md:text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-3">
+            <p className="text-xs md:text-sm text-white/60 leading-relaxed mb-3">
               Syncs dirty form state to storage automatically with debouncing and field exclusion:
             </p>
             <CodeBlock
@@ -790,7 +790,7 @@ const { hasSavedProgress, restoreToRedux } = useJourneyRedux(
             <h3 className="text-base font-bold text-slate-900 dark:text-white mb-1">
               5. TanStack Query Server Sync (`useJourneyQuery`)
             </h3>
-            <p className="text-xs md:text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-3">
+            <p className="text-xs md:text-sm text-white/60 leading-relaxed mb-3">
               Coordinates client checkpoint restoration with server-side query cache invalidation and refetching:
             </p>
             <CodeBlock
@@ -815,12 +815,12 @@ const { available, restoreAndRevalidate, discardAndReset } = useJourneyQuery('ch
       {/* Zod Validation */}
       <section id="validation-zod" className="doc-section scroll-mt-24 mb-16 section-enter">
         <div className="mb-4">
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
             Zod Runtime Schema Validation
           </h2>
         </div>
 
-        <p className="text-sm md:text-base text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
+        <p className="text-sm md:text-base text-white/60 leading-relaxed mb-6">
           Enforce strict runtime validation against stored payloads using <code className="font-mono text-xs">createZodValidator</code>. Checkpoints failing schema parsing are safely rejected:
         </p>
 
@@ -850,12 +850,12 @@ export function BookingWizard() {
       {/* Privacy & User Scoping */}
       <section id="security-privacy" className="doc-section scroll-mt-24 mb-16 section-enter">
         <div className="mb-4">
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
             Confidential Field Exclusions &amp; User Scoping
           </h2>
         </div>
 
-        <p className="text-sm md:text-base text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
+        <p className="text-sm md:text-base text-white/60 leading-relaxed mb-6">
           Never persist raw passwords, CVV codes, biometric credentials, or credit cards. Provide the <code className="font-mono text-xs">exclude</code> option:
         </p>
 
@@ -871,7 +871,7 @@ export function BookingWizard() {
           <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">
             User Identity Scoping (Shared Devices)
           </h3>
-          <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+          <p className="text-sm text-white/60 leading-relaxed mb-4">
             For apps used by multiple people on a single device, scope all checkpoints by user ID:
           </p>
           <CodeBlock
@@ -891,12 +891,12 @@ await checkpointManager.clearUserJourneys(currentUserId);`}
       {/* UI Components */}
       <section id="ui-components" className="doc-section scroll-mt-24 mb-16 section-enter">
         <div className="mb-4">
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
             Recovery UI Components
           </h2>
         </div>
 
-        <p className="text-sm md:text-base text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
+        <p className="text-sm md:text-base text-white/60 leading-relaxed mb-6">
           Accessible, drop-in UI components for workflow recovery prompts:
         </p>
 
@@ -949,12 +949,12 @@ await checkpointManager.clearUserJourneys(currentUserId);`}
       {/* CLI Tools */}
       <section id="cli-tools" className="doc-section scroll-mt-24 mb-16 section-enter">
         <div className="mb-4">
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
             CLI Diagnostic Tool &amp; CI Verification
           </h2>
         </div>
 
-        <p className="text-sm md:text-base text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
+        <p className="text-sm md:text-base text-white/60 leading-relaxed mb-6">
           Inspect exported checkpoint snapshots, verify FNV-1a checksums, test TTL expiration, and automate integrity testing in CI:
         </p>
 
@@ -975,12 +975,12 @@ npx journey-recovery checksum '{"step":2,"name":"Alex"}'`}
       {/* Testing Utilities */}
       <section id="testing-utilities" className="doc-section scroll-mt-24 mb-16 section-enter">
         <div className="mb-4">
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
             Testing Utilities
           </h2>
         </div>
 
-        <p className="text-sm md:text-base text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
+        <p className="text-sm md:text-base text-white/60 leading-relaxed mb-6">
           Write lightning-fast unit tests using <code className="font-mono text-xs">initTestRecoveryEnvironment</code> with MemoryStorageAdapter:
         </p>
 
@@ -1018,19 +1018,19 @@ it('detects and recovers saved draft session', async () => {
       {/* API Reference */}
       <section id="api-reference" className="doc-section scroll-mt-24 mb-16 section-enter">
         <div className="mb-4">
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
             API Reference &amp; Error Contracts
           </h2>
         </div>
 
-        <p className="text-sm md:text-base text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
+        <p className="text-sm md:text-base text-white/60 leading-relaxed mb-6">
           Complete interface contracts, return values, options, and error codes:
         </p>
 
-        <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 overflow-x-auto shadow-sm mb-8">
+        <div className="rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm overflow-x-auto mb-8">
           <table className="w-full text-left text-xs md:text-sm border-collapse min-w-[720px]">
             <thead>
-              <tr className="border-b border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-900/80 text-slate-600 dark:text-slate-400 font-semibold text-[11px] uppercase tracking-wider">
+              <tr className="border-b border-white/10 bg-white/5 text-white/40 font-semibold text-[11px] uppercase tracking-wider">
                 <th className="py-3 px-4">Hook / Method / Component</th>
                 <th className="py-3 px-4">Signature / Props</th>
                 <th className="py-3 px-4">Description</th>
@@ -1040,42 +1040,42 @@ it('detects and recovers saved draft session', async () => {
               <tr className="hover:bg-slate-50/50 dark:hover:bg-slate-900/40">
                 <td className="py-3 px-4 font-mono text-cyan-600 dark:text-cyan-400 font-bold whitespace-nowrap"><code>useJourney&lt;T&gt;(id, options)</code></td>
                 <td className="py-3 px-4 font-mono text-xs text-slate-500 whitespace-nowrap"><code>(id: string, options?: JourneyOptions) =&gt; JourneyHandle&lt;T&gt;</code></td>
-                <td className="py-3 px-4 text-slate-600 dark:text-slate-400">Manages active journey checkpointing, auto-save debounce, and field exclusions.</td>
+                <td className="py-3 px-4 text-white/60">Manages active journey checkpointing, auto-save debounce, and field exclusions.</td>
               </tr>
               <tr className="hover:bg-slate-50/50 dark:hover:bg-slate-900/40">
                 <td className="py-3 px-4 font-mono text-cyan-600 dark:text-cyan-400 font-bold whitespace-nowrap"><code>useRecovery&lt;T&gt;(id)</code></td>
                 <td className="py-3 px-4 font-mono text-xs text-slate-500 whitespace-nowrap"><code>(id: string) =&gt; RecoveryHandle&lt;T&gt;</code></td>
-                <td className="py-3 px-4 text-slate-600 dark:text-slate-400">Detects eligible uncommitted checkpoints for restoration or discard.</td>
+                <td className="py-3 px-4 text-white/60">Detects eligible uncommitted checkpoints for restoration or discard.</td>
               </tr>
               <tr className="hover:bg-slate-50/50 dark:hover:bg-slate-900/40">
                 <td className="py-3 px-4 font-mono text-cyan-600 dark:text-cyan-400 font-bold whitespace-nowrap"><code>useJourneyForm(id, form, options)</code></td>
                 <td className="py-3 px-4 font-mono text-xs text-slate-500 whitespace-nowrap"><code>(id: string, form: UseFormReturn, options?: FormOptions)</code></td>
-                <td className="py-3 px-4 text-slate-600 dark:text-slate-400">React Hook Form two-way integration with dirty-tracking and draft resume.</td>
+                <td className="py-3 px-4 text-white/60">React Hook Form two-way integration with dirty-tracking and draft resume.</td>
               </tr>
               <tr className="hover:bg-slate-50/50 dark:hover:bg-slate-900/40">
                 <td className="py-3 px-4 font-mono text-cyan-600 dark:text-cyan-400 font-bold whitespace-nowrap"><code>RecoveryBanner</code></td>
                 <td className="py-3 px-4 font-mono text-xs text-slate-500 whitespace-nowrap"><code>{`{ journeyId, onResume, onDiscard, title? }`}</code></td>
-                <td className="py-3 px-4 text-slate-600 dark:text-slate-400">Drop-in accessible notification banner prompting user to resume draft.</td>
+                <td className="py-3 px-4 text-white/60">Drop-in accessible notification banner prompting user to resume draft.</td>
               </tr>
               <tr className="hover:bg-slate-50/50 dark:hover:bg-slate-900/40">
                 <td className="py-3 px-4 font-mono text-cyan-600 dark:text-cyan-400 font-bold whitespace-nowrap"><code>RecoveryModal</code></td>
                 <td className="py-3 px-4 font-mono text-xs text-slate-500 whitespace-nowrap"><code>{`{ journeyId, onResume, onDiscard, title? }`}</code></td>
-                <td className="py-3 px-4 text-slate-600 dark:text-slate-400">Focused modal dialog with frosted background blur for workflow resumption.</td>
+                <td className="py-3 px-4 text-white/60">Focused modal dialog with frosted background blur for workflow resumption.</td>
               </tr>
               <tr className="hover:bg-slate-50/50 dark:hover:bg-slate-900/40">
                 <td className="py-3 px-4 font-mono text-cyan-600 dark:text-cyan-400 font-bold whitespace-nowrap"><code>RecoveryBottomSheet</code></td>
                 <td className="py-3 px-4 font-mono text-xs text-slate-500 whitespace-nowrap"><code>{`{ journeyId, onResume, onDiscard, title? }`}</code></td>
-                <td className="py-3 px-4 text-slate-600 dark:text-slate-400">Mobile slide-up bottom sheet with gesture drag handle.</td>
+                <td className="py-3 px-4 text-white/60">Mobile slide-up bottom sheet with gesture drag handle.</td>
               </tr>
               <tr className="hover:bg-slate-50/50 dark:hover:bg-slate-900/40">
                 <td className="py-3 px-4 font-mono text-cyan-600 dark:text-cyan-400 font-bold whitespace-nowrap"><code>createZodValidator(schema)</code></td>
                 <td className="py-3 px-4 font-mono text-xs text-slate-500 whitespace-nowrap"><code>(schema: ZodSchema) =&gt; ValidatorFn</code></td>
-                <td className="py-3 px-4 text-slate-600 dark:text-slate-400">Runtime schema validator rejecting malformed or invalid restored states.</td>
+                <td className="py-3 px-4 text-white/60">Runtime schema validator rejecting malformed or invalid restored states.</td>
               </tr>
               <tr className="hover:bg-slate-50/50 dark:hover:bg-slate-900/40">
                 <td className="py-3 px-4 font-mono text-cyan-600 dark:text-cyan-400 font-bold whitespace-nowrap"><code>computeChecksum(payload)</code></td>
                 <td className="py-3 px-4 font-mono text-xs text-slate-500 whitespace-nowrap"><code>(payload: string) =&gt; string</code></td>
-                <td className="py-3 px-4 text-slate-600 dark:text-slate-400">Computes 8-character deterministic 32-bit FNV-1a hex checksum hash.</td>
+                <td className="py-3 px-4 text-white/60">Computes 8-character deterministic 32-bit FNV-1a hex checksum hash.</td>
               </tr>
             </tbody>
           </table>
@@ -1086,10 +1086,10 @@ it('detects and recovers saved draft session', async () => {
           <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-3">
             Engine Error Codes
           </h3>
-          <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 overflow-x-auto shadow-sm">
+          <div className="rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm overflow-x-auto">
             <table className="w-full text-left text-xs md:text-sm border-collapse min-w-[640px]">
               <thead>
-                <tr className="border-b border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-900/80 text-slate-600 dark:text-slate-400 font-semibold text-[11px] uppercase tracking-wider">
+                <tr className="border-b border-white/10 bg-white/5 text-white/40 font-semibold text-[11px] uppercase tracking-wider">
                   <th className="py-3 px-4">Error Code</th>
                   <th className="py-3 px-4">Trigger Condition</th>
                   <th className="py-3 px-4">Engine Response</th>
@@ -1098,23 +1098,23 @@ it('detects and recovers saved draft session', async () => {
               <tbody className="divide-y divide-slate-100 dark:divide-slate-800/80">
                 <tr className="hover:bg-slate-50/50 dark:hover:bg-slate-900/40">
                   <td className="py-3 px-4 font-mono font-bold text-rose-500 whitespace-nowrap"><code>CORRUPTED_STORAGE_REJECTED</code></td>
-                  <td className="py-3 px-4 text-slate-600 dark:text-slate-400">Computed FNV-1a checksum does not match stored hash.</td>
-                  <td className="py-3 px-4 text-slate-800 dark:text-slate-200">Restoration blocked. Throws error or triggers error prompt.</td>
+                  <td className="py-3 px-4 text-white/60">Computed FNV-1a checksum does not match stored hash.</td>
+                  <td className="py-3 px-4 text-slate-800 text-white/70">Restoration blocked. Throws error or triggers error prompt.</td>
                 </tr>
                 <tr className="hover:bg-slate-50/50 dark:hover:bg-slate-900/40">
                   <td className="py-3 px-4 font-mono font-bold text-amber-500 whitespace-nowrap"><code>SESSION_EXPIRED</code></td>
-                  <td className="py-3 px-4 text-slate-600 dark:text-slate-400">Current timestamp exceeds snapshot <code>expiresAt</code>.</td>
-                  <td className="py-3 px-4 text-slate-800 dark:text-slate-200">Checkpoint automatically purged from storage.</td>
+                  <td className="py-3 px-4 text-white/60">Current timestamp exceeds snapshot <code>expiresAt</code>.</td>
+                  <td className="py-3 px-4 text-slate-800 text-white/70">Checkpoint automatically purged from storage.</td>
                 </tr>
                 <tr className="hover:bg-slate-50/50 dark:hover:bg-slate-900/40">
                   <td className="py-3 px-4 font-mono font-bold text-purple-500 whitespace-nowrap"><code>SCHEMA_VALIDATION_FAILED</code></td>
-                  <td className="py-3 px-4 text-slate-600 dark:text-slate-400">Payload fails Zod or custom validator check.</td>
-                  <td className="py-3 px-4 text-slate-800 dark:text-slate-200">Restoration rejected to protect component integrity.</td>
+                  <td className="py-3 px-4 text-white/60">Payload fails Zod or custom validator check.</td>
+                  <td className="py-3 px-4 text-slate-800 text-white/70">Restoration rejected to protect component integrity.</td>
                 </tr>
                 <tr className="hover:bg-slate-50/50 dark:hover:bg-slate-900/40">
                   <td className="py-3 px-4 font-mono font-bold text-cyan-500 whitespace-nowrap"><code>STORAGE_WRITE_FAILED</code></td>
-                  <td className="py-3 px-4 text-slate-600 dark:text-slate-400">Storage adapter throws disk quota / IO error.</td>
-                  <td className="py-3 px-4 text-slate-800 dark:text-slate-200">Prior committed checkpoint preserved untouched.</td>
+                  <td className="py-3 px-4 text-white/60">Storage adapter throws disk quota / IO error.</td>
+                  <td className="py-3 px-4 text-slate-800 text-white/70">Prior committed checkpoint preserved untouched.</td>
                 </tr>
               </tbody>
             </table>
@@ -1127,7 +1127,7 @@ it('detects and recovers saved draft session', async () => {
             href="https://github.com/Imdvlpr99/react-native-journey-recovery/blob/master/docs/adr/0001-pure-typescript-core.md"
             target="_blank"
             rel="noreferrer"
-            className="group p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 hover:border-cyan-500/50 transition-all flex items-start gap-3 shadow-sm hover:shadow"
+            className="group p-4 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm hover:border-violet-400/40 transition-all flex items-start gap-3"
           >
             <div className="text-xl p-2 rounded-lg bg-cyan-500/10 shrink-0">🏛️</div>
             <div className="flex-1">
@@ -1135,7 +1135,7 @@ it('detects and recovers saved draft session', async () => {
                 <span>ADR 0001: Pure TypeScript Core</span>
                 <IconExternalLink size={12} className="opacity-0 group-hover:opacity-100 transition-opacity" />
               </div>
-              <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
+              <p className="text-[11px] text-white/50 mt-1 leading-relaxed">
                 Zero native binaries, universal Expo Go compatibility, and zero-linkage overhead.
               </p>
             </div>
@@ -1145,7 +1145,7 @@ it('detects and recovers saved draft session', async () => {
             href="https://github.com/Imdvlpr99/react-native-journey-recovery/blob/master/docs/adr/0002-storage-adapter-architecture.md"
             target="_blank"
             rel="noreferrer"
-            className="group p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 hover:border-emerald-500/50 transition-all flex items-start gap-3 shadow-sm hover:shadow"
+            className="group p-4 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm hover:border-violet-400/40 transition-all flex items-start gap-3"
           >
             <div className="text-xl p-2 rounded-lg bg-emerald-500/10 shrink-0">🏛️</div>
             <div className="flex-1">
@@ -1153,7 +1153,7 @@ it('detects and recovers saved draft session', async () => {
                 <span>ADR 0002: Storage Adapter Architecture</span>
                 <IconExternalLink size={12} className="opacity-0 group-hover:opacity-100 transition-opacity" />
               </div>
-              <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
+              <p className="text-[11px] text-white/50 mt-1 leading-relaxed">
                 Decoupled adapter interfaces for AsyncStorage, MMKV, and hardware-chunked SecureStore.
               </p>
             </div>
@@ -1163,7 +1163,7 @@ it('detects and recovers saved draft session', async () => {
             href="https://github.com/Imdvlpr99/react-native-journey-recovery/blob/master/docs/adr/0003-write-serialization-and-atomic-failure-safety.md"
             target="_blank"
             rel="noreferrer"
-            className="group p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 hover:border-indigo-500/50 transition-all flex items-start gap-3 shadow-sm hover:shadow"
+            className="group p-4 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm hover:border-violet-400/40 transition-all flex items-start gap-3"
           >
             <div className="text-xl p-2 rounded-lg bg-indigo-500/10 shrink-0">🏛️</div>
             <div className="flex-1">
@@ -1171,7 +1171,7 @@ it('detects and recovers saved draft session', async () => {
                 <span>ADR 0003: Write Serialization &amp; Mutex</span>
                 <IconExternalLink size={12} className="opacity-0 group-hover:opacity-100 transition-opacity" />
               </div>
-              <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
+              <p className="text-[11px] text-white/50 mt-1 leading-relaxed">
                 Per-journey Promise FIFO queue eliminating race conditions and providing atomic failure safety.
               </p>
             </div>

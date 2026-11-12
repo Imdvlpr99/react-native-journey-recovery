@@ -38,11 +38,11 @@ interface TableOfContentsProps {
 export const TableOfContents: React.FC<TableOfContentsProps> = ({ activeId, onSelect }) => {
   return (
     <aside className="hidden xl:block w-56 shrink-0 sticky top-20 max-h-[calc(100vh-6rem)] overflow-y-auto space-y-4 text-xs pr-2">
-      <div className="text-[11px] font-semibold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3">
+      <div className="text-[11px] font-semibold uppercase tracking-widest text-white/30 mb-3">
         On This Page
       </div>
 
-      <nav className="flex flex-col space-y-1 border-l border-slate-200 dark:border-slate-800/80">
+      <nav className="flex flex-col space-y-1 border-l border-white/10">
         {TOC_SECTIONS.map((item) => {
           const isActive = activeId === item.id;
           return (
@@ -59,8 +59,8 @@ export const TableOfContents: React.FC<TableOfContentsProps> = ({ activeId, onSe
               }}
               className={`block pl-3 py-1 transition-colors ${
                 isActive
-                  ? 'text-sky-600 dark:text-sky-400 font-semibold border-l-2 -ml-[2px] border-sky-500'
-                  : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200'
+                  ? 'text-violet-300 font-semibold border-l-2 -ml-[2px] border-violet-500'
+                  : 'text-white/40 hover:text-white/80'
               }`}
             >
               {item.label}
@@ -69,12 +69,12 @@ export const TableOfContents: React.FC<TableOfContentsProps> = ({ activeId, onSe
         })}
       </nav>
 
-      <div className="pt-4 border-t border-slate-200 dark:border-slate-800/80 space-y-2">
+      <div className="pt-4 border-t border-white/10 space-y-2">
         <a
           href="https://github.com/Imdvlpr99/react-native-journey-recovery"
           target="_blank"
           rel="noreferrer"
-          className="flex items-center gap-2 text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200 transition-colors"
+          className="flex items-center gap-2 text-white/40 hover:text-violet-300 transition-colors"
         >
           <IconGithub size={13} />
           <span>Star on GitHub</span>
@@ -84,7 +84,7 @@ export const TableOfContents: React.FC<TableOfContentsProps> = ({ activeId, onSe
           href="https://github.com/Imdvlpr99/react-native-journey-recovery/issues"
           target="_blank"
           rel="noreferrer"
-          className="flex items-center gap-2 text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200 transition-colors"
+          className="flex items-center gap-2 text-white/40 hover:text-violet-300 transition-colors"
         >
           <span>Report an issue</span>
           <IconExternalLink size={11} className="opacity-60" />

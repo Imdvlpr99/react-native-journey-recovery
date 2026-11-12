@@ -25,38 +25,63 @@
 */
 
 /* ==========================================================================
-   BASE & THEME VARIABLES (MINIMALIST, PROFESSIONAL, ELEVATED)
+   BASE & THEME VARIABLES — GLASSMORPHISM MESH
    ========================================================================== */
 :root {
-  --bg-page: #080b11;
-  --bg-surface: #0e131f;
-  --bg-card: rgba(14, 19, 31, 0.75);
-  --border-color: rgba(30, 41, 59, 0.75);
-  --border-subtle: rgba(255, 255, 255, 0.08);
-  --text-main: #f8fafc;
-  --text-muted: #94a3b8;
-  --code-bg: #030712;
+  /* Gradient mesh background */
+  --bg-gradient: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+  --bg-page: #0f0c29;
+  --bg-surface: rgba(255, 255, 255, 0.04);
+  --bg-card: rgba(255, 255, 255, 0.05);
+  --border-color: rgba(255, 255, 255, 0.10);
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --text-main: #f1f0ff;
+  --text-muted: #a09dc0;
+  --code-bg: rgba(0, 0, 0, 0.35);
+  /* Violet accent system */
   --accent-sky: #38bdf8;
-  --accent-glow: rgba(56, 189, 248, 0.12);
+  --accent-violet: #8b5cf6;
+  --accent-violet-light: #a78bfa;
+  --accent-violet-subtle: #c4b5fd;
+  --accent-violet-deep: #7c3aed;
+  --accent-glow: rgba(139, 92, 246, 0.18);
+  --accent-glow-violet: rgba(139, 92, 246, 0.18);
+  /* Glass surface tokens */
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-bg-hover: rgba(255, 255, 255, 0.09);
+  --glass-border: rgba(255, 255, 255, 0.10);
+  --glass-border-hover: rgba(255, 255, 255, 0.20);
 }
 
 [data-theme="light"], .light {
-  --bg-page: #fafbfc;
-  --bg-surface: #ffffff;
-  --bg-card: rgba(255, 255, 255, 0.95);
-  --border-color: rgba(226, 232, 240, 0.9);
+  --bg-gradient: linear-gradient(135deg, #ede9fe 0%, #e0d7ff 40%, #f5f0ff 100%);
+  --bg-page: #ede9fe;
+  --bg-surface: rgba(255, 255, 255, 0.70);
+  --bg-card: rgba(255, 255, 255, 0.75);
+  --border-color: rgba(139, 92, 246, 0.15);
   --border-subtle: rgba(0, 0, 0, 0.06);
-  --text-main: #0f172a;
-  --text-muted: #475569;
-  --code-bg: #0f172a;
+  --text-main: #1e1245;
+  --text-muted: #5b4f8a;
+  --code-bg: rgba(26, 15, 60, 0.07);
   --accent-sky: #0284c7;
-  --accent-glow: rgba(2, 132, 199, 0.08);
+  --accent-violet: #7c3aed;
+  --accent-violet-light: #8b5cf6;
+  --accent-violet-subtle: #a78bfa;
+  --accent-violet-deep: #6d28d9;
+  --accent-glow: rgba(124, 58, 237, 0.10);
+  --accent-glow-violet: rgba(124, 58, 237, 0.10);
+  --glass-bg: rgba(255, 255, 255, 0.60);
+  --glass-bg-hover: rgba(255, 255, 255, 0.80);
+  --glass-border: rgba(139, 92, 246, 0.18);
+  --glass-border-hover: rgba(139, 92, 246, 0.30);
 }
 
 html {
   scroll-behavior: smooth;
   font-family: var(--font-sans);
-  background-color: var(--bg-page);
+  min-height: 100%;
+  background: var(--bg-gradient);
+  background-attachment: fixed;
   color: var(--text-main);
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -68,10 +93,10 @@ body {
   margin: 0;
   padding: 0;
   overflow-x: hidden;
-  background-color: var(--bg-page);
+  background: transparent;
   color: var(--text-main);
   font-family: var(--font-sans);
-  transition: background-color 150ms ease, color 150ms ease;
+  transition: color 150ms ease;
 }
 
 button,
@@ -89,7 +114,7 @@ button:active:not(:disabled) {
 
 /* Accessible focus outline */
 :focus-visible {
-  outline: 2px solid var(--accent-sky);
+  outline: 2px solid var(--accent-violet);
   outline-offset: 2px;
 }
 
