@@ -2,9 +2,10 @@ import React from 'react';
 import { CodeBlock } from './CodeBlock';
 import { ArchitectureVisualizer } from './ArchitectureVisualizer';
 import { StorageComparison } from './StorageComparison';
+import { Callout } from './Callout';
 import {
   IconCheck, IconShield, IconZap, IconDatabase,
-  IconLock, IconAlertTriangle, IconExternalLink
+  IconLock, IconExternalLink
 } from './Icons';
 
 export const Sections: React.FC<{ activeId?: string }> = ({ activeId }) => {
@@ -94,17 +95,9 @@ export const Sections: React.FC<{ activeId?: string }> = ({ activeId }) => {
         </p>
 
         {/* Warning Callout */}
-        <div className="p-4 rounded-xl border border-amber-200 dark:border-amber-900/50 bg-amber-50/60 dark:bg-amber-950/20 flex items-start gap-3 mb-6">
-          <IconAlertTriangle size={18} className="text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
-          <div className="space-y-1">
-            <div className="text-xs font-bold text-amber-900 dark:text-amber-200">
-              The Danger of Whole-Store Dumps
-            </div>
-            <p className="text-xs text-amber-800 dark:text-amber-300/80 leading-relaxed">
-              Whole-store dumps inadvertently persist sensitive authentication tokens, confidential credit card numbers, stale backend pricing, and temporary UI toggles. Furthermore, rapid keystrokes trigger concurrent async disk writes that resolve out of order, overwriting newer state with older snapshots.
-            </p>
-          </div>
-        </div>
+        <Callout type="warning" title="The Danger of Whole-Store Dumps" className="mb-6">
+          Whole-store dumps inadvertently persist sensitive authentication tokens, confidential credit card numbers, stale backend pricing, and temporary UI toggles. Furthermore, rapid keystrokes trigger concurrent async disk writes that resolve out of order, overwriting newer state with older snapshots.
+        </Callout>
 
         {/* Comparison Table */}
         <div className="rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm overflow-x-auto">

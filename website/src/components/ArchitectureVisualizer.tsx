@@ -183,17 +183,17 @@ export const ArchitectureVisualizer: React.FC = () => {
   };
 
   return (
-    <div className="my-6 rounded-xl border border-slate-200/90 dark:border-slate-800/80 bg-white dark:bg-slate-900/40 p-5 md:p-6 space-y-6 shadow-xs">
+    <div className="rounded-xl border border-white/10 bg-white/[0.03] p-5 md:p-6 space-y-5">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-2 border-b border-slate-100 dark:border-slate-800/80">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-white/8">
         <div>
-          <div className="text-[11px] font-mono font-semibold text-sky-600 dark:text-sky-400 uppercase tracking-wider mb-0.5">
+          <div className="text-[11px] font-mono font-semibold text-violet-400 uppercase tracking-wider mb-0.5">
             System Blueprint &amp; Data Pipeline
           </div>
-          <h3 className="text-xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+          <h3 className="text-lg font-bold tracking-tight text-white">
             Lifecycle &amp; Write Pipeline
           </h3>
-          <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5">
+          <p className="text-xs text-white/50 mt-0.5">
             Inspect concurrency serialization, failure safety, and state transformation step-by-step:
           </p>
         </div>
@@ -203,18 +203,18 @@ export const ArchitectureVisualizer: React.FC = () => {
           <button
             type="button"
             onClick={handlePrev}
-            className="px-2.5 py-1 rounded-lg border border-slate-200 dark:border-slate-800 text-xs font-medium text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200 bg-slate-50 dark:bg-slate-800/60 cursor-pointer"
+            className="px-2.5 py-1 rounded-lg border border-white/10 text-xs font-medium text-white/50 hover:text-white bg-white/5 hover:bg-white/8 cursor-pointer transition-colors"
             title="Previous Stage"
           >
             ← Prev
           </button>
-          <span className="text-xs font-mono font-semibold text-slate-500">
+          <span className="text-xs font-mono font-semibold text-white/40">
             {activeStageIdx + 1} / {STAGES.length}
           </span>
           <button
             type="button"
             onClick={handleNext}
-            className="px-2.5 py-1 rounded-lg border border-slate-200 dark:border-slate-800 text-xs font-medium text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200 bg-slate-50 dark:bg-slate-800/60 cursor-pointer"
+            className="px-2.5 py-1 rounded-lg border border-white/10 text-xs font-medium text-white/50 hover:text-white bg-white/5 hover:bg-white/8 cursor-pointer transition-colors"
             title="Next Stage"
           >
             Next →
@@ -233,28 +233,28 @@ export const ArchitectureVisualizer: React.FC = () => {
                 onClick={() => setActiveStageIdx(idx)}
                 className={`flex-1 min-w-[150px] text-left p-3 rounded-xl border transition-all cursor-pointer ${
                   isSelected
-                    ? 'border-sky-500 bg-sky-50/60 dark:bg-slate-800/90 dark:border-sky-500 shadow-xs'
-                    : 'border-slate-200/90 dark:border-slate-800/80 bg-slate-50/70 dark:bg-slate-900/50 hover:border-slate-300 dark:hover:border-slate-700'
+                    ? 'border-violet-500/60 bg-violet-500/15'
+                    : 'border-white/8 bg-white/[0.03] hover:border-white/15 hover:bg-white/8'
                 }`}
               >
                 <div className="flex items-center justify-between mb-1.5">
-                  <span className={`text-[11px] font-mono font-bold ${isSelected ? 'text-sky-600 dark:text-sky-400' : 'text-slate-400 dark:text-slate-500'}`}>
+                  <span className={`text-[11px] font-mono font-bold ${isSelected ? 'text-violet-400' : 'text-white/30'}`}>
                     {stage.number}
                   </span>
-                  <span className={`p-1 rounded ${isSelected ? 'text-sky-600 dark:text-sky-400' : 'text-slate-500 dark:text-slate-400'}`}>
+                  <span className={`p-1 rounded ${isSelected ? 'text-violet-400' : 'text-white/40'}`}>
                     {stage.icon}
                   </span>
                 </div>
-                <div className="text-xs font-bold text-slate-900 dark:text-slate-100 truncate">
+                <div className="text-xs font-bold text-white truncate">
                   {stage.name}
                 </div>
-                <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5 truncate">
+                <div className="text-[10px] text-white/40 mt-0.5 truncate">
                   {stage.badge}
                 </div>
               </button>
 
               {idx < STAGES.length - 1 && (
-                <div className="hidden lg:flex items-center justify-center text-slate-300 dark:text-slate-700 px-0.5 select-none text-xs">
+                <div className="hidden lg:flex items-center justify-center text-white/15 px-0.5 select-none text-xs">
                   →
                 </div>
               )}
@@ -264,21 +264,21 @@ export const ArchitectureVisualizer: React.FC = () => {
       </div>
 
       {/* Selected Stage Detail Panel */}
-      <div className="rounded-xl border border-slate-200/90 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-950/60 p-5 space-y-6">
+      <div className="rounded-xl border border-white/8 bg-black/20 p-5 space-y-6">
         {/* Stage Header Info */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-4 border-b border-slate-200/80 dark:border-slate-800/80">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-4 border-b border-white/8">
           <div className="flex items-center gap-3">
-            <span className="p-2.5 rounded-xl bg-sky-50 dark:bg-sky-950/60 text-sky-600 dark:text-sky-400 border border-sky-200 dark:border-sky-900/60">
+            <span className="p-2.5 rounded-xl bg-violet-500/15 text-violet-400 border border-violet-400/25">
               {activeStage.icon}
             </span>
             <div>
-              <div className="text-[11px] font-mono font-semibold text-sky-600 dark:text-sky-400 uppercase tracking-wider">
+              <div className="text-[11px] font-mono font-semibold text-violet-400 uppercase tracking-wider">
                 STAGE {activeStage.number} · {activeStage.badge}
               </div>
-              <h4 className="text-base font-bold text-slate-900 dark:text-slate-100">
+              <h4 className="text-base font-bold text-white">
                 {activeStage.name}
               </h4>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
+              <p className="text-xs text-white/50">
                 {activeStage.shortDesc}
               </p>
             </div>
@@ -290,13 +290,13 @@ export const ArchitectureVisualizer: React.FC = () => {
           {/* Left Column (5 cols) */}
           <div className="lg:col-span-5 space-y-4">
             <div>
-              <div className="text-xs font-semibold text-slate-900 dark:text-slate-200 mb-2.5">
+              <div className="text-xs font-semibold text-white mb-2.5">
                 Primary Responsibilities
               </div>
               <ul className="space-y-2">
                 {activeStage.responsibilities.map((resp, i) => (
-                  <li key={i} className="flex items-start gap-2 text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                    <span className="text-sky-600 dark:text-sky-400 mt-0.5 shrink-0">
+                  <li key={i} className="flex items-start gap-2 text-xs text-white/60 leading-relaxed">
+                    <span className="text-violet-400 mt-0.5 shrink-0">
                       <IconCheck size={13} />
                     </span>
                     <span>{resp}</span>
@@ -305,12 +305,12 @@ export const ArchitectureVisualizer: React.FC = () => {
               </ul>
             </div>
 
-            <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 space-y-1">
-              <div className="text-[11px] font-bold text-slate-900 dark:text-slate-200 flex items-center gap-1.5">
-                <IconShield size={13} className="text-emerald-500" />
+            <div className="p-3.5 rounded-xl border border-white/8 bg-white/5 space-y-1">
+              <div className="text-[11px] font-bold text-white flex items-center gap-1.5">
+                <IconShield size={13} className="text-emerald-400" />
                 <span>Failure &amp; Exception Handling</span>
               </div>
-              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+              <p className="text-xs text-white/60 leading-relaxed">
                 {activeStage.failureProtection}
               </p>
             </div>
@@ -319,27 +319,27 @@ export const ArchitectureVisualizer: React.FC = () => {
           {/* Right Column (7 cols): Data Packet Transformation + Code */}
           <div className="lg:col-span-7 space-y-4">
             {/* Live Data Packet Inspector */}
-            <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/80 overflow-hidden">
-              <div className="flex items-center justify-between px-3 py-2 border-b border-slate-100 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-900">
-                <span className="text-[11px] font-mono font-semibold text-sky-600 dark:text-sky-400 uppercase">
+            <div className="rounded-xl border border-white/8 overflow-hidden">
+              <div className="flex items-center justify-between px-3 py-2 border-b border-white/8 bg-white/5">
+                <span className="text-[11px] font-mono font-semibold text-violet-400 uppercase">
                   Data State: {activeStage.dataTransformTitle}
                 </span>
-                <span className="text-[10px] font-mono text-slate-400">STAGE {activeStage.number}</span>
+                <span className="text-[10px] font-mono text-white/30">STAGE {activeStage.number}</span>
               </div>
-              <pre className="p-3 text-xs font-mono text-slate-800 dark:text-sky-200 overflow-x-auto leading-relaxed bg-slate-50/30 dark:bg-[#060910]">
+              <pre className="p-3 text-xs font-mono text-violet-200/80 overflow-x-auto leading-relaxed bg-[#0d0b1e]">
                 <code>{activeStage.dataTransformContent}</code>
               </pre>
             </div>
 
             {/* Implementation Code */}
-            <div className="rounded-xl border border-slate-800/80 bg-[#060910] overflow-hidden">
-              <div className="flex items-center justify-between px-3 py-2 border-b border-slate-800/80 bg-slate-900/60">
-                <span className="text-[11px] font-mono font-medium text-slate-300">
+            <div className="rounded-xl border border-white/8 overflow-hidden">
+              <div className="flex items-center justify-between px-3 py-2 border-b border-white/8 bg-white/5">
+                <span className="text-[11px] font-mono font-medium text-white/60">
                   Implementation Details
                 </span>
-                <span className="text-[10px] font-mono uppercase text-slate-500">TypeScript</span>
+                <span className="text-[10px] font-mono uppercase text-white/40">TypeScript</span>
               </div>
-              <pre className="p-3 font-mono text-xs text-slate-200 overflow-x-auto leading-relaxed">
+              <pre className="p-3 font-mono text-xs text-white/80 overflow-x-auto leading-relaxed bg-[#060910]">
                 <code>{activeStage.codeSnippet}</code>
               </pre>
             </div>

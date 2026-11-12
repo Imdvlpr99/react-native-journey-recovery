@@ -140,7 +140,7 @@ export const App: React.FC = () => {
           />
 
           <main className="flex-1 min-w-0">
-            <div className="max-w-3xl mx-auto px-5 sm:px-8 py-8">
+            <div className="max-w-4xl mx-auto px-5 sm:px-8 py-10">
               <Breadcrumb activeId={activeId} />
               <Sections activeId={activeId} />
               <PrevNext activeId={activeId} onNavigate={navigateToSection} />
