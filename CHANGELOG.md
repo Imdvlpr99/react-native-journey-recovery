@@ -56,4 +56,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Bare React Native KYC identity verification with user identity scoping (`examples/bare-react-native`).
   - Architecture Decision Records (`docs/adr/0001`, `docs/adr/0002`, `docs/adr/0003`).
   - Full API reference (`docs/api-reference.md`).
-  - GitHub Actions Node.js matrix CI (18.x, 20.x, 22.x) and GitHub Pages deployment workflow.
+  - GitHub Actions Node.js matrix CI (20.x, 22.x) and GitHub Pages deployment workflow.

@@ -7,9 +7,12 @@ import {
   IconLock, IconAlertTriangle, IconExternalLink
 } from './Icons';
 
-export const Sections: React.FC = () => {
+export const Sections: React.FC<{ activeId?: string }> = ({ activeId }) => {
   return (
     <>
+      {activeId && (
+        <style>{`.doc-section:not(#${activeId}) { display: none; }`}</style>
+      )}
       {/* Overview */}
       <section id="overview" className="doc-section scroll-mt-24 mb-16 section-enter">
         <div className="mb-4">

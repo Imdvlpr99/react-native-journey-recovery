@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   IconTerminal, IconLayers, IconDatabase, IconZap, IconShield,
-  IconSmartphone, IconSparkles, IconSearch
+  IconSmartphone, IconSparkles
 } from './Icons';
 
 export interface NavItem {
@@ -99,59 +99,26 @@ interface SidebarProps {
   onCloseMobile: () => void;
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({
-  activeId,
-  isOpen,
-  onSelect,
-  onCloseMobile,
-}) => {
-  const [filterText, setFilterText] = useState('');
-
-  const term = filterText.toLowerCase().trim();
-
+export const Sidebar: React.FC<SidebarProps> = ({ activeId, isOpen, onSelect, onCloseMobile }) => {
   return (
     <>
-      {/* Mobile Backdrop Overlay */}
+      {/* Mobile Backdrop */}
       {isOpen && (
         <div
-          className="fixed inset-0 z-40 bg-black/60 backdrop-blur-xs lg:hidden transition-opacity"
+          className="fixed inset-0 z-40 bg-black/60 backdrop-blur-xs lg:hidden"
           onClick={onCloseMobile}
         />
       )}
 
       <aside
-        className={`fixed top-0 bottom-0 left-0 z-50 w-72 bg-white/10 backdrop-blur-xl p-6 overflow-y-auto border-r border-white/10 transition-transform duration-200 ease-in-out lg:static lg:z-auto lg:w-64 lg:p-0 lg:border-none lg:bg-transparent lg:backdrop-blur-none ${
+        className={`fixed top-0 bottom-0 left-0 z-50 w-72 bg-[#13112a]/95 backdrop-blur-xl pt-16 pb-6 px-5 overflow-y-auto border-r border-white/10 transition-transform duration-200 ease-in-out lg:static lg:z-auto lg:w-60 lg:py-6 lg:px-4 lg:bg-transparent lg:backdrop-blur-none lg:border-r lg:border-white/8 ${
           isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
-        } lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)]`}
+        } lg:sticky lg:top-14 lg:h-[calc(100vh-3.5rem)] lg:overflow-y-auto lg:shrink-0`}
       >
-        {/* Quick Filter Box */}
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded-md border border-white/10 bg-white/5 focus-within:border-violet-400/40 text-xs text-white/70 mb-5 transition-colors backdrop-blur-sm">
-          <IconSearch size={13} className="text-slate-400 shrink-0" />
-          <input
-            type="text"
-            value={filterText}
-            onChange={(e) => setFilterText(e.target.value)}
-            placeholder="Filter documentation..."
-            className="w-full bg-transparent border-none outline-none text-xs text-white/80 placeholder-white/30"
-            aria-label="Filter documentation navigation"
-          />
-          {filterText && (
-            <button
-              onClick={() => setFilterText('')}
-              className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-xs cursor-pointer"
-              aria-label="Clear filter"
-            >
-              ×
-            </button>
-          )}
-        </div>
-
         {/* Navigation Group Tree */}
         <div className="space-y-5">
           {NAV_GROUPS.map((group) => {
-            const filteredItems = group.items.filter((item) =>
-              term === '' ? true : item.label.toLowerCase().includes(term)
-            );
+            const filteredItems = group.items;
 
             if (filteredItems.length === 0) return null;
 
