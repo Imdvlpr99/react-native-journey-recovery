@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { docsHref } from '../lib/router';
-import { LINKS, PACKAGE_NAME } from '../lib/site';
+import { LINKS, PACKAGE_NAME, VERSION } from '../lib/site';
 import { CodeTabs, CopyButton } from './CodeBlock';
 import {
   ArrowRightIcon,
@@ -143,7 +143,7 @@ export const Landing: React.FC = () => {
               style={{ '--enter-delay': '0ms' } as React.CSSProperties}
               className="anim-enter inline-flex items-center gap-2 rounded-full border border-line bg-elev py-1 pl-1 pr-3 text-xs text-fg-muted transition-colors hover:border-line-strong hover:text-fg"
             >
-              <span className="rounded-full bg-accent-soft px-2 py-0.5 font-mono font-medium text-accent">v0.1.0</span>
+              <span className="rounded-full bg-accent-soft px-2 py-0.5 font-mono font-medium text-accent">v{VERSION}</span>
               React Native · Expo · TypeScript
             </a>
             <h1

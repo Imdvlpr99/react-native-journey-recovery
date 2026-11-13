@@ -1,6 +1,6 @@
 {
   "name": "react-native-journey-recovery",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A developer-first journey recovery engine for React Native applications",
   "type": "commonjs",
   "main": "dist/index.js",
@@ -37,7 +37,8 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "verify": "npm run typecheck && npm run test:coverage && npm run bench && npm run build && npm run lint:package && npm run build:docs",
-    "lint:package": "publint && attw --pack ."
+    "lint:package": "publint && attw --pack .",
+    "prepublishOnly": "npm run typecheck && npm test && npm run build && npm run lint:package"
   },
   "keywords": [
     "react-native",
@@ -50,8 +51,16 @@
     "checkpoint",
     "offline"
   ],
-  "author": "",
+  "author": "Imdvlpr99",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Imdvlpr99/react-native-journey-recovery.git"
+  },
+  "homepage": "https://rn-journey-recovery.vercel.app",
+  "bugs": {
+    "url": "https://github.com/Imdvlpr99/react-native-journey-recovery/issues"
+  },
   "peerDependencies": {
     "react": ">=18.0.0"
   },

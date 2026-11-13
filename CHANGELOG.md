@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-11-13
+
 ### Added
 - Typed lifecycle events: `RecoveryEvent.type` (`saved`, `save_failed`, `cleared`, `discarded`, `restored`, `migrated`, `expired`, `invalid`, `completed`) and `LifecycleManager.onEvent()`.
 - `RecoveryProvider` `onError` callback for failed saves, including debounced auto-saves and background flushes.
@@ -102,3 +104,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Architecture Decision Records (`docs/adr/0001`, `docs/adr/0002`, `docs/adr/0003`).
   - Full API reference (`docs/api-reference.md`).
   - GitHub Actions Node.js matrix CI (20.x, 22.x) and GitHub Pages deployment workflow.
+
+[Unreleased]: https://github.com/Imdvlpr99/react-native-journey-recovery/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/Imdvlpr99/react-native-journey-recovery/compare/v0.1.0...v0.2.0
+[0.1.0]: https://github.com/Imdvlpr99/react-native-journey-recovery/releases/tag/v0.1.0

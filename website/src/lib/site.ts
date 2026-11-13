@@ -1,5 +1,7 @@
+import pkg from '../../../package.json';
+
 export const PACKAGE_NAME = 'react-native-journey-recovery';
-export const VERSION = '0.1.0';
+export const VERSION: string = pkg.version;
 
 export const LINKS = {
   github: 'https://github.com/Imdvlpr99/react-native-journey-recovery',

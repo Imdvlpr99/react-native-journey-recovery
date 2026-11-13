@@ -10,6 +10,7 @@
     "skipLibCheck": true,
     "esModuleInterop": true,
     "isolatedModules": true,
+    "resolveJsonModule": true,
     "paths": {
       "react-native-journey-recovery": ["../src/index.ts"]
     }

@@ -1,9 +1,11 @@
 import { describe, it, expect } from 'vitest';
 import * as JourneyRecovery from '../src/index';
+import pkg from '../package.json';
 
 describe('react-native-journey-recovery exports', () => {
   it('exports all expected core classes and factories', () => {
-    expect(JourneyRecovery.VERSION).toBe('0.1.0');
+    // VERSION is hand-maintained in src/index.ts; it must match package.json.
+    expect(JourneyRecovery.VERSION).toBe(pkg.version);
     expect(JourneyRecovery.JourneyManager).toBeDefined();
     expect(JourneyRecovery.JourneyRegistry).toBeDefined();
     expect(JourneyRecovery.CheckpointManager).toBeDefined();
