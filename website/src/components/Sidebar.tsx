@@ -147,13 +147,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeId, isOpen, onSelect, on
                         }}
                         className={`flex items-center justify-between px-2.5 py-1.5 rounded-md text-xs transition-colors ${
                           isActive
-                            ? 'text-violet-300 font-semibold bg-violet-500/15 border-l-2 -ml-[2px] border-violet-400'
+                            ? 'text-[#22C7F2] font-semibold bg-[#22C7F2]/10 border-l-2 -ml-[2px] border-[#22C7F2]'
                             : 'text-white/50 hover:text-white/80 hover:bg-white/8'
                         }`}
                       >
                         <span className="truncate">{item.label}</span>
                         {item.badge && (
-                          <span className="ml-1 px-1.5 py-0.5 rounded text-[10px] font-mono text-violet-300 bg-violet-500/15 border border-violet-400/25 shrink-0">
+                          <span className="ml-1 px-1.5 py-0.5 rounded text-[10px] font-mono text-[#22C7F2] bg-[#22C7F2]/10 border border-[#22C7F2]/20 shrink-0">
                             {item.badge}
                           </span>
                         )}
