@@ -29,6 +29,6 @@ A self-contained, fully runnable Expo application demonstrating **multi-step fli
 
 1. **`RecoveryProvider`**: Configures the recovery engine at the root of the app.
 2. **`useJourney`**: Incrementally checkpoints flight selection and passenger information with automatic debouncing.
-3. **`useRecovery` & `RecoveryModal`**: Detects unfinished booking flows on launch and provides a modal prompt to resume or discard.
+3. **`useRecovery`**: Detects unfinished booking flows on launch; the app renders its own prompt to resume or discard.
 4. **`SecureStoreAdapter` (or `MemoryStorageAdapter` for testing)**: Persistent client-side storage without server data confusion.
 5. **Clean Dismissal**: Clears storage using `journey.clear()` upon final booking confirmation.

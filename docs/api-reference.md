@@ -1,449 +1,292 @@
-# API Reference: react-native-journey-recovery
+# API reference
 
-Complete API documentation for `react-native-journey-recovery`.
+Everything is exported from the package root:
+
+```ts
+import { RecoveryProvider, useJourney, useRecovery } from 'react-native-journey-recovery';
+```
+
+The [documentation site](https://rn-journey-recovery.vercel.app/#/docs/recovery-provider) has the same reference with guides and examples.
+
+## Contents
+
+1. [RecoveryProvider](#recoveryprovider)
+2. [useJourney](#usejourney)
+3. [useRecovery](#userecovery)
+4. [useRecoveryStatus](#userecoverystatus)
+5. [useJourneyForm](#usejourneyform)
+6. [useRecoveryContext](#userecoverycontext)
+7. [Storage adapters](#storage-adapters)
+8. [Core engine](#core-engine)
+9. [Lifecycle events](#lifecycle-events)
+10. [Diagnostics](#diagnostics)
+11. [Testing](#testing)
+12. [Types](#types)
+13. [Errors](#errors)
 
 ---
 
-## 1. Provider & Context
+## RecoveryProvider
 
-### `<RecoveryProvider />`
-Root provider component that initializes and shares the journey recovery engine context across the component tree.
+Creates the recovery engine and provides it to the hooks. Render once near the root.
 
 ```tsx
-<RecoveryProvider
-  storage={storage}
-  options={{
-    defaultExpiry: 24 * 60 * 60 * 1000, // 24 hours
-    autoSave: true,
-    debounceMs: 500,
-    userId: 'user_123',
-    flushOnBackground: true,
-    appState: AppState,
-    enableHistory: true,
-    maxHistory: 5,
-  }}
-  onRecovery={(event) => {
-    console.log(`[Journey ${event.journeyId}] ${event.status}`);
-  }}
->
-  <AppNavigator />
+<RecoveryProvider storage={storage} options={options} onRecovery={onRecovery} onError={onError}>
+  {children}
 </RecoveryProvider>
 ```
 
-#### Props
+| Prop | Type | Description |
+|---|---|---|
+| `storage` | `StorageAdapter` | **Required.** Keep the instance stable; a new instance rebuilds the engine. |
+| `options` | `RecoveryProviderOptions` | Engine defaults (below). |
+| `onRecovery` | `(event: RecoveryEvent) => void` | Every [lifecycle event](#lifecycle-events). |
+| `onError` | `(error: JourneyRecoveryError, journeyId: string) => void` | Failed saves, including debounced auto-saves and background flushes. |
 
-| Prop | Type | Default | Description |
+| Option | Type | Default | Description |
 |---|---|---|---|
-| `storage` | `StorageAdapter` | **Required** | The storage adapter instance (`AsyncStorageAdapter`, `MMKVStorageAdapter`, `MemoryStorageAdapter`, or custom). |
-| `options.defaultExpiry` | `number` | `undefined` | Default lifetime in milliseconds before saved checkpoints expire. |
-| `options.autoSave` | `boolean` | `false` | Enable automatic debounced checkpoint saving across journeys by default. |
-| `options.debounceMs` | `number` | `500` | Delay in milliseconds for auto-save debouncing. |
-| `options.userId` | `string` | `undefined` | User identity identifier to namespace checkpoints on shared devices (`@rn_journey:u:<userId>:<journeyId>`). |
-| `options.flushOnBackground` | `boolean` | `true` | When true and `appState` is provided, automatically flushes pending debounced writes when app transitions to background or inactive. |
-| `options.appState` | `AppStateLike` | `undefined` | React Native `AppState` instance for listening to process background transitions. |
-| `options.enableHistory` | `boolean` | `false` | When true, maintains a chronological stack of checkpoints for each journey. |
-| `options.maxHistory` | `number` | `10` | Maximum number of historical snapshots kept per journey in storage. |
-| `onRecovery` | `(event: RecoveryEvent) => void` | `undefined` | Observer callback invoked during recovery lifecycle transitions (`restored`, `idle`, `expired`, etc.). |
+| `autoSave` | `boolean` | `false` | Debounce saves for every journey (overridable per journey). |
+| `debounceMs` | `number` | `500` | Auto-save delay. |
+| `defaultExpiry` | `number` | none | Expiry in ms. |
+| `expiryMode` | `'sliding' \| 'absolute'` | `'sliding'` | Measure expiry from the last save or the first. |
+| `userId` | `string` | none | Scope keys to a user. |
+| `keyPrefix` | `string` | `'@rn_journey:'` | Prefix for every key. |
+| `appState` | `AppStateLike` | none | Pass React Native `AppState` to flush pending saves on background. |
+| `flushOnBackground` | `boolean` | `true` | Only applies with `appState`. |
+| `maxSizeBytes` | `number` | `524288` | Maximum serialized snapshot size. |
+| `transform` | `SnapshotTransform` | none | `encode`/`decode` around storage, for encryption or HMAC signing. Keep stable. |
+
+The engine is rebuilt when `storage`, `keyPrefix`, `defaultExpiry`, `expiryMode`, `autoSave`, `debounceMs`, `userId`, `maxSizeBytes` or `transform` change.
 
 ---
 
-## 2. Core React Hooks
-
-### `useJourney<T>(journeyId, options)`
-Registers a named journey and returns a handle for saving checkpoints and clearing state.
-
-```tsx
-const journey = useJourney<CheckoutData>('checkout', {
-  version: 2,
-  expiry: 12 * 60 * 60 * 1000,
-  validate: (data): data is CheckoutData => Boolean(data && data.cartItems),
-  migrate: (oldData: any, oldVersion: number) => {
-    if (oldVersion === 1) {
-      return { ...oldData, currency: 'USD' };
-    }
-    return oldData;
-  },
-});
-```
-
-#### Returns: `JourneyHandle<T>`
-- `id: string`: Journey identifier.
-- `status: RecoveryStatus`: Current status (`'idle' | 'active' | 'failed'`).
-- `checkpoint(data: T, options?: CheckpointOptions): Promise<JourneySnapshot<T>>`: Saves a checkpoint. Supports `{ exclude: string[] }` to safeguard sensitive fields.
-- `clear(): Promise<void>`: Clears active checkpoint and any pending debounced writes.
-
----
-
-### `useRecovery<T>(journeyId)`
-Inspects storage upon mount to detect if an interrupted journey exists.
-
-```tsx
-const recovery = useRecovery<CheckoutData>('checkout');
-
-if (recovery.available && recovery.snapshot) {
-  return (
-    <Banner
-      onRestore={() => recovery.restore()}
-      onDiscard={() => recovery.discard()}
-    />
-  );
-}
-```
-
-#### Returns: `RecoveryState<T>`
-- `available: boolean`: Whether a valid, unexpired checkpoint is available for recovery.
-- `status: RecoveryStatus`: Status string (`'checking' | 'available' | 'restoring' | 'restored' | 'expired' | 'invalid' | 'failed' | 'idle'`).
-- `data: T | null`: The restored data payload (populated after `restore()` succeeds).
-- `snapshot: JourneySnapshot<T> | null`: Full metadata snapshot (`id`, `version`, `createdAt`, `updatedAt`, `expiresAt`, `data`).
-- `updatedAt: number | undefined`: Timestamp when the checkpoint was last saved.
-- `restore(): Promise<T>`: Restores data, runs schema migrations if needed, and dispatches recovery lifecycle events.
-- `discard(): Promise<void>`: Deletes saved checkpoint and sets recovery state to idle.
-
----
-
-### `useRecoveryStatus(journeyId)`
-Lightweight hook returning only the `RecoveryStatus` of a journey.
-
----
-
-## 3. Storage Adapters
-
-All storage adapters conform to `StorageAdapter`:
+## useJourney
 
 ```ts
-export interface StorageAdapter {
+function useJourney<T>(journeyId: string, options?: JourneyOptions<T>): JourneyHandle<T>
+```
+
+Registers a journey and returns a handle to save it.
+
+| Option | Type | Description |
+|---|---|---|
+| `version` | `number` | Schema version, default `1`. |
+| `migrate` | `(oldData, oldVersion) => T \| Promise<T>` | Upgrades older snapshots during `restore()`. |
+| `validate` | `(data: unknown) => data is T` | Runs on every save and on restore against the current version (after migration). |
+| `expiry` | `number` | Expiry in ms. `0` expires immediately. |
+| `expiryMode` | `'sliding' \| 'absolute'` | Default from the provider. |
+| `autoSave` / `debounceMs` | | Default from the provider. |
+
+| Returns | Type | Description |
+|---|---|---|
+| `id` | `string` | |
+| `status` | `RecoveryStatus` | `idle`, `active` after a save, `failed` after a failed save (including auto-saves). |
+| `error` | `Error \| null` | Last save error; cleared by the next successful save. |
+| `checkpoint(data, options?)` | `Promise<JourneySnapshot<T>>` | Save. With auto-save, resolves immediately with a preview. |
+| `flush()` | `Promise<void>` | Write a pending auto-save now; rejects if it fails. |
+| `clear()` | `Promise<void>` | Delete the checkpoint and cancel pending auto-saves. |
+
+`CheckpointOptions`: `exclude?: string[]` (top-level keys or dot paths such as `'payment.cardNumber'`; paths pass through arrays), `expiry?: number`, `completed?: boolean`.
+
+---
+
+## useRecovery
+
+```ts
+function useRecovery<T>(journeyId: string, options?: { autoRestore?: boolean }): RecoveryState<T>
+```
+
+Checks storage on mount.
+
+| Returns | Type | Description |
+|---|---|---|
+| `status` | `RecoveryStatus` | Starts at `checking`. |
+| `available` | `boolean` | A valid checkpoint can be restored. |
+| `data` | `T \| null` | Restored data. |
+| `snapshot` | `JourneySnapshot<T> \| null` | Stored snapshot; also set for `expired`, `completed` and validation failures. |
+| `updatedAt` | `number \| undefined` | Last save time. |
+| `error` | `Error \| null` | Why it is not available, or why restore failed. |
+| `restore()` | `Promise<T>` | Migrate if needed and return the data. |
+| `discard()` | `Promise<void>` | Delete the checkpoint (and any pending auto-save). |
+| `refresh()` | `Promise<void>` | Re-read storage. |
+
+State resets to `idle` when any component clears or discards the journey.
+
+---
+
+## useRecoveryStatus
+
+```ts
+function useRecoveryStatus(journeyId: string): RecoveryStatus
+```
+
+Runs its own check, so each use reads storage once on mount.
+
+---
+
+## useJourneyForm
+
+```ts
+function useJourneyForm<T>(journeyId: string, form: FormLike<T>, options?: UseJourneyFormOptions<T>): JourneyFormHandle<T>
+```
+
+| Option | Default | Description |
+|---|---|---|
+| `autoSave` | `true` | Debounce saves triggered by `watch`. |
+| `debounceMs` | `500` | |
+| `autoRestore` | `false` | Load saved values into the form as soon as they are found. |
+| `onRestored` | | Called after values are loaded. |
+| `exclude` / `expiry` | | Passed to every save. |
+| `journey` | | `version`, `migrate`, `validate`, `expiryMode` for the journey. |
+
+Returns `journeyId`, `hasSavedProgress`, `status`, `restoreToForm()`, `clearForm()`, `checkpointForm()`.
+
+`FormLike`: `watch(callback)` returning an unsubscribe function or `{ unsubscribe }`, `getValues()`, `reset(values?)`.
+
+---
+
+## useRecoveryContext
+
+Returns `{ storage, journeyManager, recoveryManager, lifecycleManager, defaultExpiry, expiryMode, autoSave, debounceMs }`. Throws outside the provider.
+
+---
+
+## Storage adapters
+
+```ts
+interface StorageAdapter {
   getItem(key: string): Promise<string | null>;
   setItem(key: string, value: string): Promise<void>;
   removeItem(key: string): Promise<void>;
-  getAllKeys?(): Promise<string[]>;
+  getAllKeys?(): Promise<string[]>; // enables clearAllJourneys / clearUserJourneys
 }
 ```
 
-- **`AsyncStorageAdapter`**:
-  ```ts
-  import AsyncStorage from '@react-native-async-storage/async-storage';
-  const storage = new AsyncStorageAdapter(AsyncStorage);
-  ```
-- **`MMKVStorageAdapter`**:
-  ```ts
-  import { MMKV } from 'react-native-mmkv';
-  const mmkv = new MMKV();
-  const storage = new MMKVStorageAdapter(mmkv);
-  ```
-- **`SecureStoreAdapter`** (Expo & Hardware Keystore/Keychain):
-  ```ts
-  import * as SecureStore from 'expo-secure-store';
-  // Hardware-backed encrypted storage with automatic 2048-byte chunking for Android Keystore
-  const storage = new SecureStoreAdapter(SecureStore, { chunkSize: 1800 });
-  ```
-- **`MemoryStorageAdapter`**:
-  ```ts
-  const storage = new MemoryStorageAdapter();
-  ```
+| Adapter | Constructor | Notes |
+|---|---|---|
+| `AsyncStorageAdapter` | `new AsyncStorageAdapter(AsyncStorage)` | |
+| `MMKVStorageAdapter` | `new MMKVStorageAdapter(mmkv)` | Any object with `getString`, `set`, `delete`, optional `getAllKeys`. |
+| `SecureStoreAdapter` | `new SecureStoreAdapter(SecureStore, { chunkSize?, storeOptions?, trackKeys? })` | Encodes keys into SecureStore's alphabet; chunks values over `chunkSize` UTF-8 bytes (default 1800); switches to a new chunk set only after it is fully written and removes old chunks; keeps a key index (`trackKeys`, default true) so `getAllKeys` works. |
+| `MemoryStorageAdapter` | `new MemoryStorageAdapter()` | Extra `clear()` for tests. |
+
+Adapter errors are wrapped in `JourneyRecoveryError` with code `STORAGE_UNAVAILABLE`.
 
 ---
 
-## 4. Navigation & Route Adapters
+## Core engine
 
-### `createNavigationAdapter(navigation)`
-Adapter for `@react-navigation/native` stacks:
+Use without React:
 
 ```ts
-const adapter = createNavigationAdapter(navigation);
-const navContext = adapter.getNavigationContext(); // { currentRoute, params, routeHistory }
-adapter.restoreNavigation(savedContext, { resetStack: true });
+const checkpoints = new CheckpointManager(storage, { userId, maxSizeBytes, transform });
+const journeys = new JourneyManager(checkpoints);
+const lifecycle = new LifecycleManager(journeys);
+const recovery = new RecoveryManager(journeys, lifecycle);
 ```
 
-### `createExpoRouterAdapter(router, getContext)`
-Adapter for Expo Router file-based routes:
+**JourneyManager** — `registerJourney(id, options?, { allowDuplicate? })`, `checkpoint(id, data, options?)`, `getMigratedSnapshot(id)`, `flushPending(id?)`, `clearJourney(id)`, `clearAllJourneys()`, `getJourneyState(id)`, `addEventSink(fn)`, `getRegistry()`, `getCheckpointManager()`.
+
+**RecoveryManager** — `check(id)` → `{ available, status, snapshot, error? }`, `restore(id)`, `discard(id)`, `getDiagnostics(id)`.
+
+**CheckpointManager** — `save(id, data, { version, expiry?, expiryMode?, expiresAt? }, options?)`, `get(id)`, `getRaw(id)`, `delete(id)`, `clearUserJourneys(userId?)`, `deleteAll()`, `getKey(id, userId?)`. Ids are escaped so `:` cannot cross user or journey boundaries.
+
+**LifecycleManager** — `subscribe(fn)`, `on(status | 'all', fn)`, `onEvent(type | type[], fn)`, `emit(event)`, `flush(id?)`, `attach(journeyManager)`.
+
+Lower level: `SnapshotSerializer`, `SnapshotValidator`, `JourneyRegistry`, `computeChecksum`, `debounce`, `encodeSecureStoreKey`, `VERSION`.
+
+---
+
+## Lifecycle events
 
 ```ts
-import { useRouter, usePathname, useSegments, useLocalSearchParams } from 'expo-router';
-
-const router = useRouter();
-const pathname = usePathname();
-const segments = useSegments();
-const params = useLocalSearchParams();
-
-const adapter = createExpoRouterAdapter(router, () => ({ pathname, segments, params }));
-adapter.restoreRoute(savedRouteContext, { mode: 'replace' });
+interface RecoveryEvent<T = unknown> {
+  journeyId: string;
+  type: 'saved' | 'save_failed' | 'cleared' | 'discarded' | 'restored' | 'migrated' | 'expired' | 'invalid' | 'completed';
+  status: RecoveryStatus;
+  snapshot?: JourneySnapshot<T> | null; // data only on `restored`
+  error?: JourneyRecoveryError;
+  fromVersion?: number;                 // on `migrated`
+  timestamp: number;
+}
 ```
+
+`expired`, `invalid` and `completed` are emitted when a check finds them.
 
 ---
 
-## 5. Form & State Integrations
+## Diagnostics
 
-### `useJourneyForm(journeyId, form, options)`
-Integration with React Hook Form:
-
-```tsx
-import { useForm } from 'react-hook-form';
-import { useJourneyForm } from 'react-native-journey-recovery';
-
-const form = useForm<ProfileFormData>();
-const { hasSavedProgress, restoreToForm, clearForm } = useJourneyForm('profile-flow', form, {
-  autoSave: true,
-  debounceMs: 500,
-  exclude: ['password'],
-});
-```
-
-### `useJourneyFormik(journeyId, formik, options)`
-Integration with Formik:
-
-```tsx
-import { useFormik } from 'formik';
-import { useJourneyFormik } from 'react-native-journey-recovery';
-
-const formik = useFormik({
-  initialValues: { email: '', name: '' },
-  onSubmit: (values) => submit(values),
-});
-
-const { hasSavedProgress, restoreToFormik, clearFormik, checkpointFormik } = useJourneyFormik(
-  'registration-flow',
-  formik,
-  {
-    autoSave: true,
-    debounceMs: 500,
-    exclude: ['confirmPassword'],
-  }
-);
-```
-
-### `useJourneyQuery(journeyId, options)` & `createTanStackQueryCoordinator`
-Coordinates client-side journey recovery with TanStack Query server cache invalidation and revalidation:
-
-```tsx
-import { useJourneyQuery } from 'react-native-journey-recovery';
-
-const { available, restoreAndRevalidate, discardAndReset } = useJourneyQuery('checkout', {
-  queryClient,
-  invalidateOnRestore: [['cart', cartId], ['inventory']],
-  refetchOnRestore: [['pricing']],
-  resetOnClear: [['temporary-hold']],
-  onRevalidated: async (data) => {
-    console.log('Restored state with updated server queries:', data);
-  },
-});
-```
-
-Event-driven non-hook coordinator:
-```tsx
-import { createTanStackQueryCoordinator } from 'react-native-journey-recovery';
-
-const unsubscribe = createTanStackQueryCoordinator(lifecycleManager, {
-  journeyId: 'checkout',
-  queryClient,
-  invalidateOnRestore: [['cart']],
-  resetOnClear: [['temporary-hold']],
-});
-```
-
-### `useJourneyZustand(journeyId, store, selector, options)`
-Connects a specific slice of a Zustand store:
-
-```tsx
-const { hasSavedProgress, restoreToStore } = useJourneyZustand(
-  'cart-slice',
-  useAppStore,
-  (state) => state.cart,
-  { autoSave: true }
-);
-```
-
-### `useJourneyRedux(journeyId, store, selector, options)`
-Connects a specific slice of a Redux store:
-
-```tsx
-const { hasSavedProgress, restoreToRedux } = useJourneyRedux(
-  'loan-slice',
-  reduxStore,
-  (state) => state.loanApplication,
-  { autoSave: true }
-);
-
-// To restore:
-await restoreToRedux((restoredSlice) => ({
-  type: 'loan/setApplication',
-  payload: restoredSlice,
-}));
-```
+`recoveryManager.getDiagnostics(id)` or `getRecoveryDiagnostics(journeyManager, id)` returns `exists`, `status`, `isRecoverable`, `validationError`, `schemaVersion`, `targetSchemaVersion`, `isEligibleForMigration`, `createdAt`, `updatedAt`, `expiresAt`, `isExpired`, `timeUntilExpiryMs`, `payloadSizeBytes`, `hasChecksum`, `checksumValid`, `formatVersion`, `snapshot`. The report includes your data.
 
 ---
 
-## 6. UI Components
+## Testing
 
-### `<RecoveryBanner />`
-Pre-built or headless banner offering users the choice to resume or start over:
-
-```tsx
-<RecoveryBanner
-  journeyId="checkout"
-  title="Resume your checkout?"
-  onRestored={(data) => navigateToCheckout(data)}
-  onDiscarded={() => console.log('Discarded')}
-/>
+```ts
+const env = createTestRecoveryEnvironment(options?);       // sync
+const env = await initTestRecoveryEnvironment({ initialCheckpoints }); // async, seeds data
 ```
 
-Or headless with `render`:
-```tsx
-<RecoveryBanner
-  journeyId="checkout"
-  render={({ available, data, formattedLastSaved, onRestore, onDiscard }) =>
-    available ? (
-      <View>
-        <Text>Resume order from {formattedLastSaved}?</Text>
-        <Button title="Resume" onPress={onRestore} />
-        <Button title="Discard" onPress={onDiscard} />
-      </View>
-    ) : null
-  }
-/>
-```
-
-### `<RecoveryModal />`
-Centered modal dialog with backdrop blur overlay and action buttons:
-
-```tsx
-<RecoveryModal
-  journeyId="loan-application"
-  title="Resume Loan Application?"
-  resumeLabel="Continue Application"
-  discardLabel="Start New"
-  onRestored={(data) => setFormData(data)}
-  onDiscarded={() => console.log('Discarded')}
-/>
-```
-
-### `<RecoveryBottomSheet />`
-Bottom-anchored sheet prompt with mobile drag pill:
-
-```tsx
-<RecoveryBottomSheet
-  journeyId="kyc-verification"
-  title="Unfinished Verification Found"
-  onRestored={(data) => resumeVerification(data)}
-  onDiscarded={() => resetVerification()}
-/>
-```
+Returns `wrapper`, `storage` (`MemoryStorageAdapter`), `seedCheckpoint(id, data, metadata?)` and the engine instances. Options accept every provider option plus `maxSizeBytes`, `transform` and `initialCheckpoints`.
 
 ---
 
-## 7. Diagnostics & Inspection
+## Types
 
-### `getRecoveryDiagnostics(journeyManager, journeyId)` / `recoveryManager.getDiagnostics(journeyId)`
-Returns deep diagnostic metadata explaining whether a journey checkpoint is safe and eligible for recovery:
+```ts
+type RecoveryStatus =
+  | 'idle' | 'checking' | 'available' | 'active' | 'restoring' | 'restored'
+  | 'discarded' | 'expired' | 'invalid' | 'completed' | 'failed';
 
-```tsx
-const diag = await recoveryManager.getDiagnostics('checkout');
-console.log(diag);
+interface JourneySnapshot<T = unknown> {
+  id: string; version: number; createdAt: number; updatedAt: number;
+  expiresAt?: number; status: 'active' | 'completed'; data: T; checksum?: string;
+}
+
+interface SnapshotTransform {
+  encode(serialized: string): string | Promise<string>;
+  decode(stored: string): string | Promise<string>; // throw to reject the stored value
+}
 ```
 
-#### Diagnostic Properties:
-- `exists: boolean`: Whether a checkpoint exists in storage.
-- `status: RecoveryStatus`: Current status (`'available'`, `'expired'`, `'invalid'`, `'idle'`).
-- `isRecoverable: boolean`: `true` only if snapshot exists, checksum matches, and it is not expired.
-- `payloadSizeBytes: number`: Size of the stored payload in bytes.
-- `hasChecksum: boolean`: Whether the checkpoint carries an integrity checksum.
-- `checksumValid: boolean`: Whether the computed checksum matches the payload.
-- `isExpired: boolean`: Whether the checkpoint passed its expiration timestamp.
-- `timeUntilExpiryMs?: number`: Remaining lifetime in milliseconds.
-- `isEligibleForMigration: boolean`: `true` if current registered version is higher than snapshot version and a migration function is registered.
-- `formatVersion?: number`: Storage serialization format version.
-- `validationError?: string`: Explanatory message when recovery fails validation.
+### Other exported types
 
----
-
-## 8. Checkpoint History & Rollback
-
-When `enableHistory: true` is configured on `RecoveryProvider` or `CheckpointManager`:
-
-```tsx
-// Inspect past versions
-const history = await checkpointManager.getHistory('flight-booking');
-
-// Roll back to previous step
-const previousSnapshot = await checkpointManager.restoreFromHistory('flight-booking', history.length - 2);
-```
-
----
-
-## 9. Error Codes
-
-| Code | Meaning |
+| Type | Description |
 |---|---|
-| `JOURNEY_NOT_FOUND` | No checkpoint found for the specified journey ID |
-| `JOURNEY_EXPIRED` | Checkpoint has exceeded its configured expiration |
-| `SNAPSHOT_INVALID` | Checkpoint failed structural or custom validation |
-| `SNAPSHOT_CORRUPTED` | Malformed JSON or FNV-1a checksum mismatch |
-| `MIGRATION_FAILED` | Checkpoint schema could not be migrated |
-| `STORAGE_UNAVAILABLE` | Underlying storage provider failed or threw |
-| `SERIALIZATION_FAILED` | Circular data structure or payload exceeded byte size limits |
-| `JOURNEY_ALREADY_ACTIVE` | Duplicate journey registration |
-| `RECOVERY_CANCELLED` | Recovery was cancelled |
+| `ExpiryMode` | 'sliding' \| 'absolute' |
+| `RecoveryEventType` | The type field of RecoveryEvent. |
+| `JourneyErrorCode` | Union of JourneyRecoveryError codes. |
+| `UseRecoveryOptions` | { autoRestore?: boolean } |
+| `RecoveryProviderProps` · `RecoveryProviderOptions` | Provider props and options. |
+| `RecoveryContext` · `RecoveryContextValue` | The React context object and its value (prefer useRecoveryContext). |
+| `JourneyState` | { status, error } from JourneyManager.getJourneyState(). |
+| `JourneyEventSink` · `RecoveryEventListener` | Event listener signatures for addEventSink() and subscribe(). |
+| `RegisterOptions` | { allowDuplicate?: boolean } for registerJourney(). |
+| `CheckpointSaveMetadata` | { version, expiry?, expiryMode?, expiresAt? } for CheckpointManager.save(). |
+| `CheckpointManagerOptions` | { userId?, maxSizeBytes?, transform? } |
+| `SnapshotSerializerOptions` | { maxSizeBytes?, formatVersion? } |
+| `ValidationResult` | Result of SnapshotValidator.validate(). |
+| `JourneyDiagnostics` | Report returned by getDiagnostics(). |
+| `RecoveryInspectionResult` | Result of RecoveryManager.check(). |
+| `AsyncStorageLike` · `MMKVLike` · `SecureStoreLike` | Minimal client shapes accepted by the adapters. |
+| `SecureStoreOptions` · `SecureStoreAdapterOptions` | SecureStore call options and adapter options (chunkSize, storeOptions, trackKeys). |
+| `TestRecoveryEnvironment` · `TestRecoveryEnvironmentOptions` | Return value and options of the test environment factories. |
+| `DebouncedFunction` | Return type of debounce(), with flush() and cancel(). |
 
 ---
 
-## 10. CLI Diagnostic & Inspection Tool
+## Errors
 
-The `journey-recovery` CLI utility inspects stored checkpoint snapshots, checks integrity, and calculates checksums:
+`JourneyRecoveryError` has `code`, `journeyId?` and `cause?`.
 
-```bash
-# Detailed terminal report
-npx journey-recovery inspect snapshot.json
-
-# Automated CI verification (exit code 0 if valid, 1 if invalid)
-npx journey-recovery verify snapshot.json
-
-# 32-bit FNV-1a checksum
-npx journey-recovery checksum '{"step":"review"}'
-```
-
-Or programmatically:
-```ts
-import { inspectSnapshot, formatReport } from 'react-native-journey-recovery';
-
-const report = inspectSnapshot(rawJsonString);
-console.log(formatReport(report));
-```
-
----
-
-## 11. Developer Testing Harness
-
-### `createTestRecoveryEnvironment()` & `initTestRecoveryEnvironment()`
-Initializes an isolated in-memory test environment for Jest and Vitest without mock boilerplate:
-
-```tsx
-import { render, screen, fireEvent, act } from '@testing-library/react-native';
-import { createTestRecoveryEnvironment } from 'react-native-journey-recovery/testing';
-import { CheckoutScreen } from './CheckoutScreen';
-
-it('recovers cart draft', async () => {
-  const env = createTestRecoveryEnvironment();
-
-  const { unmount } = render(
-    <env.Wrapper>
-      <CheckoutScreen />
-    </env.Wrapper>
-  );
-
-  // Fast-forward auto-save
-  await act(async () => {
-    await env.flushPending();
-  });
-
-  // Simulate process kill
-  unmount();
-
-  // Relaunch app
-  render(
-    <env.Wrapper>
-      <CheckoutScreen />
-    </env.Wrapper>
-  );
-
-  expect(await screen.findByText('Resume where you left off?')).toBeTruthy();
-});
-```
+| Code | Raised when |
+|---|---|
+| `JOURNEY_NOT_FOUND` | `restore()` with nothing restorable. |
+| `JOURNEY_EXPIRED` | The checkpoint's `expiresAt` has passed. |
+| `SNAPSHOT_INVALID` | Bad structure or version, `validate` returned false or threw, or the snapshot is newer than the registered version. |
+| `SNAPSHOT_CORRUPTED` | Unparseable JSON, checksum mismatch, missing SecureStore chunk, or `transform.decode` threw. |
+| `MIGRATION_FAILED` | Older version without `migrate`, `migrate` threw, or migrated data failed `validate`. |
+| `STORAGE_UNAVAILABLE` | The storage backend failed. |
+| `SERIALIZATION_FAILED` | Not serializable, or over `maxSizeBytes`. |
+| `JOURNEY_ALREADY_ACTIVE` | `registerJourney` twice without `allowDuplicate` (hooks always allow). |
+| `RECOVERY_CANCELLED` | Reserved. |

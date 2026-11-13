@@ -5,6 +5,51 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+- Typed lifecycle events: `RecoveryEvent.type` (`saved`, `save_failed`, `cleared`, `discarded`, `restored`, `migrated`, `expired`, `invalid`, `completed`) and `LifecycleManager.onEvent()`.
+- `RecoveryProvider` `onError` callback for failed saves, including debounced auto-saves and background flushes.
+- `JourneyHandle.flush()` and `JourneyHandle.error`; `useJourney` now reports `failed` when a debounced save fails.
+- `useRecovery().refresh()`; recovery state resets when any component clears or discards the journey.
+- `exclude` accepts dot paths (`'payment.cardNumber'`), applied through arrays.
+- `transform` option (`SnapshotTransform`) to encode/decode stored values, for encryption at rest or HMAC signing.
+- `expiryMode: 'sliding' | 'absolute'` on the provider and per journey.
+- `maxSizeBytes` and `transform` on `RecoveryProvider`.
+- `useJourneyForm` `journey` option (version, migrate, validate, expiryMode).
+- `SecureStoreAdapter` key index (`trackKeys`, default on) so `getAllKeys`, `clearAllJourneys()` and `clearUserJourneys()` work.
+- `'completed'` recovery status.
+- Build ships CommonJS and ESM with matching type declarations (tsup); `npm run lint:package` (publint, are-the-types-wrong) runs in CI.
+
+### Changed
+- Completed journeys are reported as `completed` instead of `available` and are no longer offered for resume.
+- Snapshots saved with a newer schema version than the registered one are reported as `invalid`.
+- `validate` now runs on the current schema only; older snapshots are validated after migration, and migrated data that fails validation is not saved (`MIGRATION_FAILED`).
+- A storage read failure during a check reports `failed` (`STORAGE_UNAVAILABLE`) instead of `invalid`.
+- `expiry: 0` expires immediately (it previously meant "never").
+- Migration keeps the original `expiresAt` and `completed` status.
+- `saved` and other new events carry snapshot metadata only; only `restored` events include data.
+- Errors thrown by a `validate` function are wrapped in `SNAPSHOT_INVALID` with the original as `cause`.
+
+### Fixed
+- `SecureStoreAdapter` used keys containing `@` and `:`, which expo-secure-store rejects; keys are now encoded into its allowed alphabet.
+- `SecureStoreAdapter` chunked by UTF-16 length, so non-ASCII values could exceed Android's 2048-byte limit and emoji could be split; chunking is now by UTF-8 bytes on character boundaries.
+- `SecureStoreAdapter` left previous chunks (possibly sensitive) in the keychain when a value shrank, and an interrupted chunked write could corrupt the previous value.
+- Debounced auto-save failures were unhandled promise rejections and never surfaced.
+- After `clear()`, later auto-saves were not flushed on unmount or background.
+- `discard()` did not cancel a pending auto-save, which could re-create the checkpoint.
+- `useJourneyForm` `autoRestore` never restored, and the hook re-subscribed to `form.watch` on every render.
+- User ids or journey ids containing `:` could read or delete another user's checkpoints.
+- The package could not be loaded by Node (`require` or `import`), breaking Jest for consumers.
+- `createTestRecoveryEnvironment` ignored `keyPrefix` when seeding.
+- Every save re-read the previous snapshot; `createdAt` is now cached. The per-journey write queue is pruned when idle.
+
+### Removed
+- CLI (`journey-recovery`), navigation adapters, Formik / Zustand / Redux / TanStack Query integrations, UI components (`RecoveryBanner`, `RecoveryModal`, `RecoveryBottomSheet`), Zod validator helper, and checkpoint history.
+- Unused third `validator` parameter of the `JourneyManager` constructor (it was never read).
+- Legacy HTML simulator (`examples/simulator`), superseded by the live playground on the docs site.
+- Committed docs build output; the site now builds to `website/dist` on deploy.
+
 ## [0.1.0] - 2026-11-10
 
 ### Added
