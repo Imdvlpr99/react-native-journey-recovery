@@ -25,7 +25,12 @@ export function debounce<T extends (...args: any[]) => any>(
     }
 
     timeoutId = setTimeout(() => {
-      flush();
+      const result = flush();
+      // Timer-driven calls have no caller to receive a rejection. The wrapped function is
+      // expected to report its own errors; swallow here to avoid an unhandled rejection.
+      if (result && typeof (result as { catch?: unknown }).catch === 'function') {
+        (result as unknown as Promise<unknown>).catch(() => {});
+      }
     }, waitMs);
   }
 

@@ -2,6 +2,7 @@ import { useEffect, useCallback, useRef } from 'react';
 import { useJourney } from '../react/useJourney';
 import { useRecovery } from '../react/useRecovery';
 import { CheckpointOptions, JourneySnapshot } from '../types/checkpoint';
+import { JourneyOptions } from '../types/journey';
 import { RecoveryStatus } from '../types/recovery';
 
 export interface FormLike<TFieldValues = Record<string, any>> {
@@ -10,11 +11,14 @@ export interface FormLike<TFieldValues = Record<string, any>> {
   reset: (values?: Partial<TFieldValues>) => void;
 }
 
-export interface UseJourneyFormOptions extends CheckpointOptions {
+export interface UseJourneyFormOptions<TFieldValues = Record<string, any>> extends CheckpointOptions {
   autoSave?: boolean;
   debounceMs?: number;
+  /** Load saved values into the form as soon as they are found, without asking. */
   autoRestore?: boolean;
-  onRestored?: (values: any) => void;
+  onRestored?: (values: TFieldValues) => void;
+  /** Schema options for the journey (version, migrate, validate, expiryMode). */
+  journey?: Omit<JourneyOptions<TFieldValues>, 'autoSave' | 'debounceMs'>;
 }
 
 export interface JourneyFormHandle<TFieldValues> {
@@ -33,14 +37,15 @@ export interface JourneyFormHandle<TFieldValues> {
 export function useJourneyForm<TFieldValues extends Record<string, any> = Record<string, any>>(
   journeyId: string,
   form: FormLike<TFieldValues>,
-  options?: UseJourneyFormOptions
+  options?: UseJourneyFormOptions<TFieldValues>
 ): JourneyFormHandle<TFieldValues> {
   const journey = useJourney<TFieldValues>(journeyId, {
+    ...options?.journey,
     autoSave: options?.autoSave ?? true,
     debounceMs: options?.debounceMs ?? 500,
   });
 
-  const recovery = useRecovery<TFieldValues>(journeyId);
+  const recovery = useRecovery<TFieldValues>(journeyId, { autoRestore: options?.autoRestore });
 
   const formRef = useRef(form);
   formRef.current = form;
@@ -48,13 +53,22 @@ export function useJourneyForm<TFieldValues extends Record<string, any> = Record
   const onRestoredRef = useRef(options?.onRestored);
   onRestoredRef.current = options?.onRestored;
 
-  // Auto-restore form if configured
+  // autoRestore: useRecovery restores on mount; load the result into the form once.
+  const autoRestoredRef = useRef(false);
   useEffect(() => {
-    if (options?.autoRestore && recovery.available && recovery.data) {
+    if (options?.autoRestore && recovery.status === 'restored' && recovery.data && !autoRestoredRef.current) {
+      autoRestoredRef.current = true;
       formRef.current.reset(recovery.data);
       onRestoredRef.current?.(recovery.data);
     }
-  }, [options?.autoRestore, recovery.available, recovery.data]);
+  }, [options?.autoRestore, recovery.status, recovery.data]);
+
+  // Latest save options without re-subscribing when callers pass inline arrays.
+  const saveOptionsRef = useRef<CheckpointOptions>({});
+  saveOptionsRef.current = { exclude: options?.exclude, expiry: options?.expiry };
+
+  const { checkpoint, clear } = journey;
+  const { restore } = recovery;
 
   // Subscribe to form value changes
   useEffect(() => {
@@ -63,9 +77,8 @@ export function useJourneyForm<TFieldValues extends Record<string, any> = Record
     }
 
     const subscription = form.watch((values) => {
-      journey.checkpoint(values as TFieldValues, {
-        exclude: options?.exclude,
-        expiry: options?.expiry,
+      checkpoint(values as TFieldValues, saveOptionsRef.current).catch(() => {
+        // Immediate-save failures are reported via save_failed events and the provider's onError.
       });
     });
 
@@ -76,27 +89,23 @@ export function useJourneyForm<TFieldValues extends Record<string, any> = Record
         subscription.unsubscribe();
       }
     };
-  }, [form, journey, options?.exclude, options?.expiry]);
+  }, [form, checkpoint]);
 
   const restoreToForm = useCallback(async (): Promise<TFieldValues> => {
-    const restored = await recovery.restore();
+    const restored = await restore();
     formRef.current.reset(restored);
     onRestoredRef.current?.(restored);
     return restored;
-  }, [recovery]);
+  }, [restore]);
 
   const clearForm = useCallback(async (): Promise<void> => {
-    await journey.clear();
+    await clear();
     formRef.current.reset();
-  }, [journey]);
+  }, [clear]);
 
   const checkpointForm = useCallback(async (): Promise<JourneySnapshot<TFieldValues>> => {
-    const values = formRef.current.getValues();
-    return journey.checkpoint(values, {
-      exclude: options?.exclude,
-      expiry: options?.expiry,
-    });
-  }, [journey, options?.exclude, options?.expiry]);
+    return checkpoint(formRef.current.getValues(), saveOptionsRef.current);
+  }, [checkpoint]);
 
   return {
     journeyId,

@@ -16,19 +16,26 @@ export interface SnapshotSerializerOptions {
   formatVersion?: number;
 }
 
-function omitFields(obj: unknown, exclude: string[]): unknown {
-  if (typeof obj !== 'object' || obj === null) {
-    return obj;
+/**
+ * Removes excluded fields. Each entry is a top-level key (`'password'`) or a dot path
+ * (`'payment.card.number'`). Arrays are transparent: a path applies to every element,
+ * so `'cards.cvv'` removes `cvv` from each item of `cards`.
+ */
+function omitPaths(value: unknown, paths: string[][]): unknown {
+  if (paths.length === 0 || typeof value !== 'object' || value === null) {
+    return value;
   }
-  if (Array.isArray(obj)) {
-    return obj.map((item) => omitFields(item, exclude));
+  if (Array.isArray(value)) {
+    return value.map((item) => omitPaths(item, paths));
   }
   const result: Record<string, unknown> = {};
-  const excludeSet = new Set(exclude);
-  for (const [k, v] of Object.entries(obj)) {
-    if (!excludeSet.has(k)) {
-      result[k] = v;
+  for (const [key, child] of Object.entries(value)) {
+    const matching = paths.filter((p) => p[0] === key);
+    if (matching.some((p) => p.length === 1)) {
+      continue;
     }
+    const nested = matching.map((p) => p.slice(1));
+    result[key] = nested.length > 0 ? omitPaths(child, nested) : child;
   }
   return result;
 }
@@ -52,7 +59,10 @@ export class SnapshotSerializer {
     try {
       let dataToPersist = snapshot.data;
       if (options?.exclude && options.exclude.length > 0) {
-        dataToPersist = omitFields(snapshot.data, options.exclude) as T;
+        dataToPersist = omitPaths(
+          snapshot.data,
+          options.exclude.map((path) => path.split('.'))
+        ) as T;
       }
 
       const dataString = JSON.stringify(dataToPersist);
@@ -97,7 +107,7 @@ export class SnapshotSerializer {
   }
 
   /**
-   * Deserializes raw JSON string back into a JourneySnapshot.
+   * Deserializes raw JSON string back into a JourneySnapshot, verifying its checksum.
    */
   deserialize<T>(raw: string): JourneySnapshot<T> {
     if (!raw || typeof raw !== 'string') {
@@ -126,6 +136,21 @@ export class SnapshotSerializer {
       );
     }
 
-    return parsed as JourneySnapshot<T>;
+    const snapshot = parsed as JourneySnapshot<T> & { checksum?: string };
+
+    // Verify checksum when present — catches storage corruption
+    if (snapshot.checksum !== undefined) {
+      const dataString = JSON.stringify(snapshot.data);
+      const expected = computeChecksum(dataString);
+      if (snapshot.checksum !== expected) {
+        throw new JourneyRecoveryError(
+          'SNAPSHOT_CORRUPTED',
+          `Checksum mismatch for journey "${snapshot.id ?? 'unknown'}": stored ${snapshot.checksum}, computed ${expected}`,
+          snapshot.id
+        );
+      }
+    }
+
+    return snapshot;
   }
 }

@@ -14,22 +14,8 @@ export * from './core/RecoveryDiagnostics';
 // Storage Adapters
 export * from './storage';
 
-// Navigation Adapters
-export * from './navigation';
-
-// Form Integration Adapters
+// Form Integration
 export * from './forms';
-
-// State Management Integrations
-export * from './integrations/zustand';
-export * from './integrations/redux';
-export * from './integrations/tanstack-query';
-
-// UI Primitives
-export * from './ui';
-
-// Validation Helpers
-export * from './validators';
 
 // Testing Utilities
 export * from './testing';
@@ -41,7 +27,6 @@ export * from './react';
 export * from './utils/errors';
 export * from './utils/checksum';
 export * from './utils/debounce';
-export * from './cli/inspect';
 
 // Type Contracts
 export * from './types';

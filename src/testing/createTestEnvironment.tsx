@@ -39,11 +39,11 @@ export function createTestRecoveryEnvironment(
 ): TestRecoveryEnvironment {
   const storage = new MemoryStorageAdapter();
 
-  const checkpointManager = new CheckpointManager(storage, {
-    enableHistory: options?.enableHistory,
-    maxHistory: options?.maxHistory,
+  // Same key prefix, user scope and transform as the provider below, so seeded data is visible to hooks.
+  const checkpointManager = new CheckpointManager(storage, undefined, options?.keyPrefix, {
     userId: options?.userId,
     maxSizeBytes: options?.maxSizeBytes,
+    transform: options?.transform,
   });
 
   const journeyManager = new JourneyManager(checkpointManager);

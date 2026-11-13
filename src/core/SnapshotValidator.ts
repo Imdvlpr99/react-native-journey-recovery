@@ -16,7 +16,7 @@ export class SnapshotValidator {
    */
   isExpired(snapshot: JourneySnapshot<unknown>): boolean {
     if (typeof snapshot.expiresAt === 'number') {
-      return Date.now() > snapshot.expiresAt;
+      return Date.now() >= snapshot.expiresAt;
     }
     return false;
   }
@@ -84,6 +84,16 @@ export class SnapshotValidator {
       };
     }
 
+    if (typeof s.version !== 'number' || !Number.isInteger(s.version) || s.version < 1) {
+      return {
+        valid: false,
+        error: new JourneyRecoveryError(
+          'SNAPSHOT_INVALID',
+          'Snapshot version must be a positive integer',
+          s.id
+        ),
+      };
+    }
     if (s.status !== 'active' && s.status !== 'completed') {
       return {
         valid: false,

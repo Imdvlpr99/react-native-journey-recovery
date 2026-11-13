@@ -100,7 +100,7 @@ export async function getRecoveryDiagnostics<T = any>(
   }
 
   const now = Date.now();
-  const isExpired = typeof expiresAt === 'number' && now > expiresAt;
+  const isExpired = typeof expiresAt === 'number' && now >= expiresAt;
   const timeUntilExpiryMs =
     typeof expiresAt === 'number' ? Math.max(0, expiresAt - now) : undefined;
 
@@ -113,7 +113,13 @@ export async function getRecoveryDiagnostics<T = any>(
       typeof registeredOptions?.migrate === 'function'
   );
 
-  const validation = activeValidator.validate<T>(parsed, registeredOptions);
+  const effectiveTarget = targetSchemaVersion ?? 1;
+  const storedVersion = typeof schemaVersion === 'number' ? schemaVersion : 0;
+  // Same rule as RecoveryManager.check: custom validation applies to the current schema only.
+  const validation = activeValidator.validate<T>(
+    parsed,
+    storedVersion >= effectiveTarget ? registeredOptions : undefined
+  );
 
   let status: RecoveryStatus = 'available';
   let isRecoverable = true;
@@ -131,6 +137,14 @@ export async function getRecoveryDiagnostics<T = any>(
     isRecoverable = false;
     status = 'invalid';
     validationError = 'Checksum verification failed (data integrity compromised)';
+  } else if (storedVersion > effectiveTarget) {
+    isRecoverable = false;
+    status = 'invalid';
+    validationError = `Saved with schema version ${storedVersion}, newer than the registered version ${effectiveTarget}`;
+  } else if (parsed.status === 'completed') {
+    isRecoverable = false;
+    status = 'completed';
+    validationError = 'Journey is marked completed and is not offered for resume';
   }
 
   return {

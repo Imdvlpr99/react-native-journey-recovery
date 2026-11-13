@@ -161,7 +161,9 @@ describe('Chaos & Extreme Reliability Tests', () => {
     failRead = true;
     const firstCheck = await recoveryManager.check('transient-journey');
     expect(firstCheck.available).toBe(false);
-    expect(firstCheck.status).toBe('invalid');
+    // A storage read error is a failure to read, not proof the data is corrupt.
+    expect(firstCheck.status).toBe('failed');
+    expect(firstCheck.error?.code).toBe('STORAGE_UNAVAILABLE');
 
     // Second inspection succeeds without data loss
     const secondCheck = await recoveryManager.check<{ safe: boolean }>('transient-journey');

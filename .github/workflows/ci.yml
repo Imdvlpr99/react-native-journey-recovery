@@ -41,6 +41,9 @@ jobs:
       - name: Build package distribution
         run: npm run build
 
+      - name: Lint package (exports, types, CJS/ESM resolution)
+        run: npm run lint:package
+
       - name: Verify package tarball (dry-run)
         run: npm pack --dry-run
 

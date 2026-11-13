@@ -48,7 +48,9 @@ export interface JourneySnapshot<T = unknown> {
  */
 export interface CheckpointOptions {
   /**
-   * Fields to explicitly omit from persistence (e.g. sensitive tokens or passwords).
+   * Fields to omit from persistence (e.g. sensitive tokens or passwords).
+   * Use a top-level key (`'password'`) or a dot path (`'payment.cardNumber'`).
+   * Paths pass through arrays: `'cards.cvv'` removes `cvv` from every item of `cards`.
    */
   exclude?: string[];
 

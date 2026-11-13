@@ -20,22 +20,8 @@ describe('react-native-journey-recovery exports', () => {
     expect(JourneyRecovery.MMKVStorageAdapter).toBeDefined();
   });
 
-  it('exports navigation and router integration adapters', () => {
-    expect(JourneyRecovery.createNavigationAdapter).toBeDefined();
-    expect(JourneyRecovery.createExpoRouterAdapter).toBeDefined();
-  });
-
-  it('exports form and state integration adapters', () => {
+  it('exports form integration', () => {
     expect(JourneyRecovery.useJourneyForm).toBeDefined();
-    expect(JourneyRecovery.useJourneyFormik).toBeDefined();
-    expect(JourneyRecovery.useJourneyZustand).toBeDefined();
-    expect(JourneyRecovery.useJourneyRedux).toBeDefined();
-    expect(JourneyRecovery.useJourneyQuery).toBeDefined();
-    expect(JourneyRecovery.createTanStackQueryCoordinator).toBeDefined();
-  });
-
-  it('exports UI primitives', () => {
-    expect(JourneyRecovery.RecoveryBanner).toBeDefined();
   });
 
   it('exports React components and hooks', () => {
@@ -52,8 +38,7 @@ describe('react-native-journey-recovery exports', () => {
     expect(JourneyRecovery.debounce).toBeDefined();
   });
 
-  it('exports Zod validation helper and testing environment utilities', () => {
-    expect(JourneyRecovery.createZodValidator).toBeDefined();
+  it('exports testing environment utilities', () => {
     expect(JourneyRecovery.createTestRecoveryEnvironment).toBeDefined();
     expect(JourneyRecovery.initTestRecoveryEnvironment).toBeDefined();
   });
