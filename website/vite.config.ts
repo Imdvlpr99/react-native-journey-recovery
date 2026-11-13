@@ -8,12 +8,15 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   base: './',
   build: {
-    outDir: path.resolve(__dirname, '../docs'),
-    emptyOutDir: false,
+    // Generated site lives apart from the hand-written docs/ folder and is cleared on every build.
+    outDir: path.resolve(__dirname, 'dist'),
+    emptyOutDir: true,
   },
   resolve: {
     alias: {
       'react-native-journey-recovery': path.resolve(__dirname, '../src/index.ts'),
+      // The playground is a React Native app rendered on the web.
+      'react-native': 'react-native-web',
     },
   },
 });

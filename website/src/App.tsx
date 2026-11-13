@@ -1,174 +1,81 @@
-import React, { useState, useEffect } from 'react';
-import { Navbar, ActiveTab } from './components/Navbar';
-import { LandingPage } from './components/LandingPage';
-import { Sidebar } from './components/Sidebar';
-import { Sections } from './components/Sections';
-import { Breadcrumb } from './components/Breadcrumb';
-import { PrevNext } from './components/PrevNext';
-import { SearchModal } from './components/SearchModal';
+import React, { Suspense, lazy, useCallback, useEffect, useState } from 'react';
+import { findPage } from './content/docs';
+import { DocsView } from './components/DocsView';
 import { Footer } from './components/Footer';
+import { Header } from './components/Header';
+import { Landing } from './components/Landing';
+import { SearchDialog } from './components/SearchDialog';
+import { docsHref, navigate, useHashRoute } from './lib/router';
+import { useTheme } from './lib/theme';
 
-function parseLocationHash(hash: string): { tab: ActiveTab; sectionId?: string } {
-  const raw = hash.replace(/^#\/?/, '').trim();
-  if (!raw || raw === 'home') return { tab: 'home' };
-  if (raw === 'architecture') return { tab: 'docs', sectionId: 'architecture-diagram' };
-  if (raw === 'storage') return { tab: 'docs', sectionId: 'storage-comparison' };
-  if (raw.startsWith('docs')) {
-    const section = raw.replace(/^docs\/?/, '').trim();
-    return { tab: 'docs', sectionId: section || undefined };
-  }
-  return { tab: 'docs', sectionId: raw };
-}
+// react-native-web is only needed by the playground, so keep it out of the main bundle.
+const Playground = lazy(() => import('./demo/Playground'));
+
+const PlaygroundFallback: React.FC = () => (
+  <main id="main" className="flex flex-1 items-center justify-center py-32 text-sm text-fg-muted" aria-busy="true">
+    Loading the playground…
+  </main>
+);
 
 export const App: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<ActiveTab>(() => {
-    return parseLocationHash(window.location.hash).tab;
-  });
-  const [activeId, setActiveId] = useState(() => {
-    return parseLocationHash(window.location.hash).sectionId || 'overview';
-  });
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [searchModalOpen, setSearchModalOpen] = useState(false);
-  const [theme, setTheme] = useState<'dark' | 'light'>(() => {
-    return (localStorage.getItem('theme') as 'dark' | 'light') || 'dark';
-  });
+  const route = useHashRoute();
+  const { theme, toggle } = useTheme();
+  const [searchOpen, setSearchOpen] = useState(false);
 
   useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-    document.documentElement.classList.toggle('dark', theme === 'dark');
-    localStorage.setItem('theme', theme);
-  }, [theme]);
-
-  const toggleTheme = () => setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
-
-  // Scroll-reveal IntersectionObserver
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('in-view');
-          }
-        });
-      },
-      { threshold: 0.07, rootMargin: '0px 0px -32px 0px' }
-    );
-    const revealEls = document.querySelectorAll('.reveal');
-    revealEls.forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
-  }, [activeTab]);
-
-  // ⌘K / Ctrl+K
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault();
-        setSearchModalOpen((p) => !p);
+        setSearchOpen((open) => !open);
+      } else if (e.key === '/' && !searchOpen) {
+        const target = e.target as HTMLElement;
+        if (target.closest('input, textarea, [contenteditable="true"]')) return;
+        e.preventDefault();
+        setSearchOpen(true);
       }
     };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [searchOpen]);
+
+  const closeSearch = useCallback(() => setSearchOpen(false), []);
+  const selectResult = useCallback((pageId: string) => {
+    setSearchOpen(false);
+    navigate(docsHref(pageId));
   }, []);
 
-  // Hash router
-  useEffect(() => {
-    const handleHashChange = () => {
-      const { tab, sectionId } = parseLocationHash(window.location.hash);
-      setActiveTab(tab);
-      if (tab === 'docs' && sectionId) setActiveId(sectionId);
-    };
-    window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
-  }, []);
-
-  const navigateToSection = (id: string) => {
-    setActiveTab('docs');
-    setActiveId(id);
-    setSidebarOpen(false);
-    window.location.hash = `#/docs/${id}`;
-    window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
-  };
-
-  const handleNavigate = (tab: ActiveTab, sectionId?: string) => {
-    // Redirect legacy top-level views into doc sections
-    if (tab === 'architecture') {
-      navigateToSection('architecture-diagram');
-      return;
-    }
-    if (tab === 'storage') {
-      navigateToSection('storage-comparison');
-      return;
-    }
-
-    setActiveTab(tab);
-    setSidebarOpen(false);
-
-    if (tab === 'home') {
-      window.location.hash = '#/';
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    } else if (tab === 'docs') {
-      if (sectionId) {
-        navigateToSection(sectionId);
-      } else {
-        window.location.hash = '#/docs';
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
-    }
-  };
+  const page = route.view === 'docs' ? findPage(route.pageId ?? 'overview') : undefined;
+  const section =
+    route.view === 'home' ? 'home' : route.view === 'demo' ? 'demo' : page?.group === 'API reference' ? 'api' : 'guide';
 
   return (
-    <div className="min-h-screen flex flex-col bg-transparent text-[var(--text-main)] selection:bg-violet-500/20 selection:text-violet-300">
-      <SearchModal
-        isOpen={searchModalOpen}
-        onClose={() => setSearchModalOpen(false)}
-        onSelect={(id) => {
-          setSearchModalOpen(false);
-          navigateToSection(id);
+    <div className="flex min-h-screen flex-col bg-bg text-fg">
+      <a
+        href="#main"
+        onClick={(e) => {
+          e.preventDefault();
+          const main = document.getElementById('main');
+          main?.setAttribute('tabindex', '-1');
+          main?.focus();
         }}
-      />
+        className="sr-only z-[60] rounded-md bg-fg px-4 py-2 text-sm font-medium text-bg focus:not-sr-only focus:fixed focus:left-4 focus:top-3"
+      >
+        Skip to content
+      </a>
 
-      <Navbar
-        activeTab={activeTab}
-        onNavigate={handleNavigate}
-        onOpenSearch={() => setSearchModalOpen(true)}
-        onMenuToggle={() => setSidebarOpen(!sidebarOpen)}
-        sidebarOpen={sidebarOpen}
-        theme={theme}
-        onThemeToggle={toggleTheme}
-        showSidebarToggle={activeTab === 'docs'}
-      />
+      <Header section={section} theme={theme} onToggleTheme={toggle} onOpenSearch={() => setSearchOpen(true)} />
 
-      {/* HOME */}
-      {activeTab === 'home' && (
-        <LandingPage
-          onNavigate={handleNavigate}
-          onOpenSearch={() => setSearchModalOpen(true)}
-        />
+      {route.view === 'home' && <Landing />}
+      {route.view === 'docs' && <DocsView pageId={route.pageId} heading={route.heading} />}
+      {route.view === 'demo' && (
+        <Suspense fallback={<PlaygroundFallback />}>
+          <Playground />
+        </Suspense>
       )}
 
-      {/* DOCS – 2-column: sidebar + content */}
-      {activeTab === 'docs' && (
-        <div className="flex-1 flex">
-          <Sidebar
-            activeId={activeId}
-            isOpen={sidebarOpen}
-            onSelect={navigateToSection}
-            onCloseMobile={() => setSidebarOpen(false)}
-          />
+      <Footer />
 
-          <main className="flex-1 min-w-0">
-            <div className="px-6 sm:px-8 lg:px-10 py-8 max-w-5xl">
-              <Breadcrumb activeId={activeId} />
-              <Sections activeId={activeId} />
-              <PrevNext activeId={activeId} onNavigate={navigateToSection} />
-            </div>
-            <Footer onNavigate={handleNavigate} />
-          </main>
-        </div>
-      )}
-
-      {/* Footer on home view */}
-      {activeTab === 'home' && <Footer onNavigate={handleNavigate} />}
+      <SearchDialog open={searchOpen} onClose={closeSearch} onSelect={selectResult} />
     </div>
   );
 };
