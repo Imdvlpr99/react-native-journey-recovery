@@ -48,7 +48,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             : 'bg-transparent border-b border-transparent'
         }`}
       >
-        <div className="max-w-7xl mx-auto px-5 sm:px-8 h-14 flex items-center gap-6">
+        <div className="max-w-7xl mx-auto px-5 sm:px-8 h-14 flex items-center gap-3 sm:gap-4">
           {/* Mobile sidebar toggle */}
           {showSidebarToggle && onMenuToggle && (
             <button
@@ -78,16 +78,19 @@ export const Navbar: React.FC<NavbarProps> = ({
           </a>
 
           {/* Desktop nav */}
-          <nav className="hidden md:flex items-center gap-1 ml-2">
+          <nav className="hidden md:flex items-center gap-0.5 ml-1">
             {NAV_LINKS.map((link) => {
-              const isActive = link.tab === 'home' ? activeTab === 'home' : activeTab === 'docs' && !link.section ? true : false;
+              const isActive =
+                link.tab === 'home'
+                  ? activeTab === 'home'
+                  : activeTab === 'docs' && !link.section;
               return (
                 <a
                   key={link.label}
                   href={link.tab === 'home' ? '#/' : link.section ? `#/docs/${link.section}` : '#/docs'}
                   onClick={(e) => { e.preventDefault(); onNavigate(link.tab, link.section); }}
-                  className={`px-3 py-1.5 rounded-md text-sm transition-colors ${
-                    (link.tab === 'home' && activeTab === 'home') || (link.tab === 'docs' && activeTab === 'docs' && !link.section)
+                  className={`whitespace-nowrap px-3 py-1.5 rounded-md text-sm transition-colors ${
+                    isActive
                       ? 'text-[#F5F7FF] font-medium'
                       : 'text-[#F5F7FF]/45 hover:text-[#F5F7FF]/80'
                   }`}
