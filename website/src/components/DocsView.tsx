@@ -30,10 +30,6 @@ export const DocsView: React.FC<DocsViewProps> = ({ pageId, heading }) => {
     firstRender.current = false;
   }, [id, heading]);
 
-  useEffect(() => {
-    document.title = page ? `${page.title} · journey-recovery` : 'Page not found · journey-recovery';
-  }, [page]);
-
   const { prev, next } = neighbors(id);
 
   return (

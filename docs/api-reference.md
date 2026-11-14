@@ -6,7 +6,7 @@ Everything is exported from the package root:
 import { RecoveryProvider, useJourney, useRecovery } from 'react-native-journey-recovery';
 ```
 
-The [documentation site](https://rn-journey-recovery.vercel.app/#/docs/recovery-provider) has the same reference with guides and examples.
+The [documentation site](https://rn-journey-recovery.vercel.app/docs/recovery-provider) has the same reference with guides and examples.
 
 ## Contents
 

@@ -13,8 +13,7 @@ const Anchor: React.FC<{ id: string }> = ({ id }) => (
       e.preventDefault();
       const el = document.getElementById(id);
       el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      const page = window.location.hash.replace(/^#\/docs\//, '').split('#')[0];
-      if (page) history.replaceState(null, '', docsHref(page, id));
+      history.replaceState(null, '', `${window.location.pathname}#${id}`);
     }}
     aria-label="Link to this section"
     className="no-prose ml-2 inline-flex translate-y-[1px] align-middle text-fg-subtle opacity-0 transition-opacity hover:text-accent focus-visible:opacity-100 group-hover:opacity-100"

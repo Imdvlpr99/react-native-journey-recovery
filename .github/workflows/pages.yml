@@ -35,6 +35,9 @@ jobs:
 
       - name: Build React documentation
         run: npm run build:docs
+        env:
+          # The Pages copy lives under /<repo>/; its canonical URLs still point at the Vercel site.
+          DOCS_BASE: /${{ github.event.repository.name }}/
 
       - name: Setup GitHub Pages
         id: setup-pages

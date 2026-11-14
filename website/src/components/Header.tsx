@@ -1,4 +1,5 @@
 import React from 'react';
+import { docsHref, homeHref, playgroundHref } from '../lib/router';
 import { LINKS, VERSION } from '../lib/site';
 import type { Theme } from '../lib/theme';
 import { GithubIcon, MoonIcon, SearchIcon, SunIcon } from './Icons';
@@ -14,15 +15,15 @@ interface HeaderProps {
 const isMac = typeof navigator !== 'undefined' && /Mac|iPhone|iPad/.test(navigator.platform);
 
 const NAV = [
-  { label: 'Docs', href: '#/docs/overview', key: 'guide' as const },
-  { label: 'API', href: '#/docs/recovery-provider', key: 'api' as const },
-  { label: 'Playground', href: '#/playground', key: 'demo' as const },
+  { label: 'Docs', href: docsHref('overview'), key: 'guide' as const },
+  { label: 'API', href: docsHref('recovery-provider'), key: 'api' as const },
+  { label: 'Playground', href: playgroundHref(), key: 'demo' as const },
 ];
 
 export const Header: React.FC<HeaderProps> = ({ section, theme, onToggleTheme, onOpenSearch }) => (
   <header className="sticky top-0 z-40 border-b border-line bg-bg/85 backdrop-blur-md supports-[backdrop-filter]:bg-bg/75">
     <div className="mx-auto flex h-14 max-w-[90rem] items-center gap-1 px-3 sm:gap-3 sm:px-6 lg:px-8">
-      <a href="#/" className="flex shrink-0 items-center gap-2.5 rounded-md text-fg" aria-label="Journey Recovery home">
+      <a href={homeHref()} className="flex shrink-0 items-center gap-2.5 rounded-md text-fg" aria-label="Journey Recovery home">
         <LogoMark />
         <span className="hidden font-mono text-[0.875rem] font-medium tracking-tight sm:inline">
           journey-recovery

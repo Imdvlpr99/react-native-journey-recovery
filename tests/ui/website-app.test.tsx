@@ -2,19 +2,25 @@ import React from 'react';
 import { render, screen, fireEvent, act, within, waitFor } from '@testing-library/react';
 import { it, expect, describe, beforeEach, beforeAll, vi } from 'vitest';
 import { App } from '../../website/src/App';
-import { parseHash } from '../../website/src/lib/router';
+import { parseHash, parsePath } from '../../website/src/lib/router';
+import { allRouteMeta, fillHtmlTemplate, docsMeta, sitemapXml, SITE_URL } from '../../website/src/lib/seo';
 import { ALL_PAGES } from '../../website/src/content/docs';
 import { searchPages } from '../../website/src/components/SearchDialog';
 
 beforeAll(() => {
   // jsdom does not implement scrolling.
   window.scrollTo = vi.fn() as unknown as typeof window.scrollTo;
+  Element.prototype.scrollIntoView = vi.fn();
 });
 
-function setHash(hash: string) {
+function go(path: string) {
+  window.history.replaceState(null, '', path);
+}
+
+function navigateTo(path: string) {
   act(() => {
-    window.location.hash = hash;
-    window.dispatchEvent(new HashChangeEvent('hashchange'));
+    window.history.pushState(null, '', path);
+    window.dispatchEvent(new PopStateEvent('popstate'));
   });
 }
 
@@ -29,6 +35,15 @@ describe('website routing', () => {
     expect(parseHash('#/docs/storage-mmkv')).toMatchObject({ pageId: 'storage-adapters' });
   });
 
+  it('parses path routes and heading fragments', () => {
+    expect(parsePath('/')).toEqual({ view: 'home' });
+    expect(parsePath('/playground')).toEqual({ view: 'demo' });
+    expect(parsePath('/playground.html')).toEqual({ view: 'demo' });
+    expect(parsePath('/docs')).toEqual({ view: 'docs', pageId: null, heading: null });
+    expect(parsePath('/docs/quickstart/', '#restore')).toEqual({ view: 'docs', pageId: 'quickstart', heading: 'restore' });
+    expect(parsePath('/docs/storage-mmkv')).toMatchObject({ pageId: 'storage-adapters' });
+  });
+
   it('has unique page ids', () => {
     const ids = ALL_PAGES.map((p) => p.id);
     expect(new Set(ids).size).toBe(ids.length);
@@ -37,7 +52,7 @@ describe('website routing', () => {
 
 describe('website app', () => {
   beforeEach(() => {
-    window.location.hash = '';
+    go('/');
   });
 
   it('renders the landing page by default', () => {
@@ -46,43 +61,47 @@ describe('website app', () => {
     expect(screen.getAllByText(/npm install react-native-journey-recovery/i).length).toBeGreaterThan(0);
   });
 
-  it('renders the first docs page for #/docs', () => {
-    window.location.hash = '#/docs';
+  it('renders the first docs page for /docs', () => {
+    go('/docs');
     render(<App />);
     expect(screen.getByRole('heading', { level: 1, name: 'Introduction' })).toBeDefined();
     expect(screen.getByRole('heading', { level: 2, name: /The problem/i })).toBeDefined();
   });
 
-  it('redirects #/architecture and #/storage to their docs pages', () => {
-    window.location.hash = '#/architecture';
+  it('redirects old hash links such as #/architecture and #/storage to path routes', () => {
+    go('/#/architecture');
     const { unmount } = render(<App />);
     expect(screen.getByRole('heading', { level: 1, name: 'Architecture' })).toBeDefined();
+    expect(window.location.pathname).toBe('/docs/architecture');
+    expect(window.location.hash).toBe('');
     unmount();
 
-    window.location.hash = '#/storage';
+    go('/#/docs/quickstart#restore');
     render(<App />);
-    expect(screen.getByRole('heading', { level: 1, name: 'Storage adapters' })).toBeDefined();
+    expect(screen.getByRole('heading', { level: 1, name: 'Quickstart' })).toBeDefined();
+    expect(window.location.pathname + window.location.hash).toBe('/docs/quickstart#restore');
   });
 
   it('renders every docs page without crashing', () => {
     const { unmount } = render(<App />);
     unmount();
     for (const page of ALL_PAGES) {
-      window.location.hash = `#/docs/${page.id}`;
+      go(`/docs/${page.id}`);
       const view = render(<App />);
       expect(screen.getByRole('heading', { level: 1, name: page.title })).toBeDefined();
       view.unmount();
     }
   });
 
-  it('navigates from the header to the docs and between pages', () => {
+  it('navigates client-side from the header to the docs and between pages', () => {
     render(<App />);
     const mainNav = screen.getByRole('navigation', { name: 'Main' });
     fireEvent.click(within(mainNav).getByText('Docs'));
-    setHash('#/docs/overview');
+    expect(window.location.pathname).toBe('/docs/overview');
     expect(screen.getByRole('heading', { level: 1, name: 'Introduction' })).toBeDefined();
+    expect(document.title).toBe(docsMeta('overview')?.title);
 
-    setHash('#/docs/quickstart');
+    navigateTo('/docs/quickstart');
     expect(screen.getByRole('heading', { level: 1, name: 'Quickstart' })).toBeDefined();
     const current = screen
       .getAllByRole('link', { name: 'Quickstart' })
@@ -91,7 +110,7 @@ describe('website app', () => {
   });
 
   it('shows a not-found page for unknown ids', () => {
-    window.location.hash = '#/docs/does-not-exist';
+    go('/docs/does-not-exist');
     render(<App />);
     expect(screen.getByRole('heading', { level: 1, name: 'Page not found' })).toBeDefined();
   });
@@ -115,7 +134,7 @@ describe('website playground', () => {
 
   beforeEach(() => {
     window.localStorage.clear();
-    window.location.hash = '#/playground';
+    go('/playground');
   });
 
   it('runs the React Native app, survives a kill, and offers to resume', async () => {
@@ -165,5 +184,31 @@ describe('website search', () => {
 
   it('suggests pages for an empty query', () => {
     expect(searchPages('').length).toBeGreaterThan(0);
+  });
+});
+
+describe('website SEO', () => {
+  it('gives every route a unique title, description and canonical URL', () => {
+    const routes = allRouteMeta();
+    expect(new Set(routes.map((r) => r.title)).size).toBe(routes.length);
+    expect(new Set(routes.map((r) => r.path)).size).toBe(routes.length);
+    for (const r of routes) expect(r.description.length).toBeGreaterThan(50);
+  });
+
+  it('fills the HTML template and escapes values', () => {
+    const html = fillHtmlTemplate(
+      '<title>%SEO_TITLE%</title><link rel="canonical" href="%SEO_URL%"><meta name="robots" content="%SEO_ROBOTS%">',
+      { path: 'docs/x', title: 'A "quoted" <title>', description: 'd' },
+      { noindex: true }
+    );
+    expect(html).toBe(
+      `<title>A &quot;quoted&quot; &lt;title&gt;</title><link rel="canonical" href="${SITE_URL}/docs/x"><meta name="robots" content="noindex, follow">`
+    );
+  });
+
+  it('lists every docs page in the sitemap', () => {
+    const xml = sitemapXml();
+    for (const page of ALL_PAGES) expect(xml).toContain(`<loc>${SITE_URL}/docs/${page.id}</loc>`);
+    expect(xml).toContain(`<loc>${SITE_URL}/playground</loc>`);
   });
 });

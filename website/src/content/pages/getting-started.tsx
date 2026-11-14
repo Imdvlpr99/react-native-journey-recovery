@@ -1,6 +1,7 @@
 import React from 'react';
 import { CodeBlock, CodeTabs } from '../../components/CodeBlock';
 import { Callout, DocLink, H2, H3, Step, Steps, Table } from '../../components/Prose';
+import { playgroundHref } from '../../lib/router';
 import { PACKAGE_NAME } from '../../lib/site';
 
 /* ================================================================== */
@@ -54,7 +55,7 @@ export const Overview: React.FC = () => (
     <ul>
       <li><DocLink to="installation">Install the package</DocLink> and a storage backend.</li>
       <li>Follow the <DocLink to="quickstart">quickstart</DocLink> to checkpoint and restore a checkout flow.</li>
-      <li>Try the <a href="#/playground">live playground</a>: a React Native app running in your browser.</li>
+      <li>Try the <a href={playgroundHref()}>live playground</a>: a React Native app running in your browser.</li>
       <li>Read <DocLink to="recovery-lifecycle">the recovery lifecycle</DocLink> to understand each status.</li>
     </ul>
   </>

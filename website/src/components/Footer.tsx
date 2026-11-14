@@ -1,4 +1,5 @@
 import React from 'react';
+import { docsHref, playgroundHref } from '../lib/router';
 import { LINKS, PACKAGE_NAME } from '../lib/site';
 import { LogoMark } from './Logo';
 
@@ -6,11 +7,11 @@ const COLUMNS = [
   {
     title: 'Docs',
     links: [
-      { label: 'Introduction', href: '#/docs/overview' },
-      { label: 'Quickstart', href: '#/docs/quickstart' },
-      { label: 'Playground', href: '#/playground' },
-      { label: 'Storage adapters', href: '#/docs/storage-adapters' },
-      { label: 'API reference', href: '#/docs/recovery-provider' },
+      { label: 'Introduction', href: docsHref('overview') },
+      { label: 'Quickstart', href: docsHref('quickstart') },
+      { label: 'Playground', href: playgroundHref() },
+      { label: 'Storage adapters', href: docsHref('storage-adapters') },
+      { label: 'API reference', href: docsHref('recovery-provider') },
     ],
   },
   {

@@ -5,7 +5,9 @@ import { Footer } from './components/Footer';
 import { Header } from './components/Header';
 import { Landing } from './components/Landing';
 import { SearchDialog } from './components/SearchDialog';
-import { docsHref, navigate, useHashRoute } from './lib/router';
+import { docsHref, interceptLinkClick, navigate, useRoute } from './lib/router';
+import { applyHeadMeta } from './lib/head';
+import { docsMeta, HOME_META, NOT_FOUND_META, PLAYGROUND_META } from './lib/seo';
 import { useTheme } from './lib/theme';
 
 // react-native-web is only needed by the playground, so keep it out of the main bundle.
@@ -18,9 +20,23 @@ const PlaygroundFallback: React.FC = () => (
 );
 
 export const App: React.FC = () => {
-  const route = useHashRoute();
+  const route = useRoute();
   const { theme, toggle } = useTheme();
   const [searchOpen, setSearchOpen] = useState(false);
+
+  // Internal <a href="/docs/…"> links navigate client-side instead of reloading.
+  useEffect(() => {
+    document.addEventListener('click', interceptLinkClick);
+    return () => document.removeEventListener('click', interceptLinkClick);
+  }, []);
+
+  // Keep title, description and canonical URL in sync with the route.
+  const docsPageId = route.view === 'docs' ? route.pageId ?? 'overview' : null;
+  useEffect(() => {
+    if (route.view === 'home') applyHeadMeta(HOME_META);
+    else if (route.view === 'demo') applyHeadMeta(PLAYGROUND_META);
+    else applyHeadMeta(docsMeta(docsPageId ?? 'overview') ?? NOT_FOUND_META, { noindex: !docsMeta(docsPageId ?? '') });
+  }, [route.view, docsPageId]);
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {

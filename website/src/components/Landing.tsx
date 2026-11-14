@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { docsHref } from '../lib/router';
+import { docsHref, playgroundHref } from '../lib/router';
 import { LINKS, PACKAGE_NAME, VERSION } from '../lib/site';
 import { CodeTabs, CopyButton } from './CodeBlock';
 import {
@@ -165,7 +165,7 @@ export const Landing: React.FC = () => {
                 Get started <ArrowRightIcon size={16} className="transition-transform duration-200 group-hover:translate-x-0.5" />
               </a>
               <a
-                href="#/playground"
+                href={playgroundHref()}
                 className="inline-flex h-11 items-center justify-center gap-2 rounded-lg border border-line-strong px-5 text-[0.9375rem] font-medium text-fg transition-colors hover:bg-hover"
               >
                 <PlayIcon size={15} /> Try it live
@@ -307,7 +307,7 @@ export const Landing: React.FC = () => {
             </h2>
             <p className="mt-2 text-fg-muted">
               Install the package, wrap your app, and save a checkpoint. Or{' '}
-              <a href="#/playground" className="text-accent underline underline-offset-4">try the live demo</a> first.
+              <a href={playgroundHref()} className="text-accent underline underline-offset-4">try the live demo</a> first.
             </p>
           </div>
           <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center">

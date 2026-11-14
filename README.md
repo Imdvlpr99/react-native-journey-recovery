@@ -10,11 +10,11 @@ Checkpoint multi-step flows in React Native and Expo, and restore them safely af
 
 [![npm version](https://img.shields.io/npm/v/react-native-journey-recovery?style=flat-square&color=16a34a)](https://www.npmjs.com/package/react-native-journey-recovery)
 [![npm downloads](https://img.shields.io/npm/dm/react-native-journey-recovery?style=flat-square)](https://www.npmjs.com/package/react-native-journey-recovery)
-[![types](https://img.shields.io/npm/types/react-native-journey-recovery?style=flat-square)](https://rn-journey-recovery.vercel.app/#/docs/types)
+[![types](https://img.shields.io/npm/types/react-native-journey-recovery?style=flat-square)](https://rn-journey-recovery.vercel.app/docs/types)
 [![license](https://img.shields.io/npm/l/react-native-journey-recovery?style=flat-square)](https://github.com/Imdvlpr99/react-native-journey-recovery/blob/master/LICENSE)
 [![CI](https://img.shields.io/github/actions/workflow/status/Imdvlpr99/react-native-journey-recovery/ci.yml?branch=master&style=flat-square&label=CI)](https://github.com/Imdvlpr99/react-native-journey-recovery/actions/workflows/ci.yml)
 
-[Documentation](https://rn-journey-recovery.vercel.app) · [Live playground](https://rn-journey-recovery.vercel.app/#/playground) · [API reference](https://rn-journey-recovery.vercel.app/#/docs/recovery-provider) · [Changelog](https://github.com/Imdvlpr99/react-native-journey-recovery/blob/master/CHANGELOG.md)
+[Documentation](https://rn-journey-recovery.vercel.app) · [Live playground](https://rn-journey-recovery.vercel.app/playground) · [API reference](https://rn-journey-recovery.vercel.app/docs/recovery-provider) · [Changelog](https://github.com/Imdvlpr99/react-native-journey-recovery/blob/master/CHANGELOG.md)
 
 </div>
 
@@ -24,7 +24,7 @@ Long flows get interrupted. The OS kills your app in the background, the user sw
 
 `react-native-journey-recovery` gives each flow, a **journey**, its own small recovery record with explicit rules for when it is safe to restore.
 
-> **Try it without installing anything:** the [live playground](https://rn-journey-recovery.vercel.app/#/playground) runs a real React Native app in your browser. Fill in a step, kill the app, corrupt the storage, expire it, and watch what the library does.
+> **Try it without installing anything:** the [live playground](https://rn-journey-recovery.vercel.app/playground) runs a real React Native app in your browser. Fill in a step, kill the app, corrupt the storage, expire it, and watch what the library does.
 
 ## Features
 
@@ -207,7 +207,7 @@ const transform = hmacTransform(secretFromKeychain); // { encode, decode }
 <RecoveryProvider storage={storage} options={{ transform }} />;
 ```
 
-See [Security and privacy](https://rn-journey-recovery.vercel.app/#/docs/security-privacy) for a complete HMAC example.
+See [Security and privacy](https://rn-journey-recovery.vercel.app/docs/security-privacy) for a complete HMAC example.
 
 </details>
 
@@ -261,16 +261,16 @@ it('offers to resume a saved checkout', async () => {
 
 | Export | Purpose |
 |---|---|
-| [`RecoveryProvider`](https://rn-journey-recovery.vercel.app/#/docs/recovery-provider) | Creates the engine; options for storage, expiry, auto-save, user scope, transform; `onRecovery` and `onError`. |
-| [`useJourney(id, options?)`](https://rn-journey-recovery.vercel.app/#/docs/use-journey) | `checkpoint()`, `flush()`, `clear()`, `status`, `error`. |
-| [`useRecovery(id, options?)`](https://rn-journey-recovery.vercel.app/#/docs/use-recovery) | `status`, `available`, `data`, `snapshot`, `restore()`, `discard()`, `refresh()`. |
-| [`useRecoveryStatus(id)`](https://rn-journey-recovery.vercel.app/#/docs/use-recovery-status) | Just the status, for badges. |
-| [`useJourneyForm(id, form, options?)`](https://rn-journey-recovery.vercel.app/#/docs/use-journey-form) | Form integration. |
-| [Storage adapters](https://rn-journey-recovery.vercel.app/#/docs/storage-adapters) | `AsyncStorageAdapter`, `MMKVStorageAdapter`, `SecureStoreAdapter`, `MemoryStorageAdapter`. |
-| [Core engine](https://rn-journey-recovery.vercel.app/#/docs/core-engine) | `JourneyManager`, `RecoveryManager`, `CheckpointManager`, `LifecycleManager`, for use outside React. |
-| [`JourneyRecoveryError`](https://rn-journey-recovery.vercel.app/#/docs/errors) | Every error has a machine-readable `code`. |
+| [`RecoveryProvider`](https://rn-journey-recovery.vercel.app/docs/recovery-provider) | Creates the engine; options for storage, expiry, auto-save, user scope, transform; `onRecovery` and `onError`. |
+| [`useJourney(id, options?)`](https://rn-journey-recovery.vercel.app/docs/use-journey) | `checkpoint()`, `flush()`, `clear()`, `status`, `error`. |
+| [`useRecovery(id, options?)`](https://rn-journey-recovery.vercel.app/docs/use-recovery) | `status`, `available`, `data`, `snapshot`, `restore()`, `discard()`, `refresh()`. |
+| [`useRecoveryStatus(id)`](https://rn-journey-recovery.vercel.app/docs/use-recovery-status) | Just the status, for badges. |
+| [`useJourneyForm(id, form, options?)`](https://rn-journey-recovery.vercel.app/docs/use-journey-form) | Form integration. |
+| [Storage adapters](https://rn-journey-recovery.vercel.app/docs/storage-adapters) | `AsyncStorageAdapter`, `MMKVStorageAdapter`, `SecureStoreAdapter`, `MemoryStorageAdapter`. |
+| [Core engine](https://rn-journey-recovery.vercel.app/docs/core-engine) | `JourneyManager`, `RecoveryManager`, `CheckpointManager`, `LifecycleManager`, for use outside React. |
+| [`JourneyRecoveryError`](https://rn-journey-recovery.vercel.app/docs/errors) | Every error has a machine-readable `code`. |
 
-Full reference: [documentation site](https://rn-journey-recovery.vercel.app/#/docs/recovery-provider) or [`docs/api-reference.md`](https://github.com/Imdvlpr99/react-native-journey-recovery/blob/master/docs/api-reference.md).
+Full reference: [documentation site](https://rn-journey-recovery.vercel.app/docs/recovery-provider) or [`docs/api-reference.md`](https://github.com/Imdvlpr99/react-native-journey-recovery/blob/master/docs/api-reference.md).
 
 ## Security notes
 
