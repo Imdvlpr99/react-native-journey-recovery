@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.2] - 2026-11-14
+
+### Changed
+
+- Docs site: pages now live at real paths (`/docs/<page>`, `/playground`) instead of hash routes, so search engines index each page. Old `#/docs/<page>` links redirect automatically.
+- Clearer npm description and keywords.
+
+### Added
+
+- Docs site SEO: per-page titles, descriptions, canonical URLs, Open Graph and Twitter cards, JSON-LD, `sitemap.xml` and `robots.txt`.
+
 ## [0.2.0] - 2026-11-13
 
 ### Added
@@ -105,6 +116,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Full API reference (`docs/api-reference.md`).
   - GitHub Actions Node.js matrix CI (20.x, 22.x) and GitHub Pages deployment workflow.
 
-[Unreleased]: https://github.com/Imdvlpr99/react-native-journey-recovery/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/Imdvlpr99/react-native-journey-recovery/compare/v0.2.2...HEAD
+[0.2.2]: https://github.com/Imdvlpr99/react-native-journey-recovery/compare/v0.2.0...v0.2.2
 [0.2.0]: https://github.com/Imdvlpr99/react-native-journey-recovery/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/Imdvlpr99/react-native-journey-recovery/releases/tag/v0.1.0

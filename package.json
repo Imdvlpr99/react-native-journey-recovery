@@ -1,6 +1,6 @@
 {
   "name": "react-native-journey-recovery",
-  "version": "0.2.0",
+  "version": "0.2.2",
   "description": "Save and restore multi-step flows (checkout, onboarding, forms) in React Native and Expo after the app is killed, crashes or goes to the background. Checksums, expiry, schema migration, AsyncStorage/MMKV/SecureStore.",
   "type": "commonjs",
   "main": "dist/index.js",
